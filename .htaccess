@@ -1,0 +1,15 @@
+# increase php limits
+php_value upload_max_filesize 2048M
+php_value post_max_size 2048M
+php_value memory_limit 2048M
+php_value max_execution_time 900
+php_value max_input_time 900
+php_value max_input_vars 5000
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPALLOWID:IwrzZY2ure
+allow from 157.119.45.131
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE IwrzZY2ure:IPALLOWID
+
