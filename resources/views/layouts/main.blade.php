@@ -116,7 +116,7 @@
             <span class="mobile-nav__close mobile-nav__toggler"><i class="icon-close"></i></span>
             <div class="logo-box logo-retina">
                 <a href="{{ url('/') }}" aria-label="SG Educare">
-                    <img src="{{ asset('assets/images/logo-light.png') }}" width="209" alt="SG Educare" />
+                    <img src="{{ asset('assets/images/logo-dark.png') }}" width="209" alt="SG Educare" />
                 </a>
             </div>
             <div class="mobile-nav__container"></div>

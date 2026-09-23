@@ -4752,7 +4752,7 @@ body.megamenu-popup-active .mobile-nav__content {
   position: relative;
   height: 100%;
   overflow-y: auto;
-  padding-top: 70px;
+  padding-top: 30px;
   padding-bottom: 30px;
   padding-left: 15px;
   padding-right: 15px;
@@ -4760,6 +4760,9 @@ body.megamenu-popup-active .mobile-nav__content {
   visibility: hidden;
   transform: translateX(-100%);
   transition: opacity 500ms ease 0ms, visibility 500ms ease 0ms, transform 500ms ease 0ms;
+}
+.logo-box.logo-retina a img {
+    width: 115px;
 }
 .mobile-nav__content .main-menu__nav {
   display: block;

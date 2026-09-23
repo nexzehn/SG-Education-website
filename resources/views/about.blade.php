@@ -1,10 +1,11 @@
 {{--
 ============================================================================
-  resources/views/about.blade.php
-  SG Educare — About page (@yield('content'))
-  Extends layouts/main.blade.php.
-  NOTE: no <link canonical> here — canonical lives in the layout.
-        Images use {{ asset() }} so nested routes like /about don't 404.
+resources/views/about.blade.php
+SG Educare — About page (@yield('content'))
+Extends layouts/main.blade.php.
+NOTE: no
+<link canonical> here — canonical lives in the layout.
+Images use {{ asset() }} so nested routes like /about don't 404.
 ============================================================================
 --}}
 
@@ -13,29 +14,34 @@
 @section('title', 'About Us | SG Educare — Kalyan\'s Results-Focused Coaching Institute')
 
 @section('meta')
-    <meta name="description" content="About SG Educare (Latesh Sir's SG Education) — a Kalyan-based coaching institute for JEE (Main + Advanced), NEET-UG, MHT-CET, NDA and School Boards (8–10). Small batches, weekly testing and personal mentoring across three Kalyan campuses.">
-    <meta name="keywords" content="about SG Educare, Latesh Sir SG Education, coaching classes Kalyan, JEE coaching Kalyan, NEET coaching Kalyan, MHT-CET classes Kalyan, best coaching institute Kalyan">
+    <meta name="description"
+        content="About SG Educare (Latesh Sir's SG Education) — a Kalyan-based coaching institute for JEE (Main + Advanced), NEET-UG, MHT-CET, NDA and School Boards (8–10). Small batches, weekly testing and personal mentoring across three Kalyan campuses.">
+    <meta name="keywords"
+        content="about SG Educare, Latesh Sir SG Education, coaching classes Kalyan, JEE coaching Kalyan, NEET coaching Kalyan, MHT-CET classes Kalyan, best coaching institute Kalyan">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="About SG Educare — Coaching That Puts Results First">
-    <meta property="og:description" content="Kalyan's coaching institute for JEE, NEET, MHT-CET, NDA & Boards (8–10). Small batches, weekly tests, personal mentoring across 3 campuses.">
+    <meta property="og:description"
+        content="Kalyan's coaching institute for JEE, NEET, MHT-CET, NDA & Boards (8–10). Small batches, weekly tests, personal mentoring across 3 campuses.">
     <meta property="og:image" content="{{ asset('assets/images/og-image.jpg') }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:locale" content="en_IN">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="About SG Educare — Coaching Classes in Kalyan">
-    <meta name="twitter:description" content="JEE, NEET, MHT-CET, NDA & Boards coaching in Kalyan. Small batches, weekly tests, personal mentoring.">
+    <meta name="twitter:description"
+        content="JEE, NEET, MHT-CET, NDA & Boards coaching in Kalyan. Small batches, weekly tests, personal mentoring.">
     <meta name="twitter:image" content="{{ asset('assets/images/og-image.jpg') }}">
 @endsection
 
 @section('content')
 
-<section class="page-header">
+    <section class="page-header" style="padding-top: 200px;">
             <div class="container">
                 <div class="page-header__content">
                     <ul class="eduhive-breadcrumb list-unstyled">
-                        <li><span class="eduhive-breadcrumb__icon"><i class="icon-home"></i></span><a href="index.html">Home</a></li>
+                        <li><span class="eduhive-breadcrumb__icon"><i class="icon-home"></i></span><a href="index.html">Home</a>
+                        </li>
                         <li><span>About us</span></li>
                     </ul><!-- /.eduhive-breadcrumb list-unstyled -->
                     <h2 class="page-header__title">About us</h2>
@@ -62,10 +68,14 @@
                         <div class="about-two__content">
                             <div class="sec-title wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
                                 <h6 class="sec-title__tagline">ABOUT US</h6><!-- /.sec-title__tagline -->
-                                <h3 class="sec-title__title">Learn New Skills <span class="sec-title__title__shape">To Go Ahead For</span> <br> Your <span class="sec-title__title__text">Career</span></h3><!-- /.sec-title__title -->
+                                <h3 class="sec-title__title">Learn New Skills <span class="sec-title__title__shape">To Go Ahead
+                                        For</span> <br> Your <span class="sec-title__title__text">Career</span></h3>
+                                <!-- /.sec-title__title -->
                             </div><!-- /.sec-title -->
                             <div class="about-two__description wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                                <p class="about-two__text">Aonsectetur adipiscing elit Aenean scelerisque augue vitae consequat Juisque eget congue velit in cursus leo sodales the turpis euismod quis sapien euismod quis sapien the.</p><!-- /.about-two__text -->
+                                <p class="about-two__text">Aonsectetur adipiscing elit Aenean scelerisque augue vitae consequat
+                                    Juisque eget congue velit in cursus leo sodales the turpis euismod quis sapien euismod quis
+                                    sapien the.</p><!-- /.about-two__text -->
                             </div><!-- /.about-two__description -->
                             <div class="about-two__row row">
                                 <div class="col-sm-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
@@ -73,7 +83,8 @@
                                         <span class="about-two__info__icon">
                                             <i class="icon-check-2"></i>
                                         </span><!-- /.about-two__info__icon -->
-                                        <h4 class="about-two__info__title">Flexible Course Plan</h4><!-- /.about-two__info__title -->
+                                        <h4 class="about-two__info__title">Flexible Course Plan</h4>
+                                        <!-- /.about-two__info__title -->
                                     </div><!-- /.about-two__info -->
                                 </div><!-- /.col-sm-6 -->
                                 <div class="col-sm-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="100ms">
@@ -81,7 +92,8 @@
                                         <span class="about-two__info__icon">
                                             <i class="icon-check-2"></i>
                                         </span><!-- /.about-two__info__icon -->
-                                        <h4 class="about-two__info__title">Educator Support</h4><!-- /.about-two__info__title -->
+                                        <h4 class="about-two__info__title">Educator Support</h4>
+                                        <!-- /.about-two__info__title -->
                                     </div><!-- /.about-two__info -->
                                 </div><!-- /.col-sm-6 -->
                                 <div class="col-sm-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
@@ -118,7 +130,8 @@
         <section class="funfact-one funfact-one--round">
             <div class="container">
                 <div class="funfact-one__grid">
-                    <div class="funfact-one__item funfact-one__item--secondary wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                    <div class="funfact-one__item funfact-one__item--secondary wow fadeInUp" data-wow-duration="1500ms"
+                        data-wow-delay="00ms">
                         <div class="funfact-one__icon">
                             <span class="funfact-one__icon__inner"><i class="icon-connectibity"></i></span>
                         </div><!-- /.funfact-one__icon -->
@@ -128,7 +141,8 @@
                         </h3><!-- /.funfact-one__title -->
                         <p class="funfact-one__text">Satisfied Student</p><!-- /.funfact-one__text -->
                     </div><!-- /.funfact-one__item -->
-                    <div class="funfact-one__item funfact-one__item--primary wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="100ms">
+                    <div class="funfact-one__item funfact-one__item--primary wow fadeInUp" data-wow-duration="1500ms"
+                        data-wow-delay="100ms">
                         <div class="funfact-one__icon">
                             <span class="funfact-one__icon__inner"><i class="icon-batch-assign"></i></span>
                         </div><!-- /.funfact-one__icon -->
@@ -138,7 +152,8 @@
                         </h3><!-- /.funfact-one__title -->
                         <p class="funfact-one__text">Class Completed</p><!-- /.funfact-one__text -->
                     </div><!-- /.funfact-one__item -->
-                    <div class="funfact-one__item funfact-one__item--secondary wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="200ms">
+                    <div class="funfact-one__item funfact-one__item--secondary wow fadeInUp" data-wow-duration="1500ms"
+                        data-wow-delay="200ms">
                         <div class="funfact-one__icon">
                             <span class="funfact-one__icon__inner"><i class="icon-students"></i></span>
                         </div><!-- /.funfact-one__icon -->
@@ -148,7 +163,8 @@
                         </h3><!-- /.funfact-one__title -->
                         <p class="funfact-one__text">Active Students</p><!-- /.funfact-one__text -->
                     </div><!-- /.funfact-one__item -->
-                    <div class="funfact-one__item funfact-one__item--primary wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="300ms">
+                    <div class="funfact-one__item funfact-one__item--primary wow fadeInUp" data-wow-duration="1500ms"
+                        data-wow-delay="300ms">
                         <div class="funfact-one__icon">
                             <span class="funfact-one__icon__inner"><i class="icon-instructors"></i></span>
                         </div><!-- /.funfact-one__icon -->
@@ -164,14 +180,16 @@
 
         <section class="online-class section-space-bottom">
             <div class="online-class__inner">
-                <div class="online-class__inner__bg" style="background-image: url(assets/images/shapes/online-class-bg-1-1.png);">
+                <div class="online-class__inner__bg"
+                    style="background-image: url(assets/images/shapes/online-class-bg-1-1.png);">
                 </div><!-- /.online-class__inner__bg -->
             </div><!-- /.online-class__inner -->
             <div class="container">
                 <div class="video-one wow fadeInUp" data-wow-duration="1500ms">
                     <div class="video-one__bg" style="background-image: url(assets/images/resources/video-1-1.jpg);">
                         <img src="assets/images/resources/video-1-2.jpg" alt="video">
-                        <a href="https://www.youtube.com/watch?v=h9MbznbxlLc" class="video-one__video-btn video-btn video-popup">
+                        <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
+                            class="video-one__video-btn video-btn video-popup">
                             <i class="icon-play"></i>
                             <span></span>
                             <span></span>
@@ -183,10 +201,14 @@
                 <div class="online-class__content">
                     <div class="sec-title sec-title--center wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
                         <h6 class="sec-title__tagline">online class</h6><!-- /.sec-title__tagline -->
-                        <h3 class="sec-title__title"><span>lockdown</span> <span class="sec-title__title__shape">can’t</span> <span>stop your</span> <span class="sec-title__title__text">learning</span></h3><!-- /.sec-title__title -->
+                        <h3 class="sec-title__title"><span>lockdown</span> <span class="sec-title__title__shape">can’t</span>
+                            <span>stop your</span> <span class="sec-title__title__text">learning</span></h3>
+                        <!-- /.sec-title__title -->
                     </div><!-- /.sec-title -->
                     <div class="online-class__description wow fadeInUp" data-wow-duration="1500ms">
-                        <p class="online-class__text">Aonsectetur adipiscing elit Aenean scelerisque augue vitae consequat Juisque eget congue velit in cursus leo sodales the turpis euismod quis sapien euismod quis sapien the.</p><!-- /.online-class__text -->
+                        <p class="online-class__text">Aonsectetur adipiscing elit Aenean scelerisque augue vitae consequat
+                            Juisque eget congue velit in cursus leo sodales the turpis euismod quis sapien euismod quis sapien
+                            the.</p><!-- /.online-class__text -->
                     </div><!-- /.online-class__description -->
                     <div class="online-class__class-wrapper">
                         <div class="online-class__class wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
@@ -227,14 +249,16 @@
                         <div class="offer-one__image">
                             <img src="assets/images/resources/offer-1-1.jpg" alt="offer image" class="offer-one__image__one">
                             <img src="assets/images/resources/offer-1-2.jpg" alt="offer image" class="offer-one__image__two">
-                            <img src="assets/images/shapes/offer-shape-1-1.png" alt="offer shape" class="offer-one__image__shape">
+                            <img src="assets/images/shapes/offer-shape-1-1.png" alt="offer shape"
+                                class="offer-one__image__shape">
                         </div><!-- /.offer-one__image -->
                     </div><!-- /.col-lg-6 -->
                     <div class="col-lg-6">
                         <div class="offer-one__content">
                             <div class="sec-title wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
                                 <h6 class="sec-title__tagline">who we are</h6><!-- /.sec-title__tagline -->
-                                <h3 class="sec-title__title"><span class="sec-title__title__shape">We Offer</span> The <span class="sec-title__title__text">Best Carrier</span></h3><!-- /.sec-title__title -->
+                                <h3 class="sec-title__title"><span class="sec-title__title__shape">We Offer</span> The <span
+                                        class="sec-title__title__text">Best Carrier</span></h3><!-- /.sec-title__title -->
                             </div><!-- /.sec-title -->
                             <div class="offer-one__inner">
                                 <div class="offer-one__item wow fadeInUp" data-wow-duration="1500ms">
@@ -243,7 +267,8 @@
                                     </div><!-- /.offer-one__item__icon -->
                                     <div class="offer-one__item__content">
                                         <h4 class="offer-one__item__title">Industry Expert Instructor</h4>
-                                        <p class="offer-one__item__text">Aonsectetur adipiscing elit Aenean scelerisque augue vitae consequat Juisque eget congue velit in cursus leo</p>
+                                        <p class="offer-one__item__text">Aonsectetur adipiscing elit Aenean scelerisque augue
+                                            vitae consequat Juisque eget congue velit in cursus leo</p>
                                     </div><!-- /.offer-one__item__content -->
                                 </div><!-- /.offer-one__item -->
                                 <div class="offer-one__item wow fadeInUp" data-wow-duration="1500ms">
@@ -252,7 +277,8 @@
                                     </div><!-- /.offer-one__item__icon -->
                                     <div class="offer-one__item__content">
                                         <h4 class="offer-one__item__title">Up-to-Date Course Content</h4>
-                                        <p class="offer-one__item__text">Hammer out we need to socialize the comms with the wider stakeholder community exposing new ways to evolve</p>
+                                        <p class="offer-one__item__text">Hammer out we need to socialize the comms with the
+                                            wider stakeholder community exposing new ways to evolve</p>
                                     </div><!-- /.offer-one__item__content -->
                                 </div><!-- /.offer-one__item -->
                                 <div class="offer-one__item wow fadeInUp" data-wow-duration="1500ms">
@@ -261,7 +287,8 @@
                                     </div><!-- /.offer-one__item__icon -->
                                     <div class="offer-one__item__content">
                                         <h4 class="offer-one__item__title">Biggest Student Community</h4>
-                                        <p class="offer-one__item__text">Focus on the customer journey we need to socialize the comms with the wider stakeholder community upsell window-licker</p>
+                                        <p class="offer-one__item__text">Focus on the customer journey we need to socialize the
+                                            comms with the wider stakeholder community upsell window-licker</p>
                                     </div><!-- /.offer-one__item__content -->
                                 </div><!-- /.offer-one__item -->
                             </div><!-- /.offer-one__inner -->
@@ -278,32 +305,34 @@
             <div class="container">
                 <div class="sec-title sec-title--center wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
                     <h6 class="sec-title__tagline">our testimonials</h6><!-- /.sec-title__tagline -->
-                    <h3 class="sec-title__title">people <span class="sec-title__title__text">say about</span> <span class="sec-title__title__shape">eduhive</span></h3><!-- /.sec-title__title -->
+                    <h3 class="sec-title__title">people <span class="sec-title__title__text">say about</span> <span
+                            class="sec-title__title__shape">eduhive</span></h3><!-- /.sec-title__title -->
                 </div><!-- /.sec-title -->
-                <div class="testimonials-three__carousel eduhive-owl__carousel eduhive-owl__carousel--basic-nav eduhive-owl__carousel--with-shadow owl-theme owl-carousel" data-owl-options='{
-            "items": 3,
-            "margin": 30,
-            "smartSpeed": 700,
-            "loop":true,
-            "autoplay": 6000,
-            "nav":true,
-            "dots":false,
-            "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
-            "responsive":{
-                "0":{
-                    "items": 1,
-                    "margin": 10
-                },
-                "768":{
-                    "items": 2,
-                    "margin": 30
-                },
-                "1200":{
+                <div class="testimonials-three__carousel eduhive-owl__carousel eduhive-owl__carousel--basic-nav eduhive-owl__carousel--with-shadow owl-theme owl-carousel"
+                    data-owl-options='{
                     "items": 3,
-                    "margin": 30
-                }
-              }
-            }'>
+                    "margin": 30,
+                    "smartSpeed": 700,
+                    "loop":true,
+                    "autoplay": 6000,
+                    "nav":true,
+                    "dots":false,
+                    "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
+                    "responsive":{
+                        "0":{
+                            "items": 1,
+                            "margin": 10
+                        },
+                        "768":{
+                            "items": 2,
+                            "margin": 30
+                        },
+                        "1200":{
+                            "items": 3,
+                            "margin": 30
+                        }
+                      }
+                    }'>
                     <div class="item wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
                         <div class="testimonial-card-three">
                             <div class="testimonial-card-three__image">
@@ -317,7 +346,8 @@
                                     <h5 class="testimonial-card-three__name">Michael G. Ware</h5>
                                     <p class="testimonial-card-three__designation">managing director</p>
                                 </div><!-- /.testimonial-card-three__identity -->
-                                <p class="testimonial-card-three__quote">Eduhive Agency Company Also Impressed Us With Their Transpa Regarding Costs. The Initial Quote Was</p><!-- /.testimonial-card-three__quote -->
+                                <p class="testimonial-card-three__quote">Eduhive Agency Company Also Impressed Us With Their
+                                    Transpa Regarding Costs. The Initial Quote Was</p><!-- /.testimonial-card-three__quote -->
                                 <div class="eduhive-ratings">
                                     <span class="eduhive-ratings__icon">
                                         <i class="fa fa-star"></i>
@@ -351,7 +381,8 @@
                                     <h5 class="testimonial-card-three__name">Sarah Albert</h5>
                                     <p class="testimonial-card-three__designation">managing director</p>
                                 </div><!-- /.testimonial-card-three__identity -->
-                                <p class="testimonial-card-three__quote">Flexible Classes Refers To The Process Of Acquiring Is Knowledge Free Or Skills Through The Use</p><!-- /.testimonial-card-three__quote -->
+                                <p class="testimonial-card-three__quote">Flexible Classes Refers To The Process Of Acquiring Is
+                                    Knowledge Free Or Skills Through The Use</p><!-- /.testimonial-card-three__quote -->
                                 <div class="eduhive-ratings">
                                     <span class="eduhive-ratings__icon">
                                         <i class="fa fa-star"></i>
@@ -385,7 +416,8 @@
                                     <h5 class="testimonial-card-three__name">Kevin Martin</h5>
                                     <p class="testimonial-card-three__designation">managing director</p>
                                 </div><!-- /.testimonial-card-three__identity -->
-                                <p class="testimonial-card-three__quote">There Are Many Variations Of Passages, But The Majority Have Suffered Alteradution In Some Form</p><!-- /.testimonial-card-three__quote -->
+                                <p class="testimonial-card-three__quote">There Are Many Variations Of Passages, But The Majority
+                                    Have Suffered Alteradution In Some Form</p><!-- /.testimonial-card-three__quote -->
                                 <div class="eduhive-ratings">
                                     <span class="eduhive-ratings__icon">
                                         <i class="fa fa-star"></i>
@@ -418,41 +450,44 @@
             <div class="container">
                 <div class="sec-title sec-title--center wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
                     <h6 class="sec-title__tagline">our expert team</h6><!-- /.sec-title__tagline -->
-                    <h3 class="sec-title__title">Our <span class="sec-title__title__text">expert</span> <span class="sec-title__title__shape">instructor</span></h3><!-- /.sec-title__title -->
+                    <h3 class="sec-title__title">Our <span class="sec-title__title__text">expert</span> <span
+                            class="sec-title__title__shape">instructor</span></h3><!-- /.sec-title__title -->
                 </div><!-- /.sec-title -->
-                <div class="instructors-three__carousel eduhive-owl__carousel eduhive-owl__carousel--with-shadow eduhive-owl__carousel--basic-nav owl-carousel owl-theme" data-owl-options='{
-            "items": 1,
-            "margin": 10,
-            "loop": true,
-            "smartSpeed": 700,
-            "nav": false,
-            "dots": true,
-            "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
-            "autoplay": true,
-            "responsive": {
-                "0": {
+                <div class="instructors-three__carousel eduhive-owl__carousel eduhive-owl__carousel--with-shadow eduhive-owl__carousel--basic-nav owl-carousel owl-theme"
+                    data-owl-options='{
                     "items": 1,
-                    "nav": true,
-                    "dots": false,
-                    "margin": 10
-                },
-                "576": {
-                    "items": 2,
-                    "margin": 30
-                },
-                "992": {
-                    "items": 3,
-                    "margin": 30
-                },
-                "1200": {
-                    "items": 4,
-                    "margin": 30,
-                    "dots": false
-                }
-            }
-        }'>
+                    "margin": 10,
+                    "loop": true,
+                    "smartSpeed": 700,
+                    "nav": false,
+                    "dots": true,
+                    "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
+                    "autoplay": true,
+                    "responsive": {
+                        "0": {
+                            "items": 1,
+                            "nav": true,
+                            "dots": false,
+                            "margin": 10
+                        },
+                        "576": {
+                            "items": 2,
+                            "margin": 30
+                        },
+                        "992": {
+                            "items": 3,
+                            "margin": 30
+                        },
+                        "1200": {
+                            "items": 4,
+                            "margin": 30,
+                            "dots": false
+                        }
+                    }
+                }'>
                     <div class="item">
-                        <div class="instructor-card-three instructor-card-three--top-identity wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='100ms'>
+                        <div class="instructor-card-three instructor-card-three--top-identity wow fadeInUp"
+                            data-wow-duration='1500ms' data-wow-delay='100ms'>
                             <div class="instructor-card-three__image">
                                 <div class="instructor-card-three__image__inner">
                                     <img src="assets/images/instructors/instructor-3-1.jpg" alt="Anthony B. Castillo">
@@ -496,7 +531,8 @@
                                 <h3 class="instructor-card-three__name">
                                     <a href="instructor-details.html">Anthony B. Castillo</a>
                                 </h3><!-- /.instructor-card-three__name -->
-                                <p class="instructor-card-three__designation">Digital marketer</p><!-- /.instructor-card-three__designation -->
+                                <p class="instructor-card-three__designation">Digital marketer</p>
+                                <!-- /.instructor-card-three__designation -->
                             </div><!-- /.instructor-card-three__identity -->
                         </div><!-- /.instructor-card-three -->
                     </div><!-- /.item -->
@@ -545,12 +581,14 @@
                                 <h3 class="instructor-card-three__name">
                                     <a href="instructor-details.html">david cooper</a>
                                 </h3><!-- /.instructor-card-three__name -->
-                                <p class="instructor-card-three__designation">Sr. Manager</p><!-- /.instructor-card-three__designation -->
+                                <p class="instructor-card-three__designation">Sr. Manager</p>
+                                <!-- /.instructor-card-three__designation -->
                             </div><!-- /.instructor-card-three__identity -->
                         </div><!-- /.instructor-card-three -->
                     </div><!-- /.item -->
                     <div class="item">
-                        <div class="instructor-card-three instructor-card-three--top-identity wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='100ms'>
+                        <div class="instructor-card-three instructor-card-three--top-identity wow fadeInUp"
+                            data-wow-duration='1500ms' data-wow-delay='100ms'>
                             <div class="instructor-card-three__image">
                                 <div class="instructor-card-three__image__inner">
                                     <img src="assets/images/instructors/instructor-3-1.jpg" alt="Anthony B. Castillo">
@@ -594,7 +632,8 @@
                                 <h3 class="instructor-card-three__name">
                                     <a href="instructor-details.html">Anthony B. Castillo</a>
                                 </h3><!-- /.instructor-card-three__name -->
-                                <p class="instructor-card-three__designation">Digital marketer</p><!-- /.instructor-card-three__designation -->
+                                <p class="instructor-card-three__designation">Digital marketer</p>
+                                <!-- /.instructor-card-three__designation -->
                             </div><!-- /.instructor-card-three__identity -->
                         </div><!-- /.instructor-card-three -->
                     </div><!-- /.item -->
@@ -643,12 +682,14 @@
                                 <h3 class="instructor-card-three__name">
                                     <a href="instructor-details.html">david cooper</a>
                                 </h3><!-- /.instructor-card-three__name -->
-                                <p class="instructor-card-three__designation">Sr. Manager</p><!-- /.instructor-card-three__designation -->
+                                <p class="instructor-card-three__designation">Sr. Manager</p>
+                                <!-- /.instructor-card-three__designation -->
                             </div><!-- /.instructor-card-three__identity -->
                         </div><!-- /.instructor-card-three -->
                     </div><!-- /.item -->
                     <div class="item">
-                        <div class="instructor-card-three instructor-card-three--top-identity wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='200ms'>
+                        <div class="instructor-card-three instructor-card-three--top-identity wow fadeInUp"
+                            data-wow-duration='1500ms' data-wow-delay='200ms'>
                             <div class="instructor-card-three__image">
                                 <div class="instructor-card-three__image__inner">
                                     <img src="assets/images/instructors/instructor-3-3.jpg" alt="kevin martin">
@@ -692,7 +733,8 @@
                                 <h3 class="instructor-card-three__name">
                                     <a href="instructor-details.html">kevin martin</a>
                                 </h3><!-- /.instructor-card-three__name -->
-                                <p class="instructor-card-three__designation">Founder & CEO</p><!-- /.instructor-card-three__designation -->
+                                <p class="instructor-card-three__designation">Founder & CEO</p>
+                                <!-- /.instructor-card-three__designation -->
                             </div><!-- /.instructor-card-three__identity -->
                         </div><!-- /.instructor-card-three -->
                     </div><!-- /.item -->
@@ -741,7 +783,8 @@
                                 <h3 class="instructor-card-three__name">
                                     <a href="instructor-details.html">Adlof Carone</a>
                                 </h3><!-- /.instructor-card-three__name -->
-                                <p class="instructor-card-three__designation">UI/UX Designer</p><!-- /.instructor-card-three__designation -->
+                                <p class="instructor-card-three__designation">UI/UX Designer</p>
+                                <!-- /.instructor-card-three__designation -->
                             </div><!-- /.instructor-card-three__identity -->
                         </div><!-- /.instructor-card-three -->
                     </div><!-- /.item -->

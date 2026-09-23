@@ -2,17 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\ProgramController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
 Route::get('/', [HomeController::class, 'index']);
@@ -23,9 +18,8 @@ Route::post('sendemail', [HomeController::class, 'send'])->name('send.email');
 Route::get('products', [HomeController::class, 'project']);
 Route::get('our-work-corporate', [HomeController::class, 'corporate_work']);
 
-
-
-
-
-
-
+// Programs — /courses (All Programs) and /courses/{slug} (jee, neet, mht-cet, foundation, boards, nda)
+Route::get('courses', [ProgramController::class, 'index'])->name('programs.index');
+Route::get('courses/{slug}', [ProgramController::class, 'show'])
+    ->where('slug', '[a-z0-9-]+')
+    ->name('programs.show');

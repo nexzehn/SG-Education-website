@@ -1,21 +1,31 @@
 {{--
   SG Educare — Redesigned Header (topbar + main nav)
   Place at: resources/views/layouts/header.blade.php
-  Pure CSS — no JS needed for dropdown or animations.
+
+  HOW IT WORKS (no custom JS):
+   - Desktop dropdown  → pure CSS (hover / focus-within)
+   - Mobile menu       → Eduhive's .mobile-nav__toggler + eduhive.js
+                          (copies the hidden .main-menu into .mobile-nav__container)
+   - Menu items live in layouts/nav-menu.blade.php (edit there only)
+   - Sticky on scroll  → Eduhive's .sticky-header--normal (eduhive.js adds .active)
+
+  REQUIRED in layouts/main.blade.php:
+   - Keep the .mobile-nav__wrapper block (with .mobile-nav__container)
+   - eduhive.js must be loaded
+
+  All nav CSS is scoped to .sg-header so the cloned mobile menu keeps Eduhive's own styling.
 --}}
 
 <style>
 /* =========================================================
-   SG EDUCARE HEADER — VARIABLES
+   VARIABLES
    ========================================================= */
 :root {
   --sg-navy:       #0f1b3d;
   --sg-navy-light: #162350;
   --sg-accent:     #ff6b35;
   --sg-accent-alt: #f7c948;
-  --sg-blue:       #2563eb;
   --sg-white:      #ffffff;
-  --sg-gray-50:    #f8fafc;
   --sg-gray-100:   #f1f5f9;
   --sg-gray-400:   #94a3b8;
   --sg-gray-600:   #475569;
@@ -25,6 +35,9 @@
   --sg-shadow-lg:  0 12px 40px rgba(15, 27, 61, .16);
   --sg-transition: .3s cubic-bezier(.4, 0, .2, 1);
 }
+
+/* Eduhive's .page-wrapper { overflow:hidden } can break sticky; clip keeps the same look */
+.page-wrapper { overflow: clip; }
 
 /* =========================================================
    TOPBAR
@@ -47,8 +60,6 @@
   flex-wrap: wrap;
   gap: 8px;
 }
-
-/* Info list */
 .sg-topbar__info {
   display: flex;
   align-items: center;
@@ -56,19 +67,13 @@
   list-style: none;
   margin: 0; padding: 0;
 }
-.sg-topbar__info li {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
+.sg-topbar__info li { display: flex; align-items: center; gap: 7px; }
 .sg-topbar__info a {
   color: rgba(255,255,255,.8);
   text-decoration: none;
   transition: color var(--sg-transition);
 }
-.sg-topbar__info a:hover {
-  color: var(--sg-accent-alt);
-}
+.sg-topbar__info a:hover { color: var(--sg-accent-alt); }
 .sg-topbar__icon {
   width: 28px; height: 28px;
   border-radius: 8px;
@@ -78,20 +83,10 @@
   flex-shrink: 0;
   transition: background var(--sg-transition);
 }
-.sg-topbar__info li:hover .sg-topbar__icon {
-  background: rgba(255,107,53,.25);
-}
-.sg-topbar__icon svg {
-  width: 13px; height: 13px;
-  stroke: var(--sg-accent-alt);
-}
+.sg-topbar__info li:hover .sg-topbar__icon { background: rgba(255,107,53,.25); }
+.sg-topbar__icon svg { width: 13px; height: 13px; stroke: var(--sg-accent-alt); }
 
-/* Social */
-.sg-topbar__social {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+.sg-topbar__social { display: flex; align-items: center; gap: 6px; }
 .sg-topbar__social a {
   width: 30px; height: 30px;
   border-radius: 8px;
@@ -100,33 +95,36 @@
   color: rgba(255,255,255,.6);
   text-decoration: none;
   transition: all var(--sg-transition);
-  background: transparent;
 }
 .sg-topbar__social a:hover {
   background: var(--sg-accent);
   color: #fff;
   transform: translateY(-2px);
 }
-.sg-topbar__social svg {
-  width: 14px; height: 14px;
-}
+.sg-topbar__social svg { width: 14px; height: 14px; }
 
 /* =========================================================
    MAIN HEADER
    ========================================================= */
 .sg-header {
   background: var(--sg-white);
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 1000;
-  transition: box-shadow var(--sg-transition),
-              background var(--sg-transition);
+  width: 100%;
 }
-.sg-header.is-sticky {
+/* Eduhive's sticky: eduhive.js adds .active after scrolling */
+.sg-header.sticky-header--normal.active {
+  position: fixed;
+  top: 0; left: 0; right: 0;
   box-shadow: var(--sg-shadow);
-  background: rgba(255,255,255,.92);
+  background: rgba(255,255,255,.95);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  animation: sgSlideDown .4s ease;
+}
+@keyframes sgSlideDown {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(0); }
 }
 .sg-header__inner {
   max-width: 1320px;
@@ -137,88 +135,70 @@
   justify-content: space-between;
   height: 76px;
 }
-
-/* Logo */
 .sg-header__logo img {
   height: 46px;
   width: auto;
   transition: transform var(--sg-transition);
 }
-.sg-header__logo:hover img {
-  transform: scale(1.04);
-}
-
-/* Right wrapper */
-.sg-header__right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+.sg-header__logo:hover img { transform: scale(1.04); }
 
 /* =========================================================
-   NAVIGATION
+   NAVIGATION (desktop, scoped to .sg-header)
    ========================================================= */
-.sg-nav__list {
+.sg-header .sg-nav__list {
   display: flex;
   align-items: center;
   gap: 4px;
   list-style: none;
   margin: 0; padding: 0;
 }
-.sg-nav__item {
-  position: relative;
-}
-.sg-nav__link {
+.sg-header .sg-nav__item { position: relative; }
+.sg-header .sg-nav__link {
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 10px 16px;
+  padding: 10px 14px;
   font-size: .92rem;
   font-weight: 600;
   color: var(--sg-gray-800);
   text-decoration: none;
   border-radius: 10px;
-  transition: color var(--sg-transition),
-              background var(--sg-transition);
+  transition: color var(--sg-transition), background var(--sg-transition);
   position: relative;
 }
-.sg-nav__link::after {
+.sg-header .sg-nav__link::after {
   content: '';
   position: absolute;
   bottom: 4px;
-  left: 16px; right: 16px;
+  left: 14px; right: 14px;
   height: 2px;
   border-radius: 2px;
   background: var(--sg-accent);
   transform: scaleX(0);
-  transform-origin: center;
   transition: transform var(--sg-transition);
 }
-.sg-nav__link:hover,
-.sg-nav__item.current > .sg-nav__link {
+.sg-header .sg-nav__link:hover,
+.sg-header .sg-nav__item.current > .sg-nav__link {
   color: var(--sg-accent);
   background: rgba(255,107,53,.06);
 }
-.sg-nav__link:hover::after,
-.sg-nav__item.current > .sg-nav__link::after {
-  transform: scaleX(1);
-}
+.sg-header .sg-nav__link:hover::after,
+.sg-header .sg-nav__item.current > .sg-nav__link::after { transform: scaleX(1); }
 
-/* ---- Caret Icon (rotates on hover) ---- */
-.sg-nav__caret {
+.sg-header .sg-nav__caret {
   width: 16px; height: 16px;
-  transition: transform .35s cubic-bezier(.4, 0, .2, 1);
   flex-shrink: 0;
+  transition: transform .35s cubic-bezier(.4, 0, .2, 1);
 }
-.sg-nav__item.dropdown:hover > .sg-nav__link .sg-nav__caret,
-.sg-nav__item.dropdown:focus-within > .sg-nav__link .sg-nav__caret {
+.sg-header .sg-nav__item.dropdown:hover > .sg-nav__link .sg-nav__caret,
+.sg-header .sg-nav__item.dropdown:focus-within > .sg-nav__link .sg-nav__caret {
   transform: rotate(180deg);
 }
 
 /* =========================================================
-   DROPDOWN  ✨  Smooth fade + slide
+   DROPDOWN (desktop)
    ========================================================= */
-.sg-dropdown {
+.sg-header .sg-dropdown {
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
@@ -230,19 +210,21 @@
   padding: 8px 0;
   list-style: none;
   margin: 0;
-
-  /* ---- hidden state ---- */
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
-  transition: opacity .3s ease,
-              visibility .3s ease,
-              transform .3s cubic-bezier(.4, 0, .2, 1);
+  transition: opacity .3s ease, visibility .3s ease, transform .3s cubic-bezier(.4, 0, .2, 1);
   pointer-events: none;
   z-index: 999;
 }
-/* small arrow on top */
-.sg-dropdown::before {
+/* invisible bridge so the menu doesn't close while moving the mouse down */
+.sg-header .sg-dropdown::after {
+  content: '';
+  position: absolute;
+  top: -12px; left: 0; right: 0;
+  height: 12px;
+}
+.sg-header .sg-dropdown::before {
   content: '';
   position: absolute;
   top: -6px; left: 28px;
@@ -253,18 +235,14 @@
   transform: rotate(45deg);
   border-radius: 2px 0 0 0;
 }
-
-/* ---- visible state ---- */
-.sg-nav__item.dropdown:hover > .sg-dropdown,
-.sg-nav__item.dropdown:focus-within > .sg-dropdown {
+.sg-header .sg-nav__item.dropdown:hover > .sg-dropdown,
+.sg-header .sg-nav__item.dropdown:focus-within > .sg-dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
   pointer-events: auto;
 }
-
-/* Dropdown items */
-.sg-dropdown__link {
+.sg-header .sg-dropdown__link {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -274,9 +252,8 @@
   color: var(--sg-gray-600);
   text-decoration: none;
   transition: all var(--sg-transition);
-  position: relative;
 }
-.sg-dropdown__link::before {
+.sg-header .sg-dropdown__link::before {
   content: '';
   width: 6px; height: 6px;
   border-radius: 50%;
@@ -284,44 +261,32 @@
   flex-shrink: 0;
   transition: all var(--sg-transition);
 }
-.sg-dropdown__link:hover {
+.sg-header .sg-dropdown__link:hover {
   color: var(--sg-accent);
   background: rgba(255,107,53,.05);
   padding-left: 26px;
 }
-.sg-dropdown__link:hover::before {
+.sg-header .sg-dropdown__link:hover::before {
   background: var(--sg-accent);
   box-shadow: 0 0 0 3px rgba(255,107,53,.15);
 }
-
-/* Stagger animation for items */
-.sg-dropdown li {
+.sg-header .sg-dropdown li {
   opacity: 0;
   transform: translateX(-8px);
   transition: opacity .25s ease, transform .25s ease;
 }
-.sg-nav__item.dropdown:hover .sg-dropdown li,
-.sg-nav__item.dropdown:focus-within .sg-dropdown li {
-  opacity: 1;
-  transform: translateX(0);
-}
-.sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(1),
-.sg-nav__item.dropdown:focus-within .sg-dropdown li:nth-child(1) { transition-delay: .04s; }
-.sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(2),
-.sg-nav__item.dropdown:focus-within .sg-dropdown li:nth-child(2) { transition-delay: .08s; }
-.sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(3),
-.sg-nav__item.dropdown:focus-within .sg-dropdown li:nth-child(3) { transition-delay: .12s; }
-.sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(4),
-.sg-nav__item.dropdown:focus-within .sg-dropdown li:nth-child(4) { transition-delay: .16s; }
-.sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(5),
-.sg-nav__item.dropdown:focus-within .sg-dropdown li:nth-child(5) { transition-delay: .20s; }
-.sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(6),
-.sg-nav__item.dropdown:focus-within .sg-dropdown li:nth-child(6) { transition-delay: .24s; }
-.sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(7),
-.sg-nav__item.dropdown:focus-within .sg-dropdown li:nth-child(7) { transition-delay: .28s; }
+.sg-header .sg-nav__item.dropdown:hover .sg-dropdown li,
+.sg-header .sg-nav__item.dropdown:focus-within .sg-dropdown li { opacity: 1; transform: translateX(0); }
+.sg-header .sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(1) { transition-delay: .04s; }
+.sg-header .sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(2) { transition-delay: .08s; }
+.sg-header .sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(3) { transition-delay: .12s; }
+.sg-header .sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(4) { transition-delay: .16s; }
+.sg-header .sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(5) { transition-delay: .20s; }
+.sg-header .sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(6) { transition-delay: .24s; }
+.sg-header .sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(7) { transition-delay: .28s; }
+.sg-header .sg-nav__item.dropdown:hover .sg-dropdown li:nth-child(8) { transition-delay: .32s; }
 
-/* Divider before "All Programs" */
-.sg-dropdown__divider {
+.sg-header .sg-dropdown__divider {
   height: 1px;
   background: var(--sg-gray-100);
   margin: 6px 16px;
@@ -339,128 +304,76 @@
   font-weight: 700;
   color: #fff;
   background: linear-gradient(135deg, var(--sg-accent), #ff8c5a);
-  border: none;
   border-radius: 50px;
   text-decoration: none;
   white-space: nowrap;
-  transition: transform var(--sg-transition),
-              box-shadow var(--sg-transition);
   box-shadow: 0 4px 16px rgba(255,107,53,.3);
+  transition: transform var(--sg-transition), box-shadow var(--sg-transition);
 }
 .sg-cta:hover {
+  color: #fff;
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(255,107,53,.4);
 }
-.sg-cta svg {
-  width: 16px; height: 16px;
-  transition: transform var(--sg-transition);
-}
-.sg-cta:hover svg {
-  transform: translateX(3px);
-}
+.sg-cta svg { width: 16px; height: 16px; transition: transform var(--sg-transition); }
+.sg-cta:hover svg { transform: translateX(3px); }
 
 /* =========================================================
-   MOBILE TOGGLE
+   MOBILE TOGGLER (Eduhive .mobile-nav__toggler — eduhive.js opens the drawer)
    ========================================================= */
-.sg-mobile-toggle {
+.sg-header .mobile-nav__btn {
   display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
+  /* flex-direction: column;
+  justify-content: center;
+  gap: 5px; */
+  width: 42px; height: 42px;
+  padding: 9px;
   border-radius: 8px;
+  cursor: pointer;
   transition: background var(--sg-transition);
 }
-.sg-mobile-toggle:hover {
-  background: var(--sg-gray-100);
-}
-.sg-mobile-toggle span {
+.sg-header .mobile-nav__btn:hover { background: var(--sg-gray-100); }
+.sg-header .mobile-nav__btn span {
   display: block;
-  width: 22px; height: 2px;
+  width: 24px; height: 2px;
   background: var(--sg-gray-800);
   border-radius: 2px;
-  transition: all var(--sg-transition);
 }
-.sg-mobile-toggle.active span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-.sg-mobile-toggle.active span:nth-child(2) {
-  opacity: 0;
-}
-.sg-mobile-toggle.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
-}
+
+/* Hidden drawer source must never render */
+.sg-mobile-source { display: none !important; }
+
+/* Cloned menu inside Eduhive's drawer: hide desktop-only bits */
+.mobile-nav__container .sg-nav__caret,
+.mobile-nav__container .sg-dropdown__divider { display: none; }
 
 /* =========================================================
    RESPONSIVE
    ========================================================= */
-@media (max-width: 1024px) {
-  .sg-nav__link { padding: 10px 10px; font-size: .85rem; }
+.sg-header__actions { display: flex; align-items: center; gap: 12px; }
+
+@media (max-width: 1320px) {
+  .sg-header .sg-nav__link { padding: 10px 10px; font-size: .86rem; }
   .sg-cta { padding: 10px 18px; font-size: .82rem; }
 }
-@media (max-width: 768px) {
-  .sg-topbar__info { gap: 14px; }
-  .sg-topbar__info li:last-child { display: none; }
 
-  .sg-mobile-toggle { display: flex; }
-
-  .sg-header__right {
-    position: fixed;
-    top: 0; right: -100%;
-    width: 300px; height: 100vh;
-    background: var(--sg-white);
-    flex-direction: column;
-    align-items: stretch;
-    padding: 80px 24px 24px;
-    box-shadow: var(--sg-shadow-lg);
-    transition: right var(--sg-transition);
-    z-index: 998;
-    overflow-y: auto;
-  }
-  .sg-header__right.open { right: 0; }
-
-  .sg-nav__list {
-    flex-direction: column;
-    gap: 0;
-  }
-  .sg-nav__link { padding: 14px 0; border-radius: 0; }
-  .sg-nav__link::after { display: none; }
-
-  .sg-dropdown {
-    position: static;
-    box-shadow: none;
-    border: none;
-    padding: 0 0 0 16px;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    pointer-events: auto;
-    transition: max-height .35s ease;
-  }
-  .sg-dropdown::before { display: none; }
-  .sg-nav__item.dropdown.open > .sg-dropdown {
-    max-height: 500px;
-  }
-  .sg-dropdown li {
-    opacity: 1;
-    transform: none;
-  }
-
-  .sg-cta {
-    margin-top: 16px;
-    justify-content: center;
-  }
+/* Eduhive's drawer breakpoint */
+@media (max-width: 1199px) {
+  .sg-header .sg-nav { display: none; }
+  .sg-header .mobile-nav__btn { display: flex; }
 }
 
-/* Screen-reader only */
-.sr-only {
-  position: absolute; width: 1px; height: 1px;
-  padding: 0; margin: -1px; overflow: hidden;
-  clip: rect(0,0,0,0); border: 0;
+@media (max-width: 991px) {
+  .sg-topbar__info { gap: 14px; }
+  .sg-topbar__info li:last-child { display: none; }
+}
+
+@media (max-width: 575px) {
+  .sg-topbar__info li:first-child { display: none; }
+  .sg-topbar__inner { justify-content: center; }
+  .sg-header__inner { height: 68px; padding: 0 16px; }
+  .sg-header__logo img { height: 40px; }
+  .sg-cta { display: none; }
 }
 </style>
 
@@ -505,7 +418,7 @@
               <circle cx="12" cy="10" r="3"/>
             </svg>
           </span>
-          <a href="{{ url('/campuses') }}">Khadakpada &bull; Prem Auto &bull; Adharwadi, Kalyan</a>
+          <a href="{{ url('/contact') }}">Khadakpada &bull; Prem Auto &bull; Adharwadi, Kalyan</a>
         </li>
       </ul>
 
@@ -533,7 +446,7 @@
 
 
   <!-- ======== MAIN HEADER ======== -->
-  <header class="sg-header" id="sgHeader">
+  <header class="sg-header sticky-header sticky-header--normal">
     <div class="sg-header__inner">
 
       <!-- Logo -->
@@ -541,61 +454,19 @@
         <img src="{{ asset('assets/images/logo-dark.png') }}" alt="SG Educare" width="209">
       </a>
 
-      <!-- Right: Nav + CTA + Toggle -->
-      <div class="sg-header__right" id="sgNav">
+      <!-- Desktop nav (SG styles) -->
+      <nav class="sg-nav" aria-label="Main navigation">
+        @include('layouts.nav-menu', ['listClass' => 'sg-nav__list'])
+      </nav>
 
-        <nav aria-label="Main navigation">
-          <ul class="sg-nav__list">
-            <li class="sg-nav__item {{ request()->is('/') ? 'current' : '' }}">
-              <a href="{{ url('/') }}" class="sg-nav__link">Home</a>
-            </li>
-            <li class="sg-nav__item {{ request()->is('about') ? 'current' : '' }}">
-              <a href="{{ url('/about') }}" class="sg-nav__link">About Us</a>
-            </li>
+      <!-- Hidden source for Eduhive mobile drawer: eduhive.js copies .main-menu innerHTML
+           into .mobile-nav__container. Kept hidden so Eduhive's desktop CSS never shows. -->
+      <div class="main-menu sg-mobile-source" hidden aria-hidden="true">
+        @include('layouts.nav-menu', ['listClass' => 'main-menu__list'])
+      </div>
 
-            {{-- ★ PROGRAMS DROPDOWN ★ --}}
-            <li class="sg-nav__item dropdown {{ request()->is('courses*') ? 'current' : '' }}">
-              <a href="{{ url('/courses') }}" class="sg-nav__link">
-                Programs
-                <svg class="sg-nav__caret" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2.5"
-                     stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"/>
-                </svg>
-              </a>
-              <ul class="sg-dropdown">
-                <li><a href="{{ url('/courses/jee') }}"        class="sg-dropdown__link">JEE (Main + Advanced)</a></li>
-                <li><a href="{{ url('/courses/neet') }}"       class="sg-dropdown__link">NEET-UG</a></li>
-                <li><a href="{{ url('/courses/mht-cet') }}"    class="sg-dropdown__link">MHT-CET (Engg &amp; Pharmacy)</a></li>
-                <li><a href="{{ url('/courses/foundation') }}" class="sg-dropdown__link">Foundation / Launchpad</a></li>
-                <li><a href="{{ url('/courses/boards') }}"     class="sg-dropdown__link">Boards 8–10 (SSC / CBSE / ICSE)</a></li>
-                <li><a href="{{ url('/courses/nda') }}"        class="sg-dropdown__link">NDA</a></li>
-                <li class="sg-dropdown__divider" role="separator"></li>
-                <li><a href="{{ url('/courses') }}"            class="sg-dropdown__link"><strong>All Programs →</strong></a></li>
-              </ul>
-            </li>
-
-            <li class="sg-nav__item {{ request()->is('results') ? 'current' : '' }}">
-              <a href="{{ url('/results') }}" class="sg-nav__link">Results</a>
-            </li>
-            <li class="sg-nav__item {{ request()->is('resources') ? 'current' : '' }}">
-              <a href="{{ url('/resources') }}" class="sg-nav__link">Resources</a>
-            </li>
-            <li class="sg-nav__item {{ request()->is('blog*') ? 'current' : '' }}">
-              <a href="{{ url('/blog') }}" class="sg-nav__link">Blog</a>
-            </li>
-            <li class="sg-nav__item {{ request()->is('contact') ? 'current' : '' }}">
-              <a href="{{ url('/contact') }}" class="sg-nav__link">Contact</a>
-            </li>
-          </ul>
-        </nav>
-
-        <!-- Mobile Toggle -->
-        <button class="sg-mobile-toggle" id="sgToggle" aria-label="Toggle menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-
-        <!-- CTA -->
+      <!-- CTA + Eduhive mobile toggler -->
+      <div class="sg-header__actions">
         <a href="{{ url('/contact') }}" class="sg-cta">
           Get Free Counselling
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -604,39 +475,14 @@
           </svg>
         </a>
 
+        <div class="mobile-nav__btn mobile-nav__toggler" aria-label="Toggle menu" role="button">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
+
     </div>
   </header>
 
 </div>
-
-
-<!-- ======== Minimal JS (sticky + mobile only) ======== -->
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  /* Sticky shadow on scroll */
-  const header = document.getElementById('sgHeader');
-  const onScroll = () => header.classList.toggle('is-sticky', scrollY > 40);
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  /* Mobile toggle */
-  const toggle = document.getElementById('sgToggle');
-  const nav    = document.getElementById('sgNav');
-  toggle?.addEventListener('click', () => {
-    const open = nav.classList.toggle('open');
-    toggle.classList.toggle('active');
-    toggle.setAttribute('aria-expanded', open);
-  });
-
-  /* Mobile dropdown accordion */
-  document.querySelectorAll('.sg-nav__item.dropdown > .sg-nav__link').forEach(link => {
-    link.addEventListener('click', e => {
-      if (window.innerWidth <= 768) {
-        e.preventDefault();
-        link.parentElement.classList.toggle('open');
-      }
-    });
-  });
-});
-</script>
