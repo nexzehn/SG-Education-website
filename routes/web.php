@@ -12,11 +12,13 @@ use App\Http\Controllers\ProgramController;
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('about', [HomeController::class, 'about']);
+Route::get('our-methodology', [HomeController::class, 'methodology']);
 Route::get('service', [HomeController::class, 'service']);
 Route::get('contact', [HomeController::class, 'contact']);
 Route::post('sendemail', [HomeController::class, 'send'])->name('send.email');
 Route::get('products', [HomeController::class, 'project']);
 Route::get('our-work-corporate', [HomeController::class, 'corporate_work']);
+
 
 // Programs — /courses (All Programs) and /courses/{slug} (jee, neet, mht-cet, foundation, boards, nda)
 Route::get('courses', [ProgramController::class, 'index'])->name('programs.index');

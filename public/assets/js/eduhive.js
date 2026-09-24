@@ -932,6 +932,27 @@
     }
   });
 
+  const items = document.querySelectorAll('.sg-faq-item');
+
+    items.forEach((item) => {
+        const btn = item.querySelector('.sg-faq-btn');
+        btn.addEventListener('click', () => {
+            const isOpen = item.classList.contains('is-open');
+
+            // close others (single-open accordion)
+            items.forEach((el) => {
+                el.classList.remove('is-open');
+                el.querySelector('.sg-faq-btn').setAttribute('aria-expanded', 'false');
+            });
+
+            // toggle current
+            if (!isOpen) {
+                item.classList.add('is-open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+
   $(window).on("resize", function () {
     eduhive_stretch();
   });

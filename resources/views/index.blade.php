@@ -1,3998 +1,2240 @@
 {{-- ============================================================
 resources/views/home.blade.php
-SG Educare — home page content (@yield('content'))
-Extends layouts/main.blade.php (the Eduhive→Blade master layout).
-NOTE: no
-<link canonical> here — canonical lives in the layout.
-Counters use Eduhive's jquery-appear + circle-progress (no extra script needed).
+SG Education — Home page. Content from Website.docx, UI = Eduhive sections
++ a few scoped "sg-" blocks (same style language as the About page).
+Extends layouts/main.blade.php. Canonical lives in the layout.
+
+DEMO markers (replace before go-live):
+- Slider / about / class-11 / events images: Eduhive stock
+- Testimonials: placeholder quotes (docx had none)
+- Video links: Eduhive demo YouTube
 ============================================================ --}}
 @extends('layouts.main')
 
-@section('title', 'SG Educare | Best Coaching Classes in Kalyan for JEE, NEET, MHT-CET & Boards')
+@section('title', 'SG Education | Coaching Classes in Kalyan for Grades 9–12, JEE, NEET & MHT-CET')
 
 @section('meta')
     <meta name="description"
-        content="SG Educare — Kalyan's results-focused coaching institute for JEE (Main + Advanced), NEET-UG, MHT-CET, NDA and School Boards (Classes 8–10). Small batches, weekly testing and personal mentoring across 3 Kalyan campuses.">
+        content="SG Education, Khadakpada, Kalyan: focused coaching for Grades 8–12 (State Board), JEE Foundation, NEET Foundation, JEE Main & Advanced, NEET and MHT-CET. Small batches, concept-first teaching, regular tests and performance tracking.">
     <meta name="keywords"
-        content="coaching classes Kalyan, JEE coaching Kalyan, NEET coaching Kalyan, MHT-CET classes Kalyan, best coaching classes Kalyan, NDA coaching Kalyan, board tuition Kalyan, foundation classes Kalyan">
+        content="coaching classes Kalyan, JEE coaching Kalyan, NEET coaching Kalyan, MHT-CET classes Kalyan, Class 10 tuition Kalyan, 11th science classes Kalyan, JEE foundation Kalyan, Khadakpada coaching">
 
     <meta property="og:type" content="website">
-    <meta property="og:title" content="SG Educare — Kalyan's Results-Focused Coaching Institute">
+    <meta property="og:title" content="SG Education | Building Concepts. Creating Achievers.">
     <meta property="og:description"
-        content="JEE, NEET, MHT-CET, NDA & Boards (8–10) coaching in Kalyan. Small batches, weekly tests, personal mentoring across 3 campuses.">
+        content="Focused coaching in Kalyan for Grades 9–12, JEE, NEET & MHT-CET. Small batches, regular tests and performance tracking.">
     <meta property="og:image" content="{{ asset('assets/images/og-image.jpg') }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:locale" content="en_IN">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SG Educare — Coaching Classes in Kalyan">
+    <meta name="twitter:title" content="SG Education | Coaching Classes in Kalyan">
     <meta name="twitter:description"
-        content="JEE, NEET, MHT-CET, NDA & Boards coaching in Kalyan. Small batches, weekly tests, personal mentoring.">
+        content="Grades 9–12, JEE, NEET & MHT-CET coaching in Kalyan. Learn, practise, test, analyse and improve.">
     <meta name="twitter:image" content="{{ asset('assets/images/og-image.jpg') }}">
+@endsection
+
+@section('styles')
+    <style>
+        /* =====================================================================
+                                               Home page — custom blocks, same style language as About page.
+                                               All colours from Eduhive CSS variables. Per-card accent via --c / --c-rgb.
+                                               ===================================================================== */
+
+        /* ---------- 2. Why SG — refined horizontal strip ---------- */
+        /* ============================================================
+                       2. Why SG — Premium Balanced Cards
+                       Palette: Navy (#334154) + Orange (#F48134)
+                       ============================================================ */
+
+        .sg-why-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .sg-why-card {
+            position: relative;
+            flex: 0 0 calc(33.333% - 20px);
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px 35px;
+            border: 1px solid rgba(var(--eduhive-base-rgb), 0.06);
+            box-shadow: 0 10px 30px rgba(var(--eduhive-base-rgb), 0.03);
+            overflow: hidden;
+            z-index: 1;
+            cursor: default;
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            /* Ultra-smooth Apple-like ease */
+        }
+
+        /* Hover State - Card Lifts & Shadows Deepen */
+        .sg-why-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(var(--eduhive-base-rgb), 0.1);
+            border-color: rgba(var(--eduhive-primary-rgb), 0.3);
+        }
+
+        /* Background Watermark Number for Depth */
+        .sg-why-card__watermark {
+            position: absolute;
+            top: -15px;
+            right: -10px;
+            font-size: 130px;
+            font-weight: 800;
+            line-height: 1;
+            color: rgba(var(--eduhive-base-rgb), 0.03);
+            z-index: -1;
+            pointer-events: none;
+            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .sg-why-card:hover .sg-why-card__watermark {
+            color: rgba(var(--eduhive-primary-rgb), 0.05);
+            transform: scale(1.05) translate(-10px, 10px);
+        }
+
+        /* Animated Orange Bottom Line */
+        .sg-why-card__line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 4px;
+            background: var(--eduhive-primary);
+            transition: width 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .sg-why-card:hover .sg-why-card__line {
+            width: 100%;
+        }
+
+        /* Icon Box - "Liquid Fill" Animation */
+        .sg-why-card__icon {
+            position: relative;
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(var(--eduhive-primary-rgb), 0.1);
+            border-radius: 16px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .sg-why-card__icon i {
+            position: relative;
+            z-index: 2;
+            font-size: 30px;
+            color: var(--eduhive-primary);
+            transition: color 0.4s ease;
+        }
+
+        /* The fill that grows from the bottom */
+        .sg-why-card__icon::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: var(--eduhive-primary);
+            z-index: 1;
+            transition: height 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .sg-why-card:hover .sg-why-card__icon::before {
+            height: 100%;
+        }
+
+        .sg-why-card:hover .sg-why-card__icon i {
+            color: #ffffff;
+            animation: iconPop 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+
+        @keyframes iconPop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15) translateY(-2px);
+            }
+
+            100% {
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Typography */
+        .sg-why-card h4 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--eduhive-base);
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+            transition: color 0.4s ease;
+        }
+
+        .sg-why-card p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(var(--eduhive-base-rgb), 0.7);
+            margin: 0;
+        }
+
+        .sg-why-card:hover h4 {
+            color: var(--eduhive-primary);
+        }
+
+        /* Responsive Grid Adjustments */
+        @media (max-width: 1199px) {
+            .sg-why-card {
+                flex: 0 0 calc(50% - 15px);
+                /* 2 columns on tablet */
+            }
+        }
+
+        @media (max-width: 767px) {
+            .sg-why-wrap {
+                gap: 20px;
+            }
+
+            .sg-why-card {
+                flex: 0 0 100%;
+                /* 1 column on mobile */
+                padding: 30px 25px;
+            }
+
+            .sg-why-card__watermark {
+                font-size: 100px;
+            }
+        }
+
+        /* ---------- 5. Parents Q&A cards ---------- */
+        .sg-qa {
+            position: relative;
+            height: 100%;
+            padding: 28px 26px 26px;
+            border-radius: 20px;
+            background: var(--eduhive-white);
+            border: 1px solid var(--eduhive-border-color);
+            transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+        }
+
+        .sg-qa:hover {
+            transform: translateY(-6px);
+            border-color: rgba(var(--c-rgb), .5);
+            box-shadow: 0 18px 45px rgba(var(--c-rgb), .16);
+        }
+
+        .sg-qa__icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+            display: grid;
+            place-items: center;
+            font-size: 24px;
+            color: var(--c);
+            background: rgba(var(--c-rgb), .12);
+            transition: background .35s ease, color .35s ease;
+        }
+
+        .sg-qa:hover .sg-qa__icon {
+            background: var(--c);
+            color: #fff;
+        }
+
+        .sg-qa__q {
+            margin: 0 0 14px;
+            font-size: 18px;
+            line-height: 1.35;
+            color: var(--eduhive-black);
+        }
+
+        .sg-qa__a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: rgba(var(--c-rgb), .08);
+            color: var(--eduhive-black);
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .sg-qa__a i {
+            color: var(--c);
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* ---------- 6. Class 11 bullets (same as About AIR list) ---------- */
+        .sg-focus {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            list-style: none;
+            margin: 22px 0 22px;
+            padding: 0;
+        }
+
+        .sg-focus li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 54px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            background: var(--eduhive-white);
+            border: 1px solid var(--eduhive-border-color);
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--eduhive-black);
+            transition: border-color .3s ease, transform .3s ease;
+        }
+
+        .sg-focus li:hover {
+            border-color: var(--eduhive-primary);
+            transform: translateX(4px);
+        }
+
+        .sg-focus li:last-child:nth-child(odd) {
+            grid-column: span 2;
+        }
+
+        .sg-focus__icon {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 12px;
+            color: #fff;
+            background: var(--eduhive-primary);
+        }
+
+        .sg-chips {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            margin: 0 0 30px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .sg-chips__label {
+            font-weight: 700;
+            color: var(--eduhive-black);
+            margin-right: 4px;
+        }
+
+        .sg-chips li:not(.sg-chips__label) {
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--eduhive-base);
+            background: rgba(var(--eduhive-base-rgb), .08);
+        }
+
+        @media (max-width: 575px) {
+            .sg-focus {
+                grid-template-columns: 1fr;
+            }
+
+            .sg-focus li:last-child:nth-child(odd) {
+                grid-column: auto;
+            }
+        }
+
+        /* ---------- 11a. Journey timeline ---------- */
+        .sg-path {
+            padding: 110px 0;
+        }
+
+        .sg-path .sec-title {
+            margin-bottom: 60px;
+        }
+
+        .sg-path__list {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(var(--cols, 4), 1fr);
+            gap: 24px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sg-path__list::before {
+            content: "";
+            position: absolute;
+            top: 44px;
+            left: 12%;
+            right: 12%;
+            border-top: 2px dashed rgba(var(--eduhive-base-rgb), .25);
+        }
+
+        .sg-path__item {
+            position: relative;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .sg-path__dot {
+            position: relative;
+            z-index: 1;
+            width: 88px;
+            height: 88px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 34px;
+            color: var(--c);
+            background: var(--eduhive-white);
+            border: 2px solid var(--c);
+            box-shadow: 0 0 0 10px var(--eduhive-white3);
+            transition: background .35s ease, color .35s ease, transform .35s ease;
+        }
+
+        .sg-path__item:hover .sg-path__dot {
+            background: var(--c);
+            color: #fff;
+            transform: translateY(-6px);
+        }
+
+        .sg-path__grade {
+            display: inline-block;
+            margin-bottom: 8px;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--c);
+            background: rgba(var(--c-rgb), .12);
+        }
+
+        .sg-path__label {
+            margin: 0 0 6px;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: .02em;
+            text-transform: uppercase;
+            color: var(--eduhive-black);
+        }
+
+        .sg-path__text {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .sg-callout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            max-width: 820px;
+            margin: 55px auto 0;
+            padding: 18px 24px;
+            border-radius: 14px;
+            background: var(--eduhive-base);
+            color: #fff;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .sg-callout i {
+            font-size: 22px;
+            color: var(--eduhive-primary);
+        }
+
+        @media (max-width: 991px) {
+            .sg-path__list {
+                grid-template-columns: 1fr;
+                gap: 0;
+                max-width: 460px;
+                margin: 0 auto;
+            }
+
+            .sg-path__list::before {
+                top: 44px;
+                bottom: 44px;
+                left: 43px;
+                right: auto;
+                border-top: 0;
+                border-left: 2px dashed rgba(var(--eduhive-base-rgb), .25);
+            }
+
+            .sg-path__item {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                text-align: left;
+                padding: 12px 0;
+            }
+
+            .sg-path__dot {
+                margin: 0;
+                flex-shrink: 0;
+            }
+
+            .sg-callout {
+                text-align: left;
+                justify-content: flex-start;
+            }
+        }
+
+        /* ---------- 11b. FAQ left card ---------- */
+        .sg-location {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            margin: 26px 0 28px;
+            padding: 22px;
+            border-radius: 16px;
+            background: var(--eduhive-white);
+            border: 1px solid var(--eduhive-border-color);
+            box-shadow: 0 10px 30px rgba(var(--eduhive-black-rgb), .05);
+        }
+
+        .sg-location__icon {
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+            color: #fff;
+            background: var(--eduhive-primary);
+        }
+
+        .sg-location__title {
+            margin: 0 0 4px;
+            font-size: 18px;
+            color: var(--eduhive-black);
+        }
+
+        .sg-location__text {
+            margin: 0;
+            font-size: 15px;
+        }
+
+        /* ---------- 14. About SG strip ---------- */
+        .sg-summary {
+            padding: 90px 0;
+        }
+
+        .sg-summary__card {
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 40px;
+            align-items: center;
+            padding: 50px;
+            border-radius: 24px;
+            background: var(--eduhive-white);
+            border: 1px solid var(--eduhive-border-color);
+            box-shadow: 0 20px 50px rgba(var(--eduhive-black-rgb), .06);
+        }
+
+        .sg-summary__card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(var(--eduhive-primary), var(--eduhive-base));
+        }
+
+        .sg-summary__tag {
+            display: inline-block;
+            margin-bottom: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--eduhive-primary);
+        }
+
+        .sg-summary__title {
+            margin: 0 0 18px;
+            font-size: clamp(26px, 2.6vw, 34px);
+            line-height: 1.2;
+            color: var(--eduhive-black);
+        }
+
+        .sg-summary__place {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 0 22px;
+            font-weight: 600;
+            color: var(--eduhive-black);
+        }
+
+        .sg-summary__place i {
+            color: var(--eduhive-primary);
+        }
+
+        .sg-summary__text {
+            margin: 0 0 22px;
+            line-height: 1.8;
+        }
+
+        .sg-summary__stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .sg-summary__stats li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: var(--eduhive-white3);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--eduhive-black);
+        }
+
+        .sg-summary__stats i {
+            color: var(--eduhive-primary);
+        }
+
+        @media (max-width: 991px) {
+            .sg-summary__card {
+                grid-template-columns: 1fr;
+                padding: 34px 26px 30px 32px;
+                gap: 26px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .sg-summary__stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .sg-why__card,
+            .sg-why__icon,
+            .sg-qa,
+            .sg-qa__icon,
+            .sg-focus li,
+            .sg-path__dot {
+                transition: none;
+            }
+
+            .sg-why__card:hover,
+            .sg-qa:hover,
+            .sg-focus li:hover,
+            .sg-path__item:hover .sg-path__dot {
+                transform: none;
+            }
+        }
+
+        /* ============================================================
+           5. Parents Q&A Cards — Premium Horizontal Tiles
+           Concept: Wide, elegant, SaaS-style layout (no empty space)
+           ============================================================ */
+
+        .sg-qa-tile {
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+            padding: 32px 30px;
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid rgba(var(--eduhive-base-rgb), 0.06);
+            box-shadow: 0 4px 15px rgba(var(--eduhive-base-rgb), 0.02);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            height: 100%;
+        }
+
+        /* Hover: Card Lifts and Glows */
+        .sg-qa-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(var(--eduhive-base-rgb), 0.08);
+            border-color: rgba(var(--eduhive-primary-rgb), 0.3);
+        }
+
+        /* The Icon Box on the Left */
+        .sg-qa-tile__icon {
+            flex-shrink: 0;
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(var(--eduhive-base-rgb), 0.03);
+            color: var(--eduhive-base);
+            font-size: 28px;
+            border-radius: 16px;
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        /* Hover: Icon Pops and turns Orange */
+        .sg-qa-tile:hover .sg-qa-tile__icon {
+            background: var(--eduhive-primary);
+            color: #ffffff;
+            border-radius: 20px;
+            transform: scale(1.08) rotate(-5deg);
+            box-shadow: 0 10px 20px rgba(var(--eduhive-primary-rgb), 0.25);
+        }
+
+        /* Right Side Content */
+        .sg-qa-tile__content {
+            flex-grow: 1;
+        }
+
+        .sg-qa-tile__q {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--eduhive-base);
+            margin: 0 0 16px 0;
+            letter-spacing: -0.01em;
+            transition: color 0.3s ease;
+        }
+
+        .sg-qa-tile:hover .sg-qa-tile__q {
+            color: var(--eduhive-primary);
+        }
+
+        /* The "Answer" Badge (Looks verified and premium) */
+        .sg-qa-tile__a {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            background: rgba(var(--eduhive-base-rgb), 0.03);
+            border-left: 3px solid var(--eduhive-primary);
+            /* Bold accent line */
+            border-radius: 0 8px 8px 0;
+            font-size: 15px;
+            font-weight: 600;
+            color: rgba(var(--eduhive-base-rgb), 0.75);
+            transition: all 0.4s ease;
+        }
+
+        .sg-qa-tile__a i {
+            color: var(--eduhive-primary);
+            font-size: 16px;
+            transition: transform 0.4s ease;
+        }
+
+        /* Hover: The badge fills with soft orange, text turns dark Navy */
+        .sg-qa-tile:hover .sg-qa-tile__a {
+            background: linear-gradient(90deg, rgba(var(--eduhive-primary-rgb), 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            color: var(--eduhive-base);
+        }
+
+        .sg-qa-tile:hover .sg-qa-tile__a i {
+            transform: scale(1.2);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 575px) {
+            .sg-qa-tile {
+                flex-direction: column;
+                gap: 16px;
+                padding: 25px;
+            }
+
+            .sg-qa-tile__icon {
+                width: 55px;
+                height: 55px;
+                font-size: 24px;
+            }
+        }
+
+        /* ============================================================
+       14. About SG Education Summary — Executive Snapshot Card
+       Palette: Navy (#334154) + Orange (#F48134)
+       ============================================================ */
+
+        .sg-summary-sec {
+            padding: 80px 0 100px;
+        }
+
+        .sg-summary-card {
+            position: relative;
+            background: #ffffff;
+            border-radius: 24px;
+            border: 1px solid rgba(var(--eduhive-base-rgb), 0.08);
+            box-shadow: 0 20px 50px rgba(var(--eduhive-base-rgb), 0.05);
+            padding: 50px 45px;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        /* Ambient glow accent in top-right corner */
+        .sg-summary-card::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(var(--eduhive-primary-rgb), 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Left Accent Border Bar */
+        .sg-summary-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--eduhive-primary) 0%, var(--eduhive-base) 100%);
+        }
+
+        /* Header Elements */
+        .sg-summary-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 50px;
+            background: rgba(var(--eduhive-primary-rgb), 0.1);
+            color: var(--eduhive-primary);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .sg-summary-title {
+            font-size: clamp(26px, 2.4vw, 34px);
+            font-weight: 800;
+            line-height: 1.25;
+            color: var(--eduhive-base);
+            letter-spacing: -0.015em;
+            margin: 0 0 16px;
+        }
+
+        /* Location Badge with Live Pulse Dot */
+        .sg-summary-location {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(var(--eduhive-base-rgb), 0.8);
+            background: rgba(var(--eduhive-base-rgb), 0.03);
+            padding: 8px 16px;
+            border-radius: 50px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(var(--eduhive-base-rgb), 0.06);
+        }
+
+        .sg-summary-location i {
+            color: var(--eduhive-primary);
+            font-size: 16px;
+        }
+
+        .sg-pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            /* Live green status indicator */
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        /* Program Chips (Modern Pill Tags) */
+        .sg-chips-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .sg-chip-item {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--eduhive-base);
+            background: #ffffff;
+            border: 1px solid rgba(var(--eduhive-base-rgb), 0.12);
+            padding: 6px 14px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .sg-chip-item:hover {
+            border-color: var(--eduhive-primary);
+            color: var(--eduhive-primary);
+            background: rgba(var(--eduhive-primary-rgb), 0.04);
+            transform: translateY(-2px);
+        }
+
+        /* Right Side - Description Text */
+        .sg-summary-desc {
+            font-size: 16px;
+            line-height: 1.7;
+            color: rgba(var(--eduhive-base-rgb), 0.75);
+            margin: 0 0 28px;
+        }
+
+        /* Key Features Grid (2x2 Micro Cards) */
+        .sg-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sg-feature-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: rgba(var(--eduhive-base-rgb), 0.025);
+            border: 1px solid rgba(var(--eduhive-base-rgb), 0.05);
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .sg-feature-card i {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(var(--eduhive-primary-rgb), 0.1);
+            color: var(--eduhive-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .sg-feature-card span {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--eduhive-base);
+        }
+
+        .sg-feature-card:hover {
+            background: #ffffff;
+            border-color: rgba(var(--eduhive-primary-rgb), 0.3);
+            box-shadow: 0 8px 20px rgba(var(--eduhive-base-rgb), 0.06);
+            transform: translateY(-2px);
+        }
+
+        .sg-feature-card:hover i {
+            background: var(--eduhive-primary);
+            color: #ffffff;
+        }
+
+        /* Responsive Breakdown */
+        @media (max-width: 991px) {
+            .sg-summary-card {
+                grid-template-columns: 1fr;
+                gap: 35px;
+                padding: 40px 30px;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .sg-feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* ============================================================
+   11b. FAQ — Premium Support Hub + Accordion
+   Palette: Navy (#334154) + Orange (#F48134)
+   ============================================================ */
+
+/* Left panel support card */
+.sg-faq-support {
+    margin-top: 28px;
+    padding: 28px 26px;
+    border-radius: 20px;
+    background: linear-gradient(160deg, #2b3846 0%, var(--eduhive-base) 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(var(--eduhive-base-rgb), 0.22);
+}
+
+.sg-faq-support::before {
+    content: "";
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    background-image: radial-gradient(circle, rgba(255,255,255,.12) 1.5px, transparent 1.5px);
+    background-size: 14px 14px;
+    opacity: .5;
+    pointer-events: none;
+}
+
+.sg-faq-support::after {
+    content: "";
+    position: absolute;
+    bottom: -50px;
+    left: -30px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(var(--eduhive-primary-rgb), .35) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.sg-faq-support__label {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.65);
+}
+
+.sg-faq-support__label i {
+    color: var(--eduhive-primary);
+}
+
+.sg-faq-support__title {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 6px;
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -.01em;
+}
+
+.sg-faq-support__text {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 22px;
+    font-size: 14px;
+    color: rgba(255,255,255,.72);
+}
+
+.sg-faq-support__meta {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+}
+
+.sg-faq-support__chip {
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.12);
+}
+
+/* WhatsApp button inside dark card */
+.sg-faq-wa {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border-radius: 14px;
+    background: #25D366;
+    color: #fff !important;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none !important;
+    box-shadow: 0 10px 24px rgba(37, 211, 102, .28);
+    transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease;
+}
+
+.sg-faq-wa:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 30px rgba(37, 211, 102, .4);
+    color: #fff !important;
+}
+
+.sg-faq-wa i {
+    font-size: 18px;
+}
+
+/* ---------- Accordion cards ---------- */
+.sg-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.sg-faq-item {
+    background: #fff;
+    border: 1px solid rgba(var(--eduhive-base-rgb), .08);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(var(--eduhive-base-rgb), .03);
+    transition: border-color .35s ease, box-shadow .4s cubic-bezier(.22,1,.36,1), transform .4s cubic-bezier(.22,1,.36,1);
+}
+
+.sg-faq-item:hover {
+    border-color: rgba(var(--eduhive-primary-rgb), .28);
+    box-shadow: 0 14px 32px rgba(var(--eduhive-base-rgb), .07);
+}
+
+.sg-faq-item.is-open {
+    border-color: rgba(var(--eduhive-primary-rgb), .35);
+    box-shadow: 0 16px 36px rgba(var(--eduhive-base-rgb), .08);
+    transform: translateY(-2px);
+}
+
+.sg-faq-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 24px;
+    background: transparent;
+    border: 0;
+    text-align: left;
+    cursor: pointer;
+}
+
+.sg-faq-num {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--eduhive-base);
+    background: rgba(var(--eduhive-base-rgb), .05);
+    transition: background .35s ease, color .35s ease, transform .4s cubic-bezier(.34,1.4,.64,1);
+}
+
+.sg-faq-item:hover .sg-faq-num,
+.sg-faq-item.is-open .sg-faq-num {
+    background: var(--eduhive-primary);
+    color: #fff;
+    transform: scale(1.06);
+}
+
+.sg-faq-q {
+    flex: 1;
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--eduhive-base);
+    letter-spacing: -.01em;
+}
+
+.sg-faq-toggle {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--eduhive-base-rgb), .12);
+    display: grid;
+    place-items: center;
+    color: rgba(var(--eduhive-base-rgb), .45);
+    font-size: 14px;
+    transition: all .4s cubic-bezier(.22,1,.36,1);
+}
+
+.sg-faq-item:hover .sg-faq-toggle {
+    border-color: rgba(var(--eduhive-primary-rgb), .35);
+    color: var(--eduhive-primary);
+}
+
+.sg-faq-item.is-open .sg-faq-toggle {
+    background: var(--eduhive-base);
+    border-color: var(--eduhive-base);
+    color: #fff;
+    transform: rotate(45deg); /* plus becomes close */
+}
+
+.sg-faq-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .45s cubic-bezier(.22,1,.36,1);
+}
+
+.sg-faq-item.is-open .sg-faq-panel {
+    grid-template-rows: 1fr;
+}
+
+.sg-faq-panel__inner {
+    overflow: hidden;
+}
+
+.sg-faq-a {
+    margin: 0;
+    padding: 0 24px 22px 78px; /* aligns under question text */
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(var(--eduhive-base-rgb), .72);
+    border-top: 0;
+}
+
+.sg-faq-a::before {
+    content: "";
+    display: block;
+    height: 1px;
+    background: rgba(var(--eduhive-base-rgb), .08);
+    margin: 0 0 16px -54px; /* pulls divider left under number */
+}
+
+/* Intro text polish */
+.sg-faq-intro {
+    margin: 0 0 8px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(var(--eduhive-base-rgb), .72);
+}
+
+@media (max-width: 991px) {
+    .sg-faq-a {
+        padding-left: 24px;
+    }
+    .sg-faq-a::before {
+        margin-left: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sg-faq-item,
+    .sg-faq-num,
+    .sg-faq-toggle,
+    .sg-faq-panel,
+    .sg-faq-wa {
+        transition: none;
+    }
+}
+    </style>
 @endsection
 
 @section('content')
 
+    @php
+        $demoVideo = 'https://www.youtube.com/watch?v=h9MbznbxlLc'; // DEMO: replace with SG Education video
+        $whatsapp = 'https://wa.me/917715916926?text=' . rawurlencode('Hi, I want to book an academic counselling session at SG Education.');
+    @endphp
+
+    {{-- ================= 1. HERO SLIDER ================= --}}
     <section class="main-slider-one" id="home">
         <div class="main-slider-one__carousel eduhive-owl__carousel eduhive-owl__carousel--basic-nav owl-carousel owl-theme"
             data-owl-options='{
-                            "items": 1,
-                            "margin": 0,
-                            "animateIn": "fadeIn",
-                            "animateOut": "fadeOut",
-                            "loop": true,
-                            "smartSpeed": 1000,
-                            "nav": false,
-                            "dots": false,
-                            "autoplay": true,
-                            "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"]
-                        }'>
-            <div class="main-slider-one__item">
-                <div class="container">
-                    <div class="row gutter-y-60 align-items-center">
-                        <div class="main-slider-one__col-content">
-                            <div class="main-slider-one__content">
-                                <img src="assets/images/shapes/main-slider-shape-1-1.png" alt="shape"
-                                    class="main-slider-one__content__shape slider-image" />
-                                <p class="main-slider-one__sub-title">The Pathway to Education</p>
-                                <!-- /.sub-title -->
-                                <h2 class="main-slider-one__title">
-                                    Learn New
-                                    <span class="main-slider-one__title__shape">Skills Online</span>
-                                    <br />
-                                    With Top
-                                    <span class="main-slider-one__title__text">instructors</span>
-                                </h2>
-                                <!-- /.title -->
-                                <div class="main-slider-one__description">
-                                    <p class="main-slider-one__text">
-                                        There Are Many Variations Of Passages Of Lorem Ipsum
-                                        Available, But The Majority Have Suffered Alteration In Some.
-                                    </p>
-                                    <!-- /.text -->
-                                </div>
-                                <!-- /.description -->
-                                <div class="main-slider-one__button">
-                                    <a href="courses.html" class="main-slider-one__btn-1 eduhive-btn">
-                                        <span>find course</span>
-                                        <span class="eduhive-btn__icon">
-                                            <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                        </span> </a><!-- /.eduhive-btn -->
-                                    <a href="about.html" class="main-slider-one__btn-2 eduhive-btn eduhive-btn--border">
-                                        <span>About us</span>
-                                        <span class="eduhive-btn__icon">
-                                            <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                        </span> </a><!-- /.eduhive-btn -->
-                                </div>
-                                <!-- /.button -->
-                            </div>
-                            <!-- /.main-slider-one__content -->
-                        </div>
-                        <!-- /.main-slider-one__col-content -->
-                        <div class="main-slider-one__col-image">
-                            <div class="main-slider-one__image">
-                                <div class="main-slider-one__image__left">
-                                    <div class="main-slider-one__image__one">
-                                        <div class="main-slider-one__image__one__inner">
-                                            <img src="assets/images/main-slider/main-slider-1-1.jpg" alt="slider image"
-                                                class="slider-image" />
-                                        </div>
-                                        <!-- /.main-slider-one__image__one__inner -->
-                                        <div class="total-student">
-                                            <div class="total-student__inner">
-                                                <div class="total-student__image">
-                                                    <img src="assets/images/main-slider/main-slider-student-1-1.png"
-                                                        alt="student" class="slider-image" />
-                                                    <img src="assets/images/main-slider/main-slider-student-1-2.png"
-                                                        alt="student" class="slider-image" />
-                                                </div>
-                                                <!-- /.total-student__image -->
-                                                <h4 class="total-student__text count-box">
-                                                    <span class="count-text" data-stop="200"
-                                                        data-speed="1500">0</span><span>k+ <br />
-                                                        Students</span>
-                                                </h4>
-                                                <!-- /.total-student__text -->
-                                            </div>
-                                            <!-- /.total-student__inner -->
-                                        </div>
-                                        <!-- /.total-student -->
-                                    </div>
-                                    <!-- /.main-slider-one__image__one -->
-                                </div>
-                                <!-- /.main-slider-one__image__left -->
-                                <div class="main-slider-one__image__right">
-                                    <div class="main-slider-one__image__two">
-                                        <img src="assets/images/main-slider/main-slider-1-2.jpg" alt="slider image"
-                                            class="slider-image" />
-                                    </div>
-                                    <!-- /.main-slider-one__image__two -->
-                                    <div class="main-slider-one__image__three">
-                                        <img src="assets/images/main-slider/main-slider-1-3.jpg" alt="slider image"
-                                            class="slider-image" />
-                                    </div>
-                                    <!-- /.main-slider-one__image__three -->
-                                </div>
-                                <!-- /.main-slider-one__image__right -->
-                                <img src="assets/images/shapes/main-slider-shape-1-3.png" alt="shape"
-                                    class="main-slider-one__image__shape-one slider-image" />
-                                <img src="assets/images/shapes/main-slider-shape-1-4.png" alt="shape"
-                                    class="main-slider-one__image__shape-two slider-image" />
-                                <img src="assets/images/shapes/main-slider-shape-1-5.png" alt="shape"
-                                    class="main-slider-one__image__shape-three slider-image" />
-                                <div class="main-slider-one__image__shape-four"></div>
-                                <!-- /.main-slider-one__image__shape -->
-                            </div>
-                            <!-- /.main-slider-one__image -->
-                        </div>
-                        <!-- /.main-slider-one__col-image -->
-                    </div>
-                    <!-- /.row gutter-y-60 -->
-                </div>
-                <!-- /.container -->
-                <div class="main-slider-one__shape-one"></div>
-                <!-- /.main-slider-one__shape-one -->
-                <div class="main-slider-one__shape-two"></div>
-                <!-- /.main-slider-one__shape-two -->
-                <div class="main-slider-one__shape-three"></div>
-                <!-- /.main-slider-one__shape-three -->
-                <img src="assets/images/shapes/main-slider-shape-1-2.png" alt="shape"
-                    class="main-slider-one__shape-four slider-image" />
-            </div>
-            <!-- /.main-slider-one__item -->
-            <div class="main-slider-one__item">
-                <div class="container">
-                    <div class="row gutter-y-60 align-items-center">
-                        <div class="main-slider-one__col-content">
-                            <div class="main-slider-one__content">
-                                <img src="assets/images/shapes/main-slider-shape-1-1.png" alt="shape"
-                                    class="main-slider-one__content__shape slider-image" />
-                                <p class="main-slider-one__sub-title">The Pathway to Education</p>
-                                <!-- /.sub-title -->
-                                <h2 class="main-slider-one__title">
-                                    Learn
-                                    <span class="main-slider-one__title__shape">New Skills</span> To
-                                    Go <br />
-                                    Ahead For Your
-                                    <span class="main-slider-one__title__text">Career</span>
-                                </h2>
-                                <!-- /.title -->
-                                <div class="main-slider-one__description">
-                                    <p class="main-slider-one__text">
-                                        Who's Responsible For The Ask For This Request? My Supervisor
-                                        Didn't Like The Latest Revision You Gave Me Can You Switch
-                                        Back.
-                                    </p>
-                                    <!-- /.text -->
-                                </div>
-                                <!-- /.description -->
-                                <div class="main-slider-one__button">
-                                    <a href="courses.html" class="main-slider-one__btn-1 eduhive-btn">
-                                        <span>find course</span>
-                                        <span class="eduhive-btn__icon">
-                                            <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                        </span> </a><!-- /.eduhive-btn -->
-                                    <a href="about.html" class="main-slider-one__btn-2 eduhive-btn eduhive-btn--border">
-                                        <span>About us</span>
-                                        <span class="eduhive-btn__icon">
-                                            <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                        </span> </a><!-- /.eduhive-btn -->
-                                </div>
-                                <!-- /.button -->
-                            </div>
-                            <!-- /.main-slider-one__content -->
-                        </div>
-                        <!-- /.main-slider-one__col-content -->
-                        <div class="main-slider-one__col-image">
-                            <div class="main-slider-one__image">
-                                <div class="main-slider-one__image__left">
-                                    <div class="main-slider-one__image__one">
-                                        <div class="main-slider-one__image__one__inner">
-                                            <img src="assets/images/main-slider/main-slider-1-4.jpg" alt="slider image"
-                                                class="slider-image" />
-                                        </div>
-                                        <!-- /.main-slider-one__image__one__inner -->
-                                        <div class="total-student">
-                                            <div class="total-student__inner">
-                                                <div class="total-student__image">
-                                                    <img src="assets/images/main-slider/main-slider-student-1-1.png"
-                                                        alt="student" class="slider-image" />
-                                                    <img src="assets/images/main-slider/main-slider-student-1-2.png"
-                                                        alt="student" class="slider-image" />
-                                                </div>
-                                                <!-- /.total-student__image -->
-                                                <h4 class="total-student__text count-box">
-                                                    <span class="count-text" data-stop="200"
-                                                        data-speed="1500">0</span><span>k+ <br />
-                                                        Students</span>
-                                                </h4>
-                                                <!-- /.total-student__text -->
-                                            </div>
-                                            <!-- /.total-student__inner -->
-                                        </div>
-                                        <!-- /.total-student -->
-                                    </div>
-                                    <!-- /.main-slider-one__image__one -->
-                                </div>
-                                <!-- /.main-slider-one__image__left -->
-                                <div class="main-slider-one__image__right">
-                                    <div class="main-slider-one__image__two">
-                                        <img src="assets/images/main-slider/main-slider-1-5.jpg" alt="slider image"
-                                            class="slider-image" />
-                                    </div>
-                                    <!-- /.main-slider-one__image__two -->
-                                    <div class="main-slider-one__image__three">
-                                        <img src="assets/images/main-slider/main-slider-1-6.jpg" alt="slider image"
-                                            class="slider-image" />
-                                    </div>
-                                    <!-- /.main-slider-one__image__three -->
-                                </div>
-                                <!-- /.main-slider-one__image__right -->
-                                <img src="assets/images/shapes/main-slider-shape-1-3.png" alt="shape"
-                                    class="main-slider-one__image__shape-one slider-image" />
-                                <img src="assets/images/shapes/main-slider-shape-1-4.png" alt="shape"
-                                    class="main-slider-one__image__shape-two slider-image" />
-                                <img src="assets/images/shapes/main-slider-shape-1-5.png" alt="shape"
-                                    class="main-slider-one__image__shape-three slider-image" />
-                                <div class="main-slider-one__image__shape-four"></div>
-                                <!-- /.main-slider-one__image__shape -->
-                            </div>
-                            <!-- /.main-slider-one__image -->
-                        </div>
-                        <!-- /.main-slider-one__col-image -->
-                    </div>
-                    <!-- /.row gutter-y-60 -->
-                </div>
-                <!-- /.container -->
-                <div class="main-slider-one__shape-one"></div>
-                <!-- /.main-slider-one__shape-one -->
-                <div class="main-slider-one__shape-two"></div>
-                <!-- /.main-slider-one__shape-two -->
-                <div class="main-slider-one__shape-three"></div>
-                <!-- /.main-slider-one__shape-three -->
-                <img src="assets/images/shapes/main-slider-shape-1-2.png" alt="shape"
-                    class="main-slider-one__shape-four slider-image" />
-            </div>
-            <!-- /.main-slider-one__item -->
-        </div>
-        <!-- /.main-slider-one__carousel -->
-    </section>
-    <!-- /.main-slider-one -->
+                                                            "items": 1,
+                                                            "margin": 0,
+                                                            "animateIn": "fadeIn",
+                                                            "animateOut": "fadeOut",
+                                                            "loop": true,
+                                                            "smartSpeed": 1000,
+                                                            "nav": false,
+                                                            "dots": false,
+                                                            "autoplay": true,
+                                                            "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"]
+                                                        }'>
 
+            @php
+                $slides = [
+                    [
+                        'sub' => 'Focused Coaching Classes in Kalyan',
+                        'title' => 'Building <span class="main-slider-one__title__shape">Concepts.</span><br>Creating <span class="main-slider-one__title__text">Achievers.</span>',
+                        'text' => 'Grades 9–12, JEE, NEET & MHT-CET. Small batches, personalised attention, regular tests and performance tracking.',
+                        'img' => ['main-slider-1-1.jpg', 'main-slider-1-2.jpg', 'main-slider-1-3.jpg'],
+                    ],
+                    [
+                        'sub' => 'The SG Academic Excellence System',
+                        'title' => 'Learn. Practise. <span class="main-slider-one__title__shape">Test.</span><br>Analyse. <span class="main-slider-one__title__text">Improve.</span>',
+                        'text' => 'At SG Education, students don\'t just attend lectures. They learn, practise, test, analyse and improve.',
+                        'img' => ['main-slider-1-4.jpg', 'main-slider-1-5.jpg', 'main-slider-1-6.jpg'],
+                    ],
+                ];
+            @endphp
+
+            @foreach ($slides as $slide)
+                <div class="main-slider-one__item">
+                    <div class="container">
+                        <div class="row gutter-y-60 align-items-center">
+                            <div class="main-slider-one__col-content">
+                                <div class="main-slider-one__content">
+                                    <img src="{{ asset('assets/images/shapes/main-slider-shape-1-1.png') }}" alt=""
+                                        class="main-slider-one__content__shape slider-image" />
+                                    <p class="main-slider-one__sub-title">{{ $slide['sub'] }}</p>
+                                    @if ($loop->first)
+                                        <h1 class="main-slider-one__title">{!! $slide['title'] !!}</h1>
+                                    @else
+                                        <h2 class="main-slider-one__title">{!! $slide['title'] !!}</h2>
+                                    @endif
+                                    <div class="main-slider-one__description">
+                                        <p class="main-slider-one__text">{{ $slide['text'] }}</p>
+                                    </div>
+                                    <div class="main-slider-one__button">
+                                        <a href="{{ url('/contact') }}" class="main-slider-one__btn-1 eduhive-btn">
+                                            <span>Book Academic Counselling</span>
+                                            <span class="eduhive-btn__icon"><span class="eduhive-btn__icon__inner"><i
+                                                        class="icon-right-arrow"></i></span></span>
+                                        </a>
+                                        <a href="{{ url('/courses') }}"
+                                            class="main-slider-one__btn-2 eduhive-btn eduhive-btn--border">
+                                            <span>Explore Programs</span>
+                                            <span class="eduhive-btn__icon"><span class="eduhive-btn__icon__inner"><i
+                                                        class="icon-right-arrow"></i></span></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="main-slider-one__col-image">
+                                <div class="main-slider-one__image">
+                                    <div class="main-slider-one__image__left">
+                                        <div class="main-slider-one__image__one">
+                                            <div class="main-slider-one__image__one__inner">
+                                                <img src="{{ asset('assets/images/main-slider/' . $slide['img'][0]) }}"
+                                                    alt="Students at SG Education, Kalyan" class="slider-image" />
+                                            </div>
+                                            <div class="total-student">
+                                                <div class="total-student__inner">
+                                                    <div class="total-student__image">
+                                                        <img src="{{ asset('assets/images/main-slider/main-slider-student-1-1.png') }}"
+                                                            alt="" class="slider-image" />
+                                                        <img src="{{ asset('assets/images/main-slider/main-slider-student-1-2.png') }}"
+                                                            alt="" class="slider-image" />
+                                                    </div>
+                                                    <h4 class="total-student__text count-box">
+                                                        <span class="count-text" data-stop="6" data-speed="1500">0</span><span>
+                                                            Step <br /> System</span>
+                                                    </h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="main-slider-one__image__right">
+                                        <div class="main-slider-one__image__two">
+                                            <img src="{{ asset('assets/images/main-slider/' . $slide['img'][1]) }}" alt=""
+                                                class="slider-image" />
+                                        </div>
+                                        <div class="main-slider-one__image__three">
+                                            <img src="{{ asset('assets/images/main-slider/' . $slide['img'][2]) }}" alt=""
+                                                class="slider-image" />
+                                        </div>
+                                    </div>
+                                    <img src="{{ asset('assets/images/shapes/main-slider-shape-1-3.png') }}" alt=""
+                                        class="main-slider-one__image__shape-one slider-image" />
+                                    <img src="{{ asset('assets/images/shapes/main-slider-shape-1-4.png') }}" alt=""
+                                        class="main-slider-one__image__shape-two slider-image" />
+                                    <img src="{{ asset('assets/images/shapes/main-slider-shape-1-5.png') }}" alt=""
+                                        class="main-slider-one__image__shape-three slider-image" />
+                                    <div class="main-slider-one__image__shape-four"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-slider-one__shape-one"></div>
+                    <div class="main-slider-one__shape-two"></div>
+                    <div class="main-slider-one__shape-three"></div>
+                    <img src="{{ asset('assets/images/shapes/main-slider-shape-1-2.png') }}" alt=""
+                        class="main-slider-one__shape-four slider-image" />
+                </div>
+            @endforeach
+        </div>
+    </section>
+
+    {{-- ================= 2. WHY SG ================= --}}
+    {{-- ================= 2. WHY SG ================= --}}
+    @php
+        $why = [
+            ['icon' => 'icon-multiple-users', 'title' => 'Small Batches', 'text' => 'Focused attention for every student in a distraction-free environment.'],
+            ['icon' => 'icon-open-book', 'title' => 'Concept First', 'text' => 'Understand the logic deeply. We teach you how to think, not just memorise.'],
+            ['icon' => 'icon-files', 'title' => 'Regular Tests', 'text' => 'Frequent assessments so you always know exactly where your preparation stands.'],
+            ['icon' => 'icon-ranking', 'title' => 'Performance Tracking', 'text' => 'Detailed analysis of your weak points, week by week, to ensure continuous growth.'],
+            ['icon' => 'icon-instructors', 'title' => 'Faculty Mentorship', 'text' => 'Expert guidance, doubt-solving support, and direction that goes beyond lectures.'],
+        ];
+    @endphp
     <section class="course-category section-space">
         <div class="container">
-            <div class="sec-title sec-title--center wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                <h6 class="sec-title__tagline">our category</h6>
-                <!-- /.sec-title__tagline -->
-                <h3 class="sec-title__title">
-                    our <span class="sec-title__title__text">Top</span>
-                    <span class="sec-title__title__shape">Categories</span>
-                </h3>
-                <!-- /.sec-title__title -->
-            </div>
-            <!-- /.sec-title -->
-            <div class="row gutter-y-30">
-                <div class="col-xl-3 col-lg-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                    <div class="course-category__card course-category__card--1">
-                        <div class="course-category__card__inner">
-                            <div class="course-category__card__bg" style="
-                                    background-image: url(assets/images/course-category/course-category-card-bg-1-1.jpg);
-                                  "></div>
-                        </div>
-                        <!-- /.course-category__card__inner -->
-                        <div class="course-category__card__content">
-                            <div class="course-category__card__icon-box">
-                                <span class="course-category__card__icon">
-                                    <i class="icon-briefcase"></i>
-                                </span>
-                            </div>
-                            <!-- /.course-category__card__icon-box -->
-                            <h4 class="course-category__card__title">Business Management</h4>
-                            <!-- /.course-category__card__title -->
-                        </div>
-                        <!-- /.course-category__card__content -->
-                    </div>
-                    <!-- /.course-category__card -->
-                </div>
-                <!-- /.col-xl-3 col-lg-4 col-sm-6 -->
-                <div class="col-xl-3 col-lg-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="100ms">
-                    <div class="course-category__card course-category__card--2">
-                        <div class="course-category__card__inner">
-                            <div class="course-category__card__bg" style="
-                                    background-image: url(assets/images/course-category/course-category-card-bg-1-2.jpg);
-                                  "></div>
-                        </div>
-                        <!-- /.course-category__card__inner -->
-                        <div class="course-category__card__content">
-                            <div class="course-category__card__icon-box">
-                                <span class="course-category__card__icon">
-                                    <i class="icon-art-studies"></i>
-                                </span>
-                            </div>
-                            <!-- /.course-category__card__icon-box -->
-                            <h4 class="course-category__card__title">Arts & Design</h4>
-                            <!-- /.course-category__card__title -->
-                        </div>
-                        <!-- /.course-category__card__content -->
-                    </div>
-                    <!-- /.course-category__card -->
-                </div>
-                <!-- /.col-xl-3 col-lg-4 col-sm-6 -->
-                <div class="col-xl-3 col-lg-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="200ms">
-                    <div class="course-category__card course-category__card--3">
-                        <div class="course-category__card__inner">
-                            <div class="course-category__card__bg" style="
-                                    background-image: url(assets/images/course-category/course-category-card-bg-1-3.jpg);
-                                  "></div>
-                        </div>
-                        <!-- /.course-category__card__inner -->
-                        <div class="course-category__card__content">
-                            <div class="course-category__card__icon-box">
-                                <span class="course-category__card__icon">
-                                    <i class="icon-self-confidence"></i>
-                                </span>
-                            </div>
-                            <!-- /.course-category__card__icon-box -->
-                            <h4 class="course-category__card__title">Personal Development</h4>
-                            <!-- /.course-category__card__title -->
-                        </div>
-                        <!-- /.course-category__card__content -->
-                    </div>
-                    <!-- /.course-category__card -->
-                </div>
-                <!-- /.col-xl-3 col-lg-4 col-sm-6 -->
-                <div class="col-xl-3 col-lg-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="300ms">
-                    <div class="course-category__card course-category__card--4">
-                        <div class="course-category__card__inner">
-                            <div class="course-category__card__bg" style="
-                                    background-image: url(assets/images/course-category/course-category-card-bg-1-4.jpg);
-                                  "></div>
-                        </div>
-                        <!-- /.course-category__card__inner -->
-                        <div class="course-category__card__content">
-                            <div class="course-category__card__icon-box">
-                                <span class="course-category__card__icon">
-                                    <i class="icon-setting"></i>
-                                </span>
-                            </div>
-                            <!-- /.course-category__card__icon-box -->
-                            <h4 class="course-category__card__title">IT & Software</h4>
-                            <!-- /.course-category__card__title -->
-                        </div>
-                        <!-- /.course-category__card__content -->
-                    </div>
-                    <!-- /.course-category__card -->
-                </div>
-                <!-- /.col-xl-3 col-lg-4 col-sm-6 -->
-                <div class="col-xl-3 col-lg-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                    <div class="course-category__card course-category__card--5">
-                        <div class="course-category__card__inner">
-                            <div class="course-category__card__bg" style="
-                                    background-image: url(assets/images/course-category/course-category-card-bg-1-5.jpg);
-                                  "></div>
-                        </div>
-                        <!-- /.course-category__card__inner -->
-                        <div class="course-category__card__content">
-                            <div class="course-category__card__icon-box">
-                                <span class="course-category__card__icon">
-                                    <i class="icon-healthcare"></i>
-                                </span>
-                            </div>
-                            <!-- /.course-category__card__icon-box -->
-                            <h4 class="course-category__card__title">Health & Fitness</h4>
-                            <!-- /.course-category__card__title -->
-                        </div>
-                        <!-- /.course-category__card__content -->
-                    </div>
-                    <!-- /.course-category__card -->
-                </div>
-                <!-- /.col-xl-3 col-lg-4 col-sm-6 -->
-                <div class="col-xl-3 col-lg-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="100ms">
-                    <div class="course-category__card course-category__card--6">
-                        <div class="course-category__card__inner">
-                            <div class="course-category__card__bg" style="
-                                    background-image: url(assets/images/course-category/course-category-card-bg-1-6.jpg);
-                                  "></div>
-                        </div>
-                        <!-- /.course-category__card__inner -->
-                        <div class="course-category__card__content">
-                            <div class="course-category__card__icon-box">
-                                <span class="course-category__card__icon">
-                                    <i class="icon-coding-1"></i>
-                                </span>
-                            </div>
-                            <!-- /.course-category__card__icon-box -->
-                            <h4 class="course-category__card__title">Computer Science</h4>
-                            <!-- /.course-category__card__title -->
-                        </div>
-                        <!-- /.course-category__card__content -->
-                    </div>
-                    <!-- /.course-category__card -->
-                </div>
-                <!-- /.col-xl-3 col-lg-4 col-sm-6 -->
-                <div class="col-xl-3 col-lg-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="200ms">
-                    <div class="course-category__card course-category__card--7">
-                        <div class="course-category__card__inner">
-                            <div class="course-category__card__bg" style="
-                                    background-image: url(assets/images/course-category/course-category-card-bg-1-7.jpg);
-                                  "></div>
-                        </div>
-                        <!-- /.course-category__card__inner -->
-                        <div class="course-category__card__content">
-                            <div class="course-category__card__icon-box">
-                                <span class="course-category__card__icon">
-                                    <i class="icon-clapperboard"></i>
-                                </span>
-                            </div>
-                            <!-- /.course-category__card__icon-box -->
-                            <h4 class="course-category__card__title">Video & Photography</h4>
-                            <!-- /.course-category__card__title -->
-                        </div>
-                        <!-- /.course-category__card__content -->
-                    </div>
-                    <!-- /.course-category__card -->
-                </div>
-                <!-- /.col-xl-3 col-lg-4 col-sm-6 -->
-                <div class="col-xl-3 col-lg-4 col-sm-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="300ms">
-                    <div class="course-category__card course-category__card--8">
-                        <div class="course-category__card__inner">
-                            <div class="course-category__card__bg" style="
-                                    background-image: url(assets/images/course-category/course-category-card-bg-1-8.jpg);
-                                  "></div>
-                        </div>
-                        <!-- /.course-category__card__inner -->
-                        <div class="course-category__card__content">
-                            <div class="course-category__card__icon-box">
-                                <span class="course-category__card__icon">
-                                    <i class="icon-megaphone"></i>
-                                </span>
-                            </div>
-                            <!-- /.course-category__card__icon-box -->
-                            <h4 class="course-category__card__title">digital Marketing</h4>
-                            <!-- /.course-category__card__title -->
-                        </div>
-                        <!-- /.course-category__card__content -->
-                    </div>
-                    <!-- /.course-category__card -->
-                </div>
-                <!-- /.col-xl-3 col-lg-4 col-sm-6 -->
-            </div>
-            <!-- /.row gutter-y-30 -->
-        </div>
-        <!-- /.container -->
-        <div class="course-category__shape-one"></div>
-        <!-- /.course-category__shape-one -->
-        <div class="course-category__shape-two"></div>
-        <!-- /.course-category__shape-two -->
-    </section>
-    <!-- /.course-category section-space -->
 
+            <div class="sec-title sec-title--center wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                <h6 class="sec-title__tagline" style="color: var(--eduhive-primary);">why SG?</h6>
+                <h3 class="sec-title__title">What Makes <span class="sec-title__title__text">SG</span>
+                    <span class="sec-title__title__shape">Different</span>
+                </h3>
+            </div>
+
+            <div class="sg-why-wrap">
+                @foreach ($why as $index => $w)
+                    {{-- Dynamic delay for a cascading reveal effect --}}
+                    <div class="sg-why-card wow fadeInUp" data-wow-duration="1200ms" data-wow-delay="{{ $index * 150 }}ms">
+
+                        {{-- Giant subtle number in background --}}
+                        <div class="sg-why-card__watermark">0{{ $index + 1 }}</div>
+
+                        {{-- Icon with "Liquid Fill" hover --}}
+                        <div class="sg-why-card__icon">
+                            <i class="{{ $w['icon'] }}"></i>
+                        </div>
+
+                        {{-- Content --}}
+                        <div class="sg-why-card__content">
+                            <h4>{{ $w['title'] }}</h4>
+                            <p>{{ $w['text'] }}</p>
+                        </div>
+
+                        {{-- Animated bottom line --}}
+                        <div class="sg-why-card__line"></div>
+
+                    </div>
+                @endforeach
+            </div>
+
+        </div>
+        <div class="course-category__shape-one"></div>
+        <div class="course-category__shape-two"></div>
+    </section>
+
+    {{-- ================= 3. COMPLETE ACADEMIC SYSTEM ================= --}}
     <section class="about-one section-space" id="about">
-        <div class="about-one__bg" style="background-image: url(assets/images/shapes/about-bg-1-1.png)"></div>
-        <!-- /.about-one__bg -->
+        <div class="about-one__bg" style="background-image: url({{ asset('assets/images/shapes/about-bg-1-1.png') }})">
+        </div>
         <div class="container">
             <div class="row gutter-y-50 align-items-center">
                 <div class="col-lg-6 wow fadeInLeft" data-wow-duration="1500ms">
                     <div class="about-one__image">
                         <div class="about-one__image__one">
-                            <img src="assets/images/about/about-1-1.jpg" alt="about" />
+                            <img src="{{ asset('assets/images/about/about-1-1.jpg') }}" alt="Classroom at SG Education" />
                             <div class="about-one__video">
-                                <a href="https://www.youtube.com/watch?v=h9MbznbxlLc"
-                                    class="about-one__video__btn video-btn video-popup">
-                                    <i class="icon-play"></i>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span> </a><!-- /.about-one__video-btn -->
+                                <a href="{{ $demoVideo }}" class="about-one__video__btn video-btn video-popup"
+                                    aria-label="Play video">
+                                    <i class="icon-play"></i><span></span><span></span><span></span><span></span>
+                                </a>
                                 <p class="about-one__video__text">play now</p>
-                                <!-- /.about-one__video__text -->
                             </div>
-                            <!-- /.about-one__video -->
                         </div>
-                        <!-- /.about-one__image__one -->
                         <div class="about-one__image__two">
-                            <img src="assets/images/about/about-1-2.jpg" alt="about" />
+                            <img src="{{ asset('assets/images/about/about-1-2.jpg') }}" alt="" />
                         </div>
-                        <!-- /.about-one__image__two -->
-                        <img src="assets/images/shapes/about-shape-1-1.png" alt="about" class="about-one__image__shape" />
+                        <img src="{{ asset('assets/images/shapes/about-shape-1-1.png') }}" alt=""
+                            class="about-one__image__shape" />
                         <div class="about-one__image__circle">
                             <div class="about-one__image__circle__inner"></div>
                         </div>
-                        <!-- /.about-one__image__circle -->
                     </div>
-                    <!-- /.about-one__image -->
                 </div>
-                <!-- /.col-lg-6 -->
                 <div class="col-lg-6">
                     <div class="about-one__content">
                         <div class="sec-title wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                            <h6 class="sec-title__tagline">about us</h6>
-                            <!-- /.sec-title__tagline -->
-                            <h3 class="sec-title__title">
-                                we are the most popular online <br />
-                                <span class="sec-title__title__shape">skill development</span>
-                                <span class="sec-title__title__text">platform</span>
-                            </h3>
-                            <!-- /.sec-title__title -->
+                            <h6 class="sec-title__tagline">our approach</h6>
+                            <h3 class="sec-title__title">More Than Classes. <br>A <span
+                                    class="sec-title__title__shape">Complete Academic</span> <span
+                                    class="sec-title__title__text">System.</span></h3>
                         </div>
-                        <!-- /.sec-title -->
                         <div class="about-one__description wow fadeInUp" data-wow-duration="1500ms">
-                            <p class="about-one__text">
-                                Viverra Ipsum Nunc Aliquet Bibendum Enim Facilisis Gravida. Diam
-                                Phasellus Vestibulum Lorem Sed Risus Ultricies. Magna Sit Amet
-                                Purus Gravida Quis Blandit. Arcu Cursus Vitae Congue Mauris.
-                            </p>
-                            <!-- /.about-one__text -->
+                            <p class="about-one__text">A student doesn't improve simply by attending lectures. They improve
+                                when they <strong>learn, practise, test, analyse and improve</strong>, again and again.
+                                That's the SG Academic Excellence System.</p>
                         </div>
-                        <!-- /.about-one__description -->
                         <div class="about-one__inner wow fadeInUp" data-wow-duration="1500ms">
                             <ul class="about-one__info list-unstyled">
-                                <li>
-                                    <span class="about-one__info__icon"><i class="icon-right-up"></i></span>
-                                    Expert Trainers
-                                </li>
-                                <li>
-                                    <span class="about-one__info__icon"><i class="icon-right-up"></i></span>
-                                    Online Remote Learning
-                                </li>
-                                <li>
-                                    <span class="about-one__info__icon"><i class="icon-right-up"></i></span>
-                                    Lifetime Access
-                                </li>
+                                <li><span class="about-one__info__icon"><i class="icon-right-up"></i></span>Learn &amp;
+                                    Practise</li>
+                                <li><span class="about-one__info__icon"><i class="icon-right-up"></i></span>Test &amp;
+                                    Analyse</li>
+                                <li><span class="about-one__info__icon"><i class="icon-right-up"></i></span>Improve &amp;
+                                    Excel</li>
                             </ul>
-                            <!-- /.about-one__info list-unstyled -->
                             <div class="about-one__button">
-                                <a href="about.html" class="about-one__btn eduhive-btn eduhive-btn--border">
-                                    <span>more About us</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span> </a><!-- /.eduhive-btn -->
+                                <a href="{{ url('/our-methodology') }}"
+                                    class="about-one__btn eduhive-btn eduhive-btn--border">
+                                    <span>See How It Works</span>
+                                    <span class="eduhive-btn__icon"><span class="eduhive-btn__icon__inner"><i
+                                                class="icon-right-arrow"></i></span></span>
+                                </a>
                             </div>
-                            <!-- /.about-one__button -->
                         </div>
-                        <!-- /.about-one__inner -->
                     </div>
-                    <!-- /.about-one__content -->
                 </div>
-                <!-- /.col-lg-6 -->
             </div>
-            <!-- /.row gutter-y-50 -->
         </div>
-        <!-- /.container -->
     </section>
-    <!-- /.about-one section-space -->
 
-    <section class="our category
-     section-space" id="courses">
-        <div class="courses-two__bg" style="background-image: url(assets/images/shapes/courses-bg-2-1.png);"></div>
-        <!-- /.courses-two__bg -->
+    {{-- ================= 4. EVERY ACADEMIC STAGE ================= --}}
+    @php
+        $stages = [
+            ['filter' => 'school', 'cat' => 'School', 'grades' => 'Grade 9 | 10', 'title' => 'School Programs (State Board)', 'text' => 'Build strong fundamentals and prepare with confidence.', 'info' => 'Grade 9 & 10', 'url' => '/courses/boards', 'img' => 'course-1-1.jpg', 'btn' => 'Explore School Programs'],
+            ['filter' => 'foundation', 'cat' => 'Foundation', 'grades' => 'Grade 8 – 10', 'title' => 'JEE Foundation | NEET Foundation', 'text' => 'Start early. Build strong.', 'info' => 'Early preparation', 'url' => '/courses/foundation', 'img' => 'course-1-2.jpg', 'btn' => 'Explore Foundation'],
+            ['filter' => 'competitive', 'cat' => 'Competitive', 'grades' => 'Class 11 & 12', 'title' => 'JEE Main & Advanced | NEET | MHT-CET', 'text' => 'Concepts. Problem Solving. Testing. Strategy.', 'info' => 'Entrance exams', 'url' => '/courses', 'img' => 'course-1-3.jpg', 'btn' => 'Explore Competitive Programs'],
+            ['filter' => 'science', 'cat' => '11th–12th', 'grades' => 'Science', 'title' => 'PCMB | JEE | NEET | MHT-CET', 'text' => 'Build the foundation for the next level.', 'info' => 'Physics, Chemistry, Maths, Biology', 'url' => '/courses', 'img' => 'course-1-4.jpg', 'btn' => 'Explore Science Programs'],
+        ];
+    @endphp
+    <section class="courses-two section-space" id="courses">
+        <div class="courses-two__bg" style="background-image: url({{ asset('assets/images/shapes/courses-bg-2-1.png') }});">
+        </div>
         <div class="container">
             <div class="sec-title sec-title--center wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                <h6 class="sec-title__tagline">our courses</h6><!-- /.sec-title__tagline -->
-                <h3 class="sec-title__title"><span>Our</span> <span class="sec-title__title__shape">Most</span>
-                    <span>Popular</span> <span class="sec-title__title__text">Courses</span>
-                </h3><!-- /.sec-title__title -->
-            </div><!-- /.sec-title -->
+                <h6 class="sec-title__tagline">our programs</h6>
+                <h3 class="sec-title__title"><span>One Place.</span> <span class="sec-title__title__shape">Every</span>
+                    <span>Academic</span> <span class="sec-title__title__text">Stage.</span>
+                </h3>
+            </div>
             <ul class="list-unstyled courses-two__filter-list owl-filter-bar wow fadeInUp" data-wow-duration="1500ms">
-                <li class="item active" data-owl-filter="*">All courses</li>
-                <li class="item" data-owl-filter=".programming">programming</li>
-                <li class="item" data-owl-filter=".digital-marketing">digital marketing</li>
-                <li class="item" data-owl-filter=".graphic-design">graphic design</li>
-            </ul><!-- /.list-unstyledf -->
-        </div><!-- /.container -->
+                <li class="item active" data-owl-filter="*">All programs</li>
+                <li class="item" data-owl-filter=".school">school</li>
+                <li class="item" data-owl-filter=".foundation">foundation</li>
+                <li class="item" data-owl-filter=".competitive">competitive</li>
+                <li class="item" data-owl-filter=".science">11th–12th science</li>
+            </ul>
+        </div>
         <div class="courses-two__container container">
             <div class="courses-two__carousel eduhive-owl__carousel--progress eduhive-owl__carousel--filter-with-counter eduhive-owl__carousel--basic-nav owl-carousel owl-theme"
                 data-owl-filters-div=".courses-two__filter-list" data-progress-options='{
-                                "size": "1px",
-                                "margin": "0 auto",
-                                "foregroundColor": "var(--eduhive-border-color)",
-                                "color": "var(--eduhive-base)",
-                                "borderRadius": 0,
-                                "transitionInterval": 1,
-                                "progressBarClassName": "courses-two__carousel__progress-bar",
-                                "scrollerClassName": "courses-two__carousel__scroller"
-                                }' data-owl-options='{
-                                "items": 1,
-                                "margin": 10,
-                                "loop": false,
-                                "smartSpeed": 700,
-                                "nav": true,
-                                "dots": false,
-                                "navContainer": ".courses-two__custome-navs",
-                                "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
-                                "autoplay": true,
-                                "responsive": {
-                                    "0": {
-                                        "items": 1,
-                                        "margin": 10
-                                    },
-                                    "576": {
-                                        "items": 1,
-                                        "margin": 30,
-                                        "stagePadding": 100
-                                    },
-                                    "768": {
-                                        "items": 1,
-                                        "margin": 30,
-                                        "stagePadding": 200
-                                    },
-                                    "992": {
-                                        "items": 2,
-                                        "margin": 30,
-                                        "stagePadding": 120
-                                    },
-                                    "1200": {
-                                        "items": 2,
-                                        "margin": 30,
-                                        "stagePadding": 270
-                                    },
-                                    "1400": {
-                                        "items": 3,
-                                        "margin": 30,
-                                        "stagePadding": 120
-                                    },
-                                    "1600": {
-                                        "items": 3,
-                                        "margin": 30,
-                                        "stagePadding": 210
-                                    },
-                                    "1800": {
-                                        "items": 3,
-                                        "margin": 30,
-                                        "stagePadding": 375
-                                    }
-                                }
-                            }'>
-                <div class="item programming">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-1.jpg"
-                                alt="WordPress for Everyone: Unlock Your Creativity Online">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    25 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="wordpress-development.html">WordPress for Everyone:
-                                    Unlock Your Creativity Online</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    25 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    350 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>69.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
+                                                                "size": "1px",
+                                                                "margin": "0 auto",
+                                                                "foregroundColor": "var(--eduhive-border-color)",
+                                                                "color": "var(--eduhive-base)",
+                                                                "borderRadius": 0,
+                                                                "transitionInterval": 1,
+                                                                "progressBarClassName": "courses-two__carousel__progress-bar",
+                                                                "scrollerClassName": "courses-two__carousel__scroller"
+                                                            }' data-owl-options='{
+                                                                "items": 1,
+                                                                "margin": 10,
+                                                                "loop": false,
+                                                                "smartSpeed": 700,
+                                                                "nav": true,
+                                                                "dots": false,
+                                                                "navContainer": ".courses-two__custome-navs",
+                                                                "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
+                                                                "autoplay": true,
+                                                                "responsive": {
+                                                                    "0":    { "items": 1, "margin": 10 },
+                                                                    "576":  { "items": 1, "margin": 30, "stagePadding": 100 },
+                                                                    "768":  { "items": 1, "margin": 30, "stagePadding": 200 },
+                                                                    "992":  { "items": 2, "margin": 30, "stagePadding": 120 },
+                                                                    "1200": { "items": 2, "margin": 30, "stagePadding": 270 },
+                                                                    "1400": { "items": 3, "margin": 30, "stagePadding": 120 },
+                                                                    "1600": { "items": 3, "margin": 30, "stagePadding": 210 },
+                                                                    "1800": { "items": 3, "margin": 30, "stagePadding": 375 }
+                                                                }
+                                                            }'>
+                @foreach ($stages as $s)
+                    <div class="item {{ $s['filter'] }}">
+                        <div class="course-card wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                            <div class="course-card__image">
+                                <img src="{{ asset('assets/images/courses/' . $s['img']) }}"
+                                    alt="{{ $s['title'] }} at SG Education">
+                            </div>
+                            <div class="course-card__content">
+                                <div class="course-card__content__top">
+                                    <div class="course-card__category">{{ $s['cat'] }}</div>
                                     <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        25 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a
-                                        href="wordpress-development.html">WordPress for Everyone: Unlock Your Creativity
-                                        Online</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">Viverra ipsum nunc aliquet bibendum enim facilisis gravida.
-                                    Diam phasellus vestibulum lorem sed risus</p><!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="wordpress-development.html"
-                                    class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
+                                        <span class="course-card__duration__icon"><i class="icon-clock"></i></span>
+                                        {{ $s['grades'] }}
+                                    </div>
+                                </div>
+                                <h3 class="course-card__title"><a href="{{ url($s['url']) }}">{{ $s['title'] }}</a></h3>
+                                <div class="course-card__info">
                                     <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        25 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        350 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item programming -->
-                <div class="item digital-marketing">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-6.jpg"
-                                alt="Digital Marketing course Guideline: Level Up Your Skills">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    28 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="digital-marketing.html">Digital Marketing course
-                                    Guideline: Level Up Your Skills</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    26 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    100 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>20.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        28 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a
-                                        href="digital-marketing.html">Digital Marketing course Guideline: Level Up Your
-                                        Skills</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">Unless they bother until the end of time maybe vis a vis too
-                                    many cooks over the line encourage & support business</p><!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="digital-marketing.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        26 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        100 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item digital-marketing -->
-                <div class="item graphic-design">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-4.jpg"
-                                alt="advanced Mastering UI/UX Design Fundamentals course">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    15 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="uiux-design.html">advanced Mastering UI/UX Design
-                                    Fundamentals course</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    28 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    150 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>70.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        15 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a href="uiux-design.html">advanced
-                                        Mastering UI/UX Design Fundamentals course</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">The closest elephant is the most dangerous. We should have a
-                                    meeting to discuss the details of the next</p><!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="uiux-design.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        28 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        150 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item graphic-design -->
-                <div class="item programming">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-2.jpg"
-                                alt="The Data Science Revolution: Upgrading Your Skills">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    20 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="data-science.html">The Data Science Revolution:
-                                    Upgrading Your Skills</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    20 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    300 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>50.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        20 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a href="data-science.html">The
-                                        Data Science Revolution: Upgrading Your Skills</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">We need to dialog around your choice of work attire we need
-                                    more paper back of the net quick win yet today</p><!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="data-science.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        20 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        300 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item programming -->
-                <div class="item digital-marketing">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-7.jpg"
-                                alt="The SEO Become an Expert in Search Engine Optimization">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    10 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="search-engine-optimization.html">The SEO Become an
-                                    Expert in Search Engine Optimization</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    19 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    450 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>35.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        10 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a
-                                        href="search-engine-optimization.html">The SEO Become an Expert in Search Engine
-                                        Optimization</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">T-shaped individual start procrastinating 2 hours get to do
-                                    work while procrastinating open book</p><!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="search-engine-optimization.html"
-                                    class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        19 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        450 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item digital-marketing -->
-                <div class="item graphic-design">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-5.jpg"
-                                alt="advanced Mastering graphics Design Fundamentals course">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    35 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="graphics-design.html">advanced Mastering graphics Design
-                                    Fundamentals course</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    15 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    250 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>85.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        35 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a
-                                        href="graphics-design.html">advanced Mastering graphics Design Fundamentals
-                                        course</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">The flagpole bazooka that run it past the boss jump right in
-                                    and banzai attack will they won't they its all greek</p><!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="graphics-design.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        15 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        250 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item graphic-design -->
-
-                <div class="item programming">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-3.jpg"
-                                alt="From Zero to Website: A Web Development Adventure">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    30 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="web-development.html">From Zero to Website: A Web
-                                    Development Adventure</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    32 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    250 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>40.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        30 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a href="web-development.html">From
-                                        Zero to Website: A Web Development Adventure</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">Yet today shall be a cloudy day, thanks to blue sky thinking,
-                                    we can now deploy our new ui to the cloud</p><!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="web-development.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        32 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        250 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item programming -->
-                <div class="item digital-marketing">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-10.jpg"
-                                alt="Social Media Marketing Mastering course From Zero to Hero">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    11 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="digital-marketing.html">Social Media Marketing Mastering
-                                    course From Zero to Hero</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    21 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    150 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>36.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        11 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a
-                                        href="digital-marketing.html">Social Media Marketing Mastering course From Zero to
-                                        Hero</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">Anim veritatis, so aliquip magna. Aut quis accusantium,
-                                    doloremque suscipit, yet exercitation nostrum</p><!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="digital-marketing.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        21 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        150 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item digital-marketing -->
-                <div class="item graphic-design">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-15.jpg"
-                                alt="advanced Mastering mobile app design Fundamentals course">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    37 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="graphics-design.html">advanced Mastering mobile app
-                                    design Fundamentals course</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    16 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    210 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>80.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        37 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a
-                                        href="graphics-design.html">advanced Mastering mobile app design Fundamentals
-                                        course</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">Quasi nequeporro modi ullamco tempor, yet quaerat, for vitae.
-                                    Ullamco quo, but ipsa, nor ullamco, and adipisicing</p><!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="graphics-design.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        16 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        210 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item graphic-design -->
-                <div class="item programming">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-8.jpg"
-                                alt="Apps Development Mastering course From Zero to Hero">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    40 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="apps-development.html">Apps Development Mastering course
-                                    From Zero to Hero</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    37 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    400 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>55.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        40 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a
-                                        href="apps-development.html">Apps Development Mastering course From Zero to Hero</a>
-                                </h3><!-- /.course-card__title -->
-                                <p class="course-card__text">Baseline the procedure and samepage your department i am dead
-                                    inside, and move the needle, so exposing new</p><!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="apps-development.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        37 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        400 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item programming -->
-                <div class="item digital-marketing">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-11.jpg"
-                                alt="advanced Marketing Analytics Mastering course From Zero to Hero">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    17 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="digital-marketing.html">advanced Marketing Analytics
-                                    Mastering course From Zero to Hero</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    32 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    50 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>38.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        17 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a
-                                        href="digital-marketing.html">advanced Marketing Analytics Mastering course From
-                                        Zero to Hero</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">Consectetur officia. Ea illo, yet velit, pariatur, but eu qui.
-                                    Officia ullamco, for id dolores nihil Eius ipsam</p><!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="digital-marketing.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        32 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        50 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item digital-marketing -->
-                <div class="item graphic-design">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-16.jpg"
-                                alt="advanced Mastering web UI/UX design Fundamentals course">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    39 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="uiux-design.html">advanced Mastering web UI/UX design
-                                    Fundamentals course</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    18 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    220 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>79.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        39 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a href="uiux-design.html">advanced
-                                        Mastering web UI/UX design Fundamentals course</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">Accusantium incidunt mollit. Nesciunt quisquam accusantium, yet
-                                    sint. Sunt nequeporro Totam commodi Omnis ab, or dolor, for ut</p>
-                                <!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="uiux-design.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        18 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        220 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item graphic-design -->
-
-                <div class="item programming">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-9.jpg"
-                                alt="Web Design Wizardry Mastering Responsive Website">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    26 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="web-design.html">Web Design Wizardry Mastering
-                                    Responsive Website</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    18 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    80 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>28.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        26 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a href="web-design.html">Web
-                                        Design Wizardry Mastering Responsive Website</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">Race without a finish line we don't want to boil the ocean.
-                                    What do you feel you would bring to the table</p><!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="web-design.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        18 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        80 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item programming -->
-                <div class="item digital-marketing">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-12.jpg"
-                                alt="advanced Affiliate Marketing Mastering course From Zero to Hero">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    18 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="digital-marketing.html">advanced Affiliate Marketing
-                                    Mastering course From Zero to Hero</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    16 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    52 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>32.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        18 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a
-                                        href="digital-marketing.html">advanced Affiliate Marketing Mastering course From
-                                        Zero to Hero</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">Illum explicabo, and dicta. Velit magni modi est, but non, and
-                                    aut, yet pariatur. Quo. Sunt do, so ex id ipsum</p><!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="digital-marketing.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        16 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        52 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item digital-marketing -->
-                <div class="item graphic-design">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-17.jpg"
-                                alt="advanced Mastering professional logo design Fundamentals course">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    41 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="graphics-design.html">advanced Mastering professional
-                                    logo design Fundamentals course</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    21 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    190 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>60.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        41 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a
-                                        href="graphics-design.html">advanced Mastering professional logo design Fundamentals
-                                        course</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">Accusantium incidunt mollit. Nesciunt quisquam accusantium, yet
-                                    sint. Sunt nequeporro Totam commodi Omnis ab, or dolor, for ut</p>
-                                <!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="graphics-design.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        21 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        190 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item graphic-design -->
-                <div class="item programming">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-14.jpg"
-                                alt="advanced machine learning Mastering course From Zero to Hero">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    23 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="data-science.html">advanced machine learning Mastering
-                                    course From Zero to Hero</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    41 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    56 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>33.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        23 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a
-                                        href="data-science.html">advanced machine learning Mastering course From Zero to
-                                        Hero</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">Natus nequeporro. Adipisicing consequat nemo. Illum. Aliquip
-                                    reprehenderit lorem duis, yet eum, and quasi qui Veritatis</p>
-                                <!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="data-science.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        41 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        56 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item programming -->
-                <div class="item digital-marketing">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-13.jpg"
-                                alt="advanced Email Marketing Mastering course From Zero to Hero">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    21 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="digital-marketing.html">advanced Email Marketing
-                                    Mastering course From Zero to Hero</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    14 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    54 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>29.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        21 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a
-                                        href="digital-marketing.html">advanced Email Marketing Mastering course From Zero to
-                                        Hero</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">Et velit, for inventore ab, and quaerat suscipit. Minim. Minim
-                                    adipisci. Totam architecto for non, so aut, for veniam pariatur</p>
-                                <!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="digital-marketing.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        14 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        54 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item digital-marketing -->
-                <div class="item graphic-design">
-                    <div class="course-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                        <div class="course-card__image">
-                            <img src="assets/images/courses/course-1-18.jpg"
-                                alt="advanced Mastering business card design Fundamentals course">
-                            <div class="course-card__ratings">
-                                <div class="eduhive-ratings">
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                    <span class="eduhive-ratings__icon">
-                                        <i class="fa fa-star"></i>
-                                    </span><!-- /.eduhive-ratings__icon -->
-                                </div><!-- /.product-ratings -->
-                                <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                            </div><!-- /.course-card__ratings -->
-                        </div><!-- /.course-card__image -->
-                        <div class="course-card__content">
-                            <div class="course-card__content__top">
-                                <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                <div class="course-card__duration">
-                                    <span class="course-card__duration__icon">
-                                        <i class="icon-clock"></i>
-                                    </span><!-- /.course-card__duration__icon -->
-                                    45 weeks
-                                </div><!-- /.course-card__duration -->
-                            </div><!-- /.course-card__content__top -->
-                            <h3 class="course-card__title"><a href="graphics-design.html">advanced Mastering business card
-                                    design Fundamentals course</a></h3><!-- /.course-card__title -->
-                            <div class="course-card__info">
-                                <div class="course-card__lessons">
-                                    <span class="course-card__lessons__icon">
-                                        <i class="icon-open-book"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    25 lessons
-                                </div><!-- /.course-card__lessons -->
-                                <div class="course-card__students">
-                                    <span class="course-card__students__icon">
-                                        <i class="icon-multiple-users-silhouette"></i>
-                                    </span><!-- /.course-card__lessons__icon -->
-                                    130 Students
-                                </div><!-- /.course-card__students -->
-                            </div><!-- /.course-card__info -->
-                            <h4 class="course-card__price">$<span>55.00</span></h4><!-- /.course-card__price -->
-                        </div><!-- /.course-card__content -->
-                        <div class="course-card__hover"
-                            style="background-image: url(assets/images/shapes/course-card-bg-1-1.png);">
-                            <div class="course-card__hover__content">
-                                <div class="course-card__content__top course-card__content__top--hover">
-                                    <div class="course-card__category">Experts</div><!-- /.course-card__category -->
-                                    <div class="course-card__duration">
-                                        <span class="course-card__duration__icon">
-                                            <i class="icon-clock"></i>
-                                        </span><!-- /.course-card__duration__icon -->
-                                        45 weeks
-                                    </div><!-- /.course-card__duration -->
-                                </div><!-- /.course-card__content__top -->
-                                <h3 class="course-card__title course-card__title--hover"><a
-                                        href="graphics-design.html">advanced Mastering business card design Fundamentals
-                                        course</a></h3><!-- /.course-card__title -->
-                                <p class="course-card__text">Perspiciatis tempor, but perspiciatis, adipisicing, but
-                                    consequat magna, so illo. Cupidatat laudantium. Quis nihil illo</p>
-                                <!-- /.course-card__text -->
-                                <div class="course-card__ratings course-card__ratings--hover">
-                                    <div class="eduhive-ratings">
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                        <span class="eduhive-ratings__icon">
-                                            <i class="fa fa-star"></i>
-                                        </span><!-- /.eduhive-ratings__icon -->
-                                    </div><!-- /.product-ratings -->
-                                    <p class="course-card__ratings__text">5 Ratings</p><!-- /.course-card__ratings__text -->
-                                </div><!-- /.course-card__ratings -->
-                                <a href="graphics-design.html" class="course-card__btn eduhive-btn eduhive-btn--border">
-                                    <span>enroll now</span>
-                                    <span class="eduhive-btn__icon">
-                                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                    </span>
-                                </a><!-- /.course-card__btn eduhive-btn -->
-                                <div class="course-card__info course-card__info--hover">
-                                    <div class="course-card__lessons">
-                                        <span class="course-card__lessons__icon">
-                                            <i class="icon-open-book"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        25 lessons
-                                    </div><!-- /.course-card__lessons -->
-                                    <div class="course-card__students">
-                                        <span class="course-card__students__icon">
-                                            <i class="icon-multiple-users-silhouette"></i>
-                                        </span><!-- /.course-card__lessons__icon -->
-                                        130 Students
-                                    </div><!-- /.course-card__students -->
-                                </div><!-- /.course-card__info -->
-                            </div><!-- /.course-card__hover__content -->
-                        </div><!-- /.course-card__hover -->
-                    </div><!-- /.course-card -->
-                </div><!-- /.item graphic-design -->
-            </div><!-- /.courses-two__carousel -->
-        </div><!-- /.courses-two__container container -->
+                                        <span class="course-card__lessons__icon"><i class="icon-open-book"></i></span>
+                                        {{ $s['info'] }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="course-card__hover"
+                                style="background-image: url({{ asset('assets/images/shapes/course-card-bg-1-1.png') }});">
+                                <div class="course-card__hover__content">
+                                    <div class="course-card__content__top course-card__content__top--hover">
+                                        <div class="course-card__category">{{ $s['cat'] }}</div>
+                                        <div class="course-card__duration">
+                                            <span class="course-card__duration__icon"><i class="icon-clock"></i></span>
+                                            {{ $s['grades'] }}
+                                        </div>
+                                    </div>
+                                    <h3 class="course-card__title course-card__title--hover"><a
+                                            href="{{ url($s['url']) }}">{{ $s['title'] }}</a></h3>
+                                    <p class="course-card__text">{{ $s['text'] }}</p>
+                                    <a href="{{ url($s['url']) }}" class="course-card__btn eduhive-btn eduhive-btn--border">
+                                        <span>{{ $s['btn'] }}</span>
+                                        <span class="eduhive-btn__icon"><span class="eduhive-btn__icon__inner"><i
+                                                    class="icon-right-arrow"></i></span></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
         <div class="container">
-            <div class="courses-two__custome-navs"></div><!-- /.courses-two__custome-navs -->
-        </div><!-- /.container -->
-        <div class="courses-two__box-one"></div><!-- /.courses-two__box-one -->
-        <div class="courses-two__box-two"></div><!-- /.courses-two__box-two -->
-        <img src="assets/images/shapes/courses-shape-2-1.png" alt="shape" class="courses-two__shape-one">
-        <img src="assets/images/shapes/courses-shape-2-2.png" alt="shape" class="courses-two__shape-two">
-    </section><!-- /.courses-two section-space-bottom -->
+            <div class="courses-two__custome-navs"></div>
+        </div>
+        <div class="courses-two__box-one"></div>
+        <div class="courses-two__box-two"></div>
+        <img src="{{ asset('assets/images/shapes/courses-shape-2-1.png') }}" alt="" class="courses-two__shape-one">
+        <img src="{{ asset('assets/images/shapes/courses-shape-2-2.png') }}" alt="" class="courses-two__shape-two">
+    </section>
 
-    <section class="faq-one faq-one--home section-space">
+    {{-- ================= 5. WHAT PARENTS WANT TO KNOW =================
+    Row 1 = image + intro · Row 2 = 6 Q&A cards (3 / 2 / 1 columns)
+    --}}
+    @php
+        // Cleaned up array: Removed the 'c' (color) keys to enforce brand consistency
+        $parents = [
+            ['q' => 'Is my child understanding the concepts?', 'a' => 'Concept-focused teaching', 'icon' => 'icon-open-book'],
+            ['q' => 'Is my child practising enough?', 'a' => 'Structured homework & practice', 'icon' => 'icon-copy-writing'],
+            ['q' => 'How is my child performing?', 'a' => 'Regular tests & performance analysis', 'icon' => 'icon-ranking'],
+            ['q' => 'Where is my child weak?', 'a' => 'Chapter-wise identification of gaps', 'icon' => 'icon-files'],
+            ['q' => 'Who will guide my child?', 'a' => 'Faculty mentorship & doubt support', 'icon' => 'icon-instructors'],
+            ['q' => 'Will I know about the progress?', 'a' => 'Regular parent communication', 'icon' => 'icon-community'],
+        ];
+    @endphp
+    <section class="offer-one section-space">
         <div class="container">
-            <div class="row gutter-y-50 align-items-center">
+            <div class="row gutter-y-60 align-items-center">
+                <div class="col-lg-6 wow fadeInUp" data-wow-duration="1500ms">
+                    <div class="offer-one__image">
+                        <img src="{{ asset('assets/images/resources/offer-1-1.jpg') }}"
+                            alt="Parent and student at SG Education" class="offer-one__image__one">
+                        <img src="{{ asset('assets/images/resources/offer-1-2.jpg') }}" alt=""
+                            class="offer-one__image__two">
+                        <img src="{{ asset('assets/images/shapes/offer-shape-1-1.png') }}" alt=""
+                            class="offer-one__image__shape">
+                    </div>
+                </div>
                 <div class="col-lg-6">
-                    <div class="funfact-one">
-                        <div class="funfact-one__grid">
-                            <div class="funfact-one__item funfact-one__item--secondary wow fadeInUp"
-                                data-wow-duration="1500ms" data-wow-delay="00ms">
-                                <div class="funfact-one__icon">
-                                    <span class="funfact-one__icon__inner"><i class="icon-connectibity"></i></span>
-                                </div><!-- /.funfact-one__icon -->
-                                <h3 class="funfact-one__title count-box">
-                                    <span class="count-text" data-stop="30" data-speed="1500">0</span>
-                                    <span>k+</span>
-                                </h3><!-- /.funfact-one__title -->
-                                <p class="funfact-one__text">Satisfied Student</p><!-- /.funfact-one__text -->
-                            </div><!-- /.funfact-one__item -->
-                            <div class="funfact-one__item funfact-one__item--primary wow fadeInUp"
-                                data-wow-duration="1500ms" data-wow-delay="100ms">
-                                <div class="funfact-one__icon">
-                                    <span class="funfact-one__icon__inner"><i class="icon-batch-assign"></i></span>
-                                </div><!-- /.funfact-one__icon -->
-                                <h3 class="funfact-one__title count-box">
-                                    <span class="count-text" data-stop="6500" data-speed="1500">0</span>
-                                    <span>+</span>
-                                </h3><!-- /.funfact-one__title -->
-                                <p class="funfact-one__text">Class Completed</p><!-- /.funfact-one__text -->
-                            </div><!-- /.funfact-one__item -->
-                            <div class="funfact-one__item funfact-one__item--primary wow fadeInUp"
-                                data-wow-duration="1500ms" data-wow-delay="00ms">
-                                <div class="funfact-one__icon">
-                                    <span class="funfact-one__icon__inner"><i class="icon-students"></i></span>
-                                </div><!-- /.funfact-one__icon -->
-                                <h3 class="funfact-one__title count-box">
-                                    <span class="count-text" data-stop="6561" data-speed="1500">0</span>
-                                    <span>+</span>
-                                </h3><!-- /.funfact-one__title -->
-                                <p class="funfact-one__text">Active Students</p><!-- /.funfact-one__text -->
-                            </div><!-- /.funfact-one__item -->
-                            <div class="funfact-one__item funfact-one__item--secondary wow fadeInUp"
-                                data-wow-duration="1500ms" data-wow-delay="100ms">
-                                <div class="funfact-one__icon">
-                                    <span class="funfact-one__icon__inner"><i class="icon-instructors"></i></span>
-                                </div><!-- /.funfact-one__icon -->
-                                <h3 class="funfact-one__title count-box">
-                                    <span class="count-text" data-stop="400" data-speed="1500">0</span>
-                                    <span>+</span>
-                                </h3><!-- /.funfact-one__title -->
-                                <p class="funfact-one__text">Experts Instructors</p><!-- /.funfact-one__text -->
-                            </div><!-- /.funfact-one__item -->
-                        </div><!-- /.rfunfact-one__grid -->
-                    </div><!-- /.funfact-one -->
-                </div><!-- /.col-lg-6 -->
-                <div class="col-lg-6">
-                    <div class="faq-one__content">
+                    <div class="offer-one__content">
                         <div class="sec-title wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                            <h6 class="sec-title__tagline">faq’s</h6><!-- /.sec-title__tagline -->
-                            <h3 class="sec-title__title">We Are Always Ensure <span class="sec-title__title__text">Best <br>
-                                    Course</span> For <span class="sec-title__title__shape">Your Learning</span></h3>
-                            <!-- /.sec-title__title -->
-                        </div><!-- /.sec-title -->
-                        <div class="faq-one__accordion">
-                            <div class="eduhive-accordion" data-grp-name="eduhive-accordion">
-                                <div class="accordion wow fadeInUp" data-wow-duration="1500ms">
-                                    <div class="accordion-title">
-                                        <h4>How long should a business plan be?</h4>
-                                        <span class="accordion-title__icon">
-                                            <i class="icon-double-arrow"></i>
-                                        </span>
-                                    </div><!-- /.accordion-title -->
-                                    <div class="accordion-content">
-                                        <div class="inner">
-                                            <p>Bring to the table win-win survival strategies to ensure proactive
-                                                domination. At the end of the day, going forward, a new normal.</p>
-                                        </div><!-- /.inner -->
-                                    </div><!-- /.accordion-content -->
-                                </div><!-- /.accordion-item -->
-                                <div class="accordion active wow fadeInUp" data-wow-duration="1500ms">
-                                    <div class="accordion-title">
-                                        <h4>What is included in your services?</h4>
-                                        <span class="accordion-title__icon">
-                                            <i class="icon-double-arrow"></i>
-                                        </span>
-                                    </div><!-- /.accordion-title -->
-                                    <div class="accordion-content">
-                                        <div class="inner">
-                                            <p>There are many variations of passages Lorem Ipsum but the majority have
-                                                suffered alteration in some form, by injected humour.</p>
-                                        </div><!-- /.inner -->
-                                    </div><!-- /.accordion-content -->
-                                </div><!-- /.accordion-item -->
-                                <div class="accordion wow fadeInUp" data-wow-duration="1500ms">
-                                    <div class="accordion-title">
-                                        <h4>What type of company is measured?</h4>
-                                        <span class="accordion-title__icon">
-                                            <i class="icon-double-arrow"></i>
-                                        </span>
-                                    </div><!-- /.accordion-title -->
-                                    <div class="accordion-content">
-                                        <div class="inner">
-                                            <p>Prior to joining company, she spent 20+ years at Inmosys, where he held a
-                                                wide range of global leadership roles, from services to products.</p>
-                                        </div><!-- /.inner -->
-                                    </div><!-- /.accordion-content -->
-                                </div><!-- /.accordion-item -->
-                            </div><!-- /.faq-accordion -->
-                        </div><!-- /.faq-one__accordion -->
-                    </div><!-- /.faq-one__content -->
-                </div><!-- /.col-lg-6 -->
-            </div><!-- /.row gutter-y-50 -->
-        </div><!-- /.container -->
-        <div class="faq-one__image-inner">
-            <img src="assets/images/faq/faq-2-1.jpg" alt="faq">
-        </div><!-- /.faq-one__image-inner -->
-        <img src="assets/images/shapes/faq-shape-1-5.png" alt="shape" class="faq-one__shape-three">
-    </section><!-- /.faq-one section-space -->
+                            <h6 class="sec-title__tagline">for parents</h6>
+                            <h3 class="sec-title__title"><span class="sec-title__title__shape">What Parents</span> Want to
+                                <span class="sec-title__title__text">Know</span>
+                            </h3>
+                        </div>
+                        <p class="wow fadeInUp" data-wow-duration="1500ms">Every parent has the same six questions about
+                            their child's preparation. At SG Education, each one has a clear answer built into the way we
+                            teach, test and communicate.</p>
+                        <p class="wow fadeInUp" data-wow-duration="1500ms"><strong>You shouldn't have to wait for the final
+                                exam to know how your child is doing.</strong></p>
+                        <a href="{{ url('/contact') }}" class="eduhive-btn wow fadeInUp" data-wow-duration="1500ms"
+                            style="margin-top: 10px;">
+                            <span>Talk to Our Team</span>
+                            <span class="eduhive-btn__icon"><span class="eduhive-btn__icon__inner"><i
+                                        class="icon-right-arrow"></i></span></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
+            <div class="row gutter-y-30" style="margin-top: 70px;">
+                @foreach ($parents as $p)
+                    {{-- Changed to col-lg-6 for a wider, sleeker 2-column layout --}}
+                    <div class="col-lg-6 col-md-6 wow fadeInUp" data-wow-duration="1500ms"
+                        data-wow-delay="{{ ($loop->index % 2) * 150 }}ms">
 
-    <section class="instructors-three section-space2" id="instructors">
+                        <div class="sg-qa-tile">
+
+                            {{-- Icon Area --}}
+                            <div class="sg-qa-tile__icon">
+                                <i class="{{ $p['icon'] }}" aria-hidden="true"></i>
+                            </div>
+
+                            {{-- Content Area --}}
+                            <div class="sg-qa-tile__content">
+                                <h4 class="sg-qa-tile__q">{{ $p['q'] }}</h4>
+
+                                {{-- Highlighted Answer Badge --}}
+                                <div class="sg-qa-tile__a">
+                                    <i class="icon-check-2" aria-hidden="true"></i>
+                                    <span>{{ $p['a'] }}</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        <div class="offer-one__shape-box"></div>
+    </section>
+
+    {{-- ================= 6. CLASS 11 CHANGES EVERYTHING ================= --}}
+    <section class="about-two section-space">
         <div class="container">
-            <div class="sec-title sec-title--center wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                <h6 class="sec-title__tagline">our expert team</h6><!-- /.sec-title__tagline -->
-                <h3 class="sec-title__title">Our <span class="sec-title__title__text">expert</span> <span
-                        class="sec-title__title__shape">instructor</span></h3><!-- /.sec-title__title -->
-            </div><!-- /.sec-title -->
-            <div class="instructors-three__carousel eduhive-owl__carousel eduhive-owl__carousel--with-shadow eduhive-owl__carousel--basic-nav owl-carousel owl-theme"
-                data-owl-options='{
-                "items": 1,
-                "margin": 10,
-                "loop": true,
-                "smartSpeed": 700,
-                "nav": false,
-                "dots": true,
-                "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
-                "autoplay": true,
-                "responsive": {
-                    "0": {
-                        "items": 1,
-                        "nav": true,
-                        "dots": false,
-                        "margin": 10
-                    },
-                    "576": {
-                        "items": 2,
-                        "margin": 30
-                    },
-                    "992": {
-                        "items": 3,
-                        "margin": 30
-                    },
-                    "1200": {
-                        "items": 4,
-                        "margin": 30,
-                        "dots": false
-                    }
-                }
-            }'>
-                <div class="item">
-                    <div class="instructor-card-three instructor-card-three--top-identity wow fadeInUp"
-                        data-wow-duration='1500ms' data-wow-delay='100ms'>
-                        <div class="instructor-card-three__image">
-                            <div class="instructor-card-three__image__inner">
-                                <img src="assets/images/instructors/instructor-3-1.jpg" alt="Anthony B. Castillo">
-                                <div class="instructor-card-three__social social-links-two">
-                                    <div class="social-links-two__item">
-                                        <a href="https://facebook.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-facebook-f" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Facebook</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://twitter.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-twitter" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Twitter</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://instagram.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-instagram" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Instagram</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://youtube.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-youtube" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Youtube</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                </div><!-- /.instructor-card-three__social -->
-                            </div><!-- /.instructor-card-three__image__inner -->
-                        </div><!-- /.instructor-card-three__image -->
-                        <div class="instructor-card-three__identity">
-                            <h3 class="instructor-card-three__name">
-                                <a href="instructor-details.html">Anthony B. Castillo</a>
-                            </h3><!-- /.instructor-card-three__name -->
-                            <p class="instructor-card-three__designation">Digital marketer</p>
-                            <!-- /.instructor-card-three__designation -->
-                        </div><!-- /.instructor-card-three__identity -->
-                    </div><!-- /.instructor-card-three -->
-                </div><!-- /.item -->
-                <div class="item">
-                    <div class="instructor-card-three wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='200ms'>
-                        <div class="instructor-card-three__image">
-                            <div class="instructor-card-three__image__inner">
-                                <img src="assets/images/instructors/instructor-3-2.jpg" alt="david cooper">
-                                <div class="instructor-card-three__social social-links-two">
-                                    <div class="social-links-two__item">
-                                        <a href="https://facebook.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-facebook-f" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Facebook</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://twitter.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-twitter" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Twitter</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://instagram.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-instagram" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Instagram</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://youtube.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-youtube" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Youtube</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                </div><!-- /.instructor-card-three__social -->
-                            </div><!-- /.instructor-card-three__image__inner -->
-                        </div><!-- /.instructor-card-three__image -->
-                        <div class="instructor-card-three__identity">
-                            <h3 class="instructor-card-three__name">
-                                <a href="instructor-details.html">david cooper</a>
-                            </h3><!-- /.instructor-card-three__name -->
-                            <p class="instructor-card-three__designation">Sr. Manager</p>
-                            <!-- /.instructor-card-three__designation -->
-                        </div><!-- /.instructor-card-three__identity -->
-                    </div><!-- /.instructor-card-three -->
-                </div><!-- /.item -->
-                <div class="item">
-                    <div class="instructor-card-three instructor-card-three--top-identity wow fadeInUp"
-                        data-wow-duration='1500ms' data-wow-delay='100ms'>
-                        <div class="instructor-card-three__image">
-                            <div class="instructor-card-three__image__inner">
-                                <img src="assets/images/instructors/instructor-3-1.jpg" alt="Anthony B. Castillo">
-                                <div class="instructor-card-three__social social-links-two">
-                                    <div class="social-links-two__item">
-                                        <a href="https://facebook.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-facebook-f" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Facebook</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://twitter.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-twitter" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Twitter</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://instagram.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-instagram" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Instagram</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://youtube.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-youtube" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Youtube</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                </div><!-- /.instructor-card-three__social -->
-                            </div><!-- /.instructor-card-three__image__inner -->
-                        </div><!-- /.instructor-card-three__image -->
-                        <div class="instructor-card-three__identity">
-                            <h3 class="instructor-card-three__name">
-                                <a href="instructor-details.html">Anthony B. Castillo</a>
-                            </h3><!-- /.instructor-card-three__name -->
-                            <p class="instructor-card-three__designation">Digital marketer</p>
-                            <!-- /.instructor-card-three__designation -->
-                        </div><!-- /.instructor-card-three__identity -->
-                    </div><!-- /.instructor-card-three -->
-                </div><!-- /.item -->
-                <div class="item">
-                    <div class="instructor-card-three wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='200ms'>
-                        <div class="instructor-card-three__image">
-                            <div class="instructor-card-three__image__inner">
-                                <img src="assets/images/instructors/instructor-3-2.jpg" alt="david cooper">
-                                <div class="instructor-card-three__social social-links-two">
-                                    <div class="social-links-two__item">
-                                        <a href="https://facebook.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-facebook-f" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Facebook</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://twitter.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-twitter" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Twitter</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://instagram.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-instagram" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Instagram</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://youtube.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-youtube" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Youtube</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                </div><!-- /.instructor-card-three__social -->
-                            </div><!-- /.instructor-card-three__image__inner -->
-                        </div><!-- /.instructor-card-three__image -->
-                        <div class="instructor-card-three__identity">
-                            <h3 class="instructor-card-three__name">
-                                <a href="instructor-details.html">david cooper</a>
-                            </h3><!-- /.instructor-card-three__name -->
-                            <p class="instructor-card-three__designation">Sr. Manager</p>
-                            <!-- /.instructor-card-three__designation -->
-                        </div><!-- /.instructor-card-three__identity -->
-                    </div><!-- /.instructor-card-three -->
-                </div><!-- /.item -->
-                <div class="item">
-                    <div class="instructor-card-three instructor-card-three--top-identity wow fadeInUp"
-                        data-wow-duration='1500ms' data-wow-delay='200ms'>
-                        <div class="instructor-card-three__image">
-                            <div class="instructor-card-three__image__inner">
-                                <img src="assets/images/instructors/instructor-3-3.jpg" alt="kevin martin">
-                                <div class="instructor-card-three__social social-links-two">
-                                    <div class="social-links-two__item">
-                                        <a href="https://facebook.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-facebook-f" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Facebook</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://twitter.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-twitter" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Twitter</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://instagram.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-instagram" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Instagram</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://youtube.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-youtube" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Youtube</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                </div><!-- /.instructor-card-three__social -->
-                            </div><!-- /.instructor-card-three__image__inner -->
-                        </div><!-- /.instructor-card-three__image -->
-                        <div class="instructor-card-three__identity">
-                            <h3 class="instructor-card-three__name">
-                                <a href="instructor-details.html">kevin martin</a>
-                            </h3><!-- /.instructor-card-three__name -->
-                            <p class="instructor-card-three__designation">Founder & CEO</p>
-                            <!-- /.instructor-card-three__designation -->
-                        </div><!-- /.instructor-card-three__identity -->
-                    </div><!-- /.instructor-card-three -->
-                </div><!-- /.item -->
-                <div class="item">
-                    <div class="instructor-card-three wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='300ms'>
-                        <div class="instructor-card-three__image">
-                            <div class="instructor-card-three__image__inner">
-                                <img src="assets/images/instructors/instructor-3-4.jpg" alt="Adlof Carone">
-                                <div class="instructor-card-three__social social-links-two">
-                                    <div class="social-links-two__item">
-                                        <a href="https://facebook.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-facebook-f" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Facebook</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://twitter.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-twitter" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Twitter</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://instagram.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-instagram" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Instagram</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                    <div class="social-links-two__item">
-                                        <a href="https://youtube.com">
-                                            <span class="social-links-two__icon">
-                                                <i class="fab fa-youtube" aria-hidden="true"></i>
-                                            </span><!-- /.social-links-two__icon -->
-                                            <span class="sr-only">Youtube</span>
-                                        </a>
-                                    </div><!-- /.social-links-two__item -->
-                                </div><!-- /.instructor-card-three__social -->
-                            </div><!-- /.instructor-card-three__image__inner -->
-                        </div><!-- /.instructor-card-three__image -->
-                        <div class="instructor-card-three__identity">
-                            <h3 class="instructor-card-three__name">
-                                <a href="instructor-details.html">Adlof Carone</a>
-                            </h3><!-- /.instructor-card-three__name -->
-                            <p class="instructor-card-three__designation">UI/UX Designer</p>
-                            <!-- /.instructor-card-three__designation -->
-                        </div><!-- /.instructor-card-three__identity -->
-                    </div><!-- /.instructor-card-three -->
-                </div><!-- /.item -->
-            </div><!-- /.instructors-three__carousel -->
-        </div><!-- /.container -->
-    </section><!-- /.instructors-three section-space2 -->
+            <div class="row gutter-y-60 align-items-center">
+                <div class="col-lg-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                    <div class="about-two__image">
+                        <img src="{{ asset('assets/images/about/about-2-1.jpg') }}" alt="Class 11 science students"
+                            class="about-two__image__one">
+                        <img src="{{ asset('assets/images/about/about-2-2.jpg') }}" alt="" class="about-two__image__two">
+                        <img src="{{ asset('assets/images/shapes/about-shape-2-1.png') }}" alt=""
+                            class="about-two__image__shape-one">
+                        <div class="about-two__image__shape-box"></div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="about-two__content">
+                        <div class="sec-title wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                            <h6 class="sec-title__tagline">11th science</h6>
+                            <h3 class="sec-title__title">Class 11 <span class="sec-title__title__shape">Changes</span> <span
+                                    class="sec-title__title__text">Everything.</span></h3>
+                        </div>
+                        <p class="about-two__text wow fadeInUp" data-wow-duration="1500ms">The jump from Grade 10 to science
+                            can be significant: deeper concepts, a larger syllabus and more analytical questions. If the
+                            goal is JEE, NEET or MHT-CET, Class 11 becomes even more important. SG Education helps students:
+                        </p>
 
+                        @php
+                            $class11 = ['Understand deeper concepts', 'Build problem-solving ability', 'Stay on schedule', 'Test regularly', 'Identify weaknesses early'];
+                        @endphp
+                        <ul class="sg-focus">
+                            @foreach ($class11 as $item)
+                                <li class="wow fadeInUp" data-wow-duration="1200ms" data-wow-delay="{{ $loop->index * 60 }}ms">
+                                    <span class="sg-focus__icon"><i class="icon-check-2" aria-hidden="true"></i></span>
+                                    {{ $item }}
+                                </li>
+                            @endforeach
+                        </ul>
+
+                        <ul class="sg-chips wow fadeInUp" data-wow-duration="1500ms">
+                            <li class="sg-chips__label">Programs:</li>
+                            <li>PCMB</li>
+                            <li>JEE</li>
+                            <li>NEET</li>
+                            <li>MHT-CET</li>
+                        </ul>
+
+                        <a href="{{ url('/courses') }}" class="eduhive-btn wow fadeInUp" data-wow-duration="1500ms">
+                            <span>Explore 11th Science</span>
+                            <span class="eduhive-btn__icon"><span class="eduhive-btn__icon__inner"><i
+                                        class="icon-right-arrow"></i></span></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ================= 7. RESULTS ================= --}}
+    @include('partials.results')
+
+    {{-- ================= 8. TESTIMONIALS (DEMO — docx had no testimonials) ================= --}}
+    @php
+        // DEMO: replace with real parent/student testimonials (with their consent) before go-live
+        $testimonials = [
+            ['name' => 'Parent of a Grade 10 student', 'role' => 'Kalyan', 'quote' => 'The regular tests and chapter-wise feedback showed us exactly where our child needed help. We could see the improvement month by month.', 'img' => 'testimonial-1-1.jpg'],
+            ['name' => 'Class 12 Science student', 'role' => 'JEE aspirant', 'quote' => 'Small batches meant I could ask doubts without hesitation. The test analysis helped me stop repeating the same mistakes.', 'img' => 'testimonial-1-2.jpg'],
+            ['name' => 'Parent of a Class 11 student', 'role' => 'NEET aspirant', 'quote' => 'The shift to Class 11 was tough, but the mentorship and regular parent updates kept us confident about the preparation.', 'img' => 'testimonial-1-3.jpg'],
+        ];
+    @endphp
     <section class="testimonials-one section-space" id="testimonials">
         <div class="container">
             <div class="row gutter-y-50">
                 <div class="col-xl-4">
                     <div class="testimonials-one__content">
                         <div class="sec-title wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                            <h6 class="sec-title__tagline">our testimonials</h6>
-                            <!-- /.sec-title__tagline -->
-                            <h3 class="sec-title__title">
-                                peoples <span class="sec-title__title__shape">say about</span>
-                                <br />
-                                <span class="sec-title__title__text">eduhive</span>
-                            </h3>
-                            <!-- /.sec-title__title -->
+                            <h6 class="sec-title__tagline">testimonials</h6>
+                            <h3 class="sec-title__title">Don't Take <span class="sec-title__title__shape">Our
+                                    Word</span><br><span class="sec-title__title__text">For It.</span></h3>
                         </div>
-                        <!-- /.sec-title -->
                         <div class="testimonials-one__description wow fadeInUp" data-wow-duration="1500ms">
-                            <p class="testimonials-one__text">
-                                Aonsectetur adipiscing elit Aenean scelerisque augue vitae
-                                consequat Juisque eget congue.
-                            </p>
-                            <!-- /.testimonials-one__text -->
+                            <p class="testimonials-one__text">Hear from the students and parents who have experienced the SG
+                                way of learning.</p>
                         </div>
-                        <!-- /.testimonial-one__description -->
                         <div class="testimonials-one__custome-navs"></div>
-                        <!-- /.testimonials-one__custome-navs -->
                     </div>
-                    <!-- /.testimonials-one__content -->
                 </div>
-                <!-- /.col-xl-4 -->
                 <div class="col-xl-8">
                     <div class="eduhive-stretch-element-inside-column">
                         <div class="testimonials-one__carousel eduhive-owl__carousel eduhive-owl__carousel--with-shadow owl-theme owl-carousel"
                             data-owl-options='{
-                                            "items": 1,
-                                            "margin": 30,
-                                            "smartSpeed": 700,
-                                            "loop": true,
-                                            "autoplay": 600,
-                                            "nav": true,
-                                            "navContainer": ".testimonials-one__custome-navs",
-                                            "dots": false,
-                                            "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
-                                            "responsive":{
-                                                "0":{
-                                                    "items": 1,
-                                                    "margin": 10
-                                                },
-                                                "576":{
-                                                    "items": 1.5
-                                                },
-                                                "768":{
-                                                    "items": 1.8
-                                                },
-                                                "992":{
-                                                    "items": 2.6
-                                                },
-                                                "1200":{
-                                                    "items": 2.3
-                                                },
-                                                "1360":{
-                                                    "items": 2.3
-                                                },
-                                                "1536":{
-                                                    "items": 2.5
-                                                },
-                                                "1600":{
-                                                    "items": 2.7
-                                                },
-                                                "1800":{
-                                                    "items": 2.94
-                                                }
-                                            }
-                                            }'>
-                            <div class="item wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                                <div class="testimonial-card">
-                                    <div class="testimonial-card__top">
-                                        <div class="testimonial-card__image">
-                                            <img src="assets/images/testimonials/testimonial-1-1.jpg" alt="Esther Howard" />
-                                            <span class="testimonial-card__icon"><i
-                                                    class="icon-quote-2"></i></span><!-- /.testimonial-card__icon -->
+                                                                            "items": 1,
+                                                                            "margin": 30,
+                                                                            "smartSpeed": 700,
+                                                                            "loop": true,
+                                                                            "autoplay": 600,
+                                                                            "nav": true,
+                                                                            "navContainer": ".testimonials-one__custome-navs",
+                                                                            "dots": false,
+                                                                            "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
+                                                                            "responsive":{
+                                                                                "0":{ "items": 1, "margin": 10 },
+                                                                                "576":{ "items": 1.5 },
+                                                                                "768":{ "items": 1.8 },
+                                                                                "992":{ "items": 2.6 },
+                                                                                "1200":{ "items": 2.3 },
+                                                                                "1536":{ "items": 2.5 },
+                                                                                "1800":{ "items": 2.94 }
+                                                                            }
+                                                                        }'>
+                            @foreach ($testimonials as $t)
+                                <div class="item wow fadeInUp" data-wow-duration="1500ms"
+                                    data-wow-delay="{{ $loop->index * 100 }}ms">
+                                    <div class="testimonial-card">
+                                        <div class="testimonial-card__top">
+                                            <div class="testimonial-card__image">
+                                                <img src="{{ asset('assets/images/testimonials/' . $t['img']) }}"
+                                                    alt="{{ $t['name'] }}" />
+                                                <span class="testimonial-card__icon"><i class="icon-quote-2"></i></span>
+                                            </div>
+                                            <div class="testimonial-card__identity">
+                                                <h5 class="testimonial-card__name">{{ $t['name'] }}</h5>
+                                                <p class="testimonial-card__designation">{{ $t['role'] }}</p>
+                                            </div>
                                         </div>
-                                        <!-- /.testimonial-card__image -->
-                                        <div class="testimonial-card__identity">
-                                            <h5 class="testimonial-card__name">Esther Howard</h5>
-                                            <p class="testimonial-card__designation">Ethical Hacker</p>
+                                        <div class="testimonial-card__content">
+                                            <p class="testimonial-card__quote">{{ $t['quote'] }}</p>
                                         </div>
-                                        <!-- /.testimonial-card__identity -->
                                     </div>
-                                    <!-- /.testimonial-card__top -->
-                                    <div class="testimonial-card__content">
-                                        <p class="testimonial-card__quote">
-                                            I think this should be fairly easy so if you just want to
-                                            have a look what you've given us is texty, we want sexy.
-                                            Labrador you might wanna give it
-                                        </p>
-                                        <!-- /.testimonial-card__quote -->
-                                        <div class="eduhive-ratings">
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                        </div>
-                                        <!-- /.product-ratings -->
-                                    </div>
-                                    <!-- /.testimonial-card__content -->
                                 </div>
-                                <!-- /.testimonial-card -->
-                            </div>
-                            <!-- /.owl-slide-item-->
-                            <div class="item wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="100ms">
-                                <div class="testimonial-card">
-                                    <div class="testimonial-card__top">
-                                        <div class="testimonial-card__image">
-                                            <img src="assets/images/testimonials/testimonial-1-2.jpg" alt="Sarah Albert" />
-                                            <span class="testimonial-card__icon"><i
-                                                    class="icon-quote-2"></i></span><!-- /.testimonial-card__icon -->
-                                        </div>
-                                        <!-- /.testimonial-card__image -->
-                                        <div class="testimonial-card__identity">
-                                            <h5 class="testimonial-card__name">Sarah Albert</h5>
-                                            <p class="testimonial-card__designation">
-                                                managing director
-                                            </p>
-                                        </div>
-                                        <!-- /.testimonial-card__identity -->
-                                    </div>
-                                    <!-- /.testimonial-card__top -->
-                                    <div class="testimonial-card__content">
-                                        <p class="testimonial-card__quote">
-                                            Can you make pink a little more pinkish can you remove my
-                                            double chin on my business card photo? i don't like the way
-                                            it looks can you
-                                        </p>
-                                        <!-- /.testimonial-card__quote -->
-                                        <div class="eduhive-ratings">
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                        </div>
-                                        <!-- /.product-ratings -->
-                                    </div>
-                                    <!-- /.testimonial-card__content -->
-                                </div>
-                                <!-- /.testimonial-card -->
-                            </div>
-                            <!-- /.owl-slide-item-->
-                            <div class="item wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="200ms">
-                                <div class="testimonial-card">
-                                    <div class="testimonial-card__top">
-                                        <div class="testimonial-card__image">
-                                            <img src="assets/images/testimonials/testimonial-1-3.jpg" alt="Kevin Martin" />
-                                            <span class="testimonial-card__icon"><i
-                                                    class="icon-quote-2"></i></span><!-- /.testimonial-card__icon -->
-                                        </div>
-                                        <!-- /.testimonial-card__image -->
-                                        <div class="testimonial-card__identity">
-                                            <h5 class="testimonial-card__name">Kevin Martin</h5>
-                                            <p class="testimonial-card__designation">
-                                                managing director
-                                            </p>
-                                        </div>
-                                        <!-- /.testimonial-card__identity -->
-                                    </div>
-                                    <!-- /.testimonial-card__top -->
-                                    <div class="testimonial-card__content">
-                                        <p class="testimonial-card__quote">
-                                            I really like the colour but can you change it, yet is there
-                                            a way we can make the page feel more introductory without
-                                            being cheesy can't you
-                                        </p>
-                                        <!-- /.testimonial-card__quote -->
-                                        <div class="eduhive-ratings">
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                            <span class="eduhive-ratings__icon">
-                                                <i class="fa fa-star"></i> </span><!-- /.eduhive-ratings__icon -->
-                                        </div>
-                                        <!-- /.product-ratings -->
-                                    </div>
-                                    <!-- /.testimonial-card__content -->
-                                </div>
-                                <!-- /.testimonial-card -->
-                            </div>
-                            <!-- /.owl-slide-item-->
+                            @endforeach
                         </div>
-                        <!-- /.testimonials-one__carousel -->
                     </div>
-                    <!-- /.eduhive-stretch-element-inside-column -->
                 </div>
-                <!-- /.col-xl-8 -->
             </div>
-            <!-- /.row gutter-y-50 -->
         </div>
-        <!-- /.container -->
-        <img src="assets/images/shapes/testimonials-shape-1-1.png" alt="shape" class="testimonials-one__shape" />
+        <img src="{{ asset('assets/images/shapes/testimonials-shape-1-1.png') }}" alt="" class="testimonials-one__shape" />
         <div class="testimonials-one__shape-box"></div>
-        <!-- /.testimonials-one__shape-box -->
     </section>
-    <!-- /.testimonials-one section-space -->
 
-    <section class="cta-one">
+    {{-- ================= 9. VISION / FOUNDER ================= --}}
+    @php
+        $founderImg = 'assets/images/team/latesh-sir.jpg';
+        $founderImg = file_exists(public_path($founderImg)) ? $founderImg : 'assets/images/courses/course-d-instructor-1-9.jpg'; // DEMO fallback
+    @endphp
+    <section class="course-instructor-details section-space">
         <div class="container">
-            <div class="cta-one__content wow fadeInUp" data-wow-duration="1500ms">
-                <h2 class="cta-one__title">
-                    Get Your Quality Skills Certificate <br />
-                    Through Eduhive
-                </h2>
-                <!-- /.cta-one__title -->
-                <a href="contact.html" class="eduhive-btn">
-                    <span>get started now</span>
-                    <span class="eduhive-btn__icon">
-                        <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                    </span> </a><!-- /.eduhive-btn -->
+            <div class="sec-title sec-title--center wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                <h6 class="sec-title__tagline">our founder</h6>
+                <h3 class="sec-title__title">The <span class="sec-title__title__shape">Vision</span> Behind <span
+                        class="sec-title__title__text">SG Education</span></h3>
             </div>
-            <!-- /.cta-one__conten -->
+            <div class="course-instructor-details__inner">
+                <div class="course-instructor-details__image">
+                    <img src="{{ asset($founderImg) }}" alt="Latesh Ghavat, Founder, SG Education">
+                </div>
+                <div class="course-instructor-details__info">
+                    <h3 class="course-instructor-details__name">Latesh Ghavat</h3>
+                    <p class="course-instructor-details__designation">Founder, SG Education</p>
+                    <p class="course-instructor-details__text"><strong>"Education is not about completing chapters. It is
+                            about developing the ability to understand, think, solve and improve."</strong></p>
+                    <p class="course-instructor-details__text">SG Education was built around a simple belief: <strong>strong
+                            fundamentals + consistent practice + meaningful feedback = better academic growth.</strong> Our
+                        aim is to create an academic environment where students receive the direction, discipline and
+                        support required to keep improving.</p>
+                    <a href="{{ url('/about') }}" class="eduhive-btn">
+                        <span>Meet the Founder</span>
+                        <span class="eduhive-btn__icon"><span class="eduhive-btn__icon__inner"><i
+                                    class="icon-right-arrow"></i></span></span>
+                    </a>
+                </div>
+            </div>
         </div>
-        <!-- /.container -->
-        <img src="assets/images/resources/cta-1-1.png" alt="shape" class="cta-one__image-one" />
-        <img src="assets/images/resources/cta-1-2.png" alt="shape" class="cta-one__image-two" />
-        <img src="assets/images/shapes/cta-shape-1-1.png" alt="shape" class="cta-one__shape-one" />
-        <img src="assets/images/shapes/cta-shape-1-1.png" alt="shape" class="cta-one__shape-two" />
-        <div class="cta-one__shape-box-one"></div>
-        <!-- /.cta-one__shape-box-one -->
-        <div class="cta-one__shape-box-two wow fadeInRight" data-wow-duration="1500ms"></div>
-        <!-- /.cta-one__shape-box-two -->
     </section>
-    <!-- /.cta-one -->
 
+    {{-- ================= 10. LEARNING BEYOND THE CLASSROOM ================= --}}
+    <section class="online-class section-space-bottom">
+        <div class="online-class__inner">
+            <div class="online-class__inner__bg"
+                style="background-image: url({{ asset('assets/images/shapes/online-class-bg-1-1.png') }});"></div>
+        </div>
+        <div class="container">
+            <div class="video-one wow fadeInUp" data-wow-duration="1500ms">
+                <div class="video-one__bg"
+                    style="background-image: url({{ asset('assets/images/resources/video-1-1.jpg') }});">
+                    <img src="{{ asset('assets/images/resources/video-1-2.jpg') }}" alt="SG Education events">
+                    <a href="{{ $demoVideo }}" class="video-one__video-btn video-btn video-popup" aria-label="Play video">
+                        <i class="icon-play"></i><span></span><span></span><span></span><span></span>
+                    </a>
+                </div>
+            </div>
+            <div class="online-class__content">
+                <div class="sec-title sec-title--center wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                    <h6 class="sec-title__tagline">events &amp; initiatives</h6>
+                    <h3 class="sec-title__title"><span>Learning</span> <span class="sec-title__title__shape">Beyond</span>
+                        <span>the</span> <span class="sec-title__title__text">Classroom</span>
+                    </h3>
+                </div>
+                <div class="online-class__description wow fadeInUp" data-wow-duration="1500ms">
+                    <p class="online-class__text">Career guidance, academic seminars, scholarship tests, student workshops
+                        and felicitation events. SG Education conducts initiatives designed to help students and parents
+                        make better academic decisions.</p>
+                </div>
+                <div class="online-class__class-wrapper">
+                    <div class="online-class__class wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                        <div class="online-class__class__icon online-class__class__icon--audio">
+                            <span class="online-class__class__icon__inner"><i class="icon-graduation"></i></span>
+                        </div>
+                        <h4 class="online-class__class__title">Career Guidance</h4>
+                    </div>
+                    <div class="online-class__class wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="100ms">
+                        <div class="online-class__class__icon online-class__class__icon--live">
+                            <span class="online-class__class__icon__inner"><i class="icon-live-streaming"></i></span>
+                        </div>
+                        <h4 class="online-class__class__title">Seminars &amp; Workshops</h4>
+                    </div>
+                    <div class="online-class__class wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="200ms">
+                        <div class="online-class__class__icon online-class__class__icon--recorded">
+                            <span class="online-class__class__icon__inner"><i class="icon-medal"></i></span>
+                        </div>
+                        <h4 class="online-class__class__title">Scholarship Tests</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="online-class__shape"></div>
+        <div class="online-class__box"></div>
+    </section>
+
+    {{-- ================= 11a. YOUR JOURNEY (timeline) ================= --}}
+    @php
+        $journey = [
+            ['grade' => 'Grade 9', 'step' => 'Build', 'text' => 'Strong fundamentals and study habits.', 'icon' => 'icon-open-book', 'c' => 'primary'],
+            ['grade' => 'Grade 10', 'step' => 'Master', 'text' => 'Board preparation with confidence.', 'icon' => 'icon-batch-assign', 'c' => 'secondary'],
+            ['grade' => '11th – 12th', 'step' => 'Strengthen', 'text' => 'Deeper concepts and problem solving.', 'icon' => 'icon-graduation', 'c' => 'pink'],
+            ['grade' => 'JEE / NEET / CET', 'step' => 'Compete', 'text' => 'Speed, accuracy and exam strategy.', 'icon' => 'icon-ranking', 'c' => 'green'],
+        ];
+    @endphp
+    <section class="sg-path">
+        <div class="container">
+            <div class="sec-title sec-title--center wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                <h6 class="sec-title__tagline">your journey</h6>
+                <h3 class="sec-title__title">Your Journey <span class="sec-title__title__text">Starts</span> <span
+                        class="sec-title__title__shape">Here.</span></h3>
+            </div>
+            <ol class="sg-path__list" style="--cols: 4;">
+                @foreach ($journey as $j)
+                    <li class="sg-path__item wow fadeInUp" data-wow-duration="1200ms"
+                        data-wow-delay="{{ $loop->index * 120 }}ms"
+                        style="--c: var(--eduhive-{{ $j['c'] }}); --c-rgb: var(--eduhive-{{ $j['c'] }}-rgb);">
+                        <span class="sg-path__dot"><i class="{{ $j['icon'] }}" aria-hidden="true"></i></span>
+                        <div>
+                            <span class="sg-path__grade">{{ $j['grade'] }}</span>
+                            <h4 class="sg-path__label">{{ $j['step'] }}</h4>
+                            <p class="sg-path__text">{{ $j['text'] }}</p>
+                        </div>
+                    </li>
+                @endforeach
+            </ol>
+            <div class="sg-callout wow fadeInUp" data-wow-duration="1500ms">
+                <i class="icon-right-up" aria-hidden="true"></i>
+                We don't just prepare students for the next examination. We prepare them for the next level.
+            </div>
+        </div>
+    </section>
+
+    {{-- ================= 11b. FAQ ================= --}}
+@php
+    $faqs = [
+        ['q' => 'Which classes does SG Education offer?', 'a' => 'Grades 8–10, Foundation, 11th–12th Science, JEE, NEET and MHT-CET programs.'],
+        ['q' => 'Where is SG Education located?', 'a' => 'SG Education is located at Khadakpada, Kalyan, offering School, Foundation and Competitive programs.'],
+        ['q' => 'How can I choose the right program?', 'a' => 'Book an academic counselling session and discuss your child\'s class, board, academic level and future goals with our team.'],
+        ['q' => 'How are students tested and tracked?', 'a' => 'Through chapter tests, unit tests, cumulative tests and mock tests, followed by analysis of why marks were lost and a plan to improve.'],
+    ];
+@endphp
+<section class="faq-one section-space" id="faq">
+    <div class="container">
+        <div class="row gutter-y-50 align-items-start">
+
+            {{-- LEFT: Title + Support Hub --}}
+            <div class="col-lg-5">
+                <div class="sec-title wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                    <h6 class="sec-title__tagline">faq’s</h6>
+                    <h3 class="sec-title__title">Frequently
+                        <span class="sec-title__title__text">Asked</span>
+                        <span class="sec-title__title__shape">Questions</span>
+                    </h3>
+                </div>
+
+                <p class="sg-faq-intro wow fadeInUp" data-wow-duration="1500ms">
+                    Quick answers for parents and students. Still unsure?
+                    Talk to our team and we’ll help you pick the right program.
+                </p>
+
+                <div class="sg-faq-support wow fadeInUp" data-wow-duration="1500ms">
+                    <div class="sg-faq-support__label">
+                        <i class="icon-location" aria-hidden="true"></i> Visit / Contact
+                    </div>
+                    <h4 class="sg-faq-support__title">SG Education, Khadakpada</h4>
+                    <p class="sg-faq-support__text">Kalyan, Maharashtra</p>
+
+                    <div class="sg-faq-support__meta">
+                        <span class="sg-faq-support__chip">School</span>
+                        <span class="sg-faq-support__chip">Foundation</span>
+                        <span class="sg-faq-support__chip">Competitive</span>
+                    </div>
+
+                    <a href="{{ $whatsapp }}" class="sg-faq-wa" target="_blank" rel="noopener">
+                        <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                        <span>Ask Us on WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+
+            {{-- RIGHT: Custom Accordion --}}
+            <div class="col-lg-7">
+                <div class="sg-faq-list wow fadeInUp" data-wow-duration="1500ms">
+                    @foreach ($faqs as $f)
+                        <div class="sg-faq-item {{ $loop->first ? 'is-open' : '' }}">
+                            <button type="button" class="sg-faq-btn" aria-expanded="{{ $loop->first ? 'true' : 'false' }}">
+                                <span class="sg-faq-num">0{{ $loop->iteration }}</span>
+                                <h4 class="sg-faq-q">{{ $f['q'] }}</h4>
+                                <span class="sg-faq-toggle" aria-hidden="true">
+                                    <i class="fas fa-plus"></i>
+                                </span>
+                            </button>
+                            <div class="sg-faq-panel">
+                                <div class="sg-faq-panel__inner">
+                                    <p class="sg-faq-a">{{ $f['a'] }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+    {{-- ================= 12. BLOG / KNOWLEDGE HUB ================= --}}
+    @php
+        $posts = [
+            ['title' => 'How to Score 95%+ in Class 10', 'img' => 'blog-1-1.jpg'],
+            ['title' => 'How to Start JEE Preparation in Class 11', 'img' => 'blog-1-2.jpg'],
+            ['title' => 'How to Prepare for NEET After Class 10', 'img' => 'blog-1-3.jpg'],
+            ['title' => 'How to Choose Coaching Classes in Kalyan', 'img' => 'blog-1-4.jpg'],
+            ['title' => 'JEE Main vs JEE Advanced', 'img' => 'blog-1-5.jpg'],
+        ];
+    @endphp
     <section class="blog-three section-space" id="blog">
         <div class="container">
             <div class="row gutter-y-50 align-items-center">
                 <div class="col-xl-4 col-lg-5">
                     <div class="blog-three__content">
                         <div class="sec-title wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                            <h6 class="sec-title__tagline">latest blog</h6><!-- /.sec-title__tagline -->
-                            <h3 class="sec-title__title"><span class="sec-title__title__shape">our latest</span> <span
-                                    class="sec-title__title__text">blog <br> news</span></h3><!-- /.sec-title__title -->
-                        </div><!-- /.sec-title -->
+                            <h6 class="sec-title__tagline">SG knowledge hub</h6>
+                            <h3 class="sec-title__title"><span class="sec-title__title__shape">Learn Better.</span> <span
+                                    class="sec-title__title__text">Prepare <br> Better.</span></h3>
+                        </div>
                         <div class="blog-three__description">
-                            <p class="blog-three__text">Are there any leftovers in the kitchen? that's not on the roadmap,
-                                or drink from the firehose, nor time vampire what about scaling components to a global
-                                audience</p><!-- /.blog-three__text -->
-                        </div><!-- /.blog-three__description -->
-                        <div class="blog-three__custome-navs"></div><!-- /.blog-three__custome-navs -->
-                    </div><!-- /.blog-three__content -->
-                </div><!-- /.col-xl-4 col-lg-7 -->
+                            <p class="blog-three__text">Practical guides for students and parents on boards, JEE, NEET and
+                                choosing the right preparation path.</p>
+                            <a href="{{ url('/blog') }}" class="eduhive-btn eduhive-btn--border" style="margin-top: 20px;">
+                                <span>Explore SG Knowledge Hub</span>
+                                <span class="eduhive-btn__icon"><span class="eduhive-btn__icon__inner"><i
+                                            class="icon-right-arrow"></i></span></span>
+                            </a>
+                        </div>
+                        <div class="blog-three__custome-navs"></div>
+                    </div>
+                </div>
                 <div class="col-xl-8 col-lg-7">
                     <div class="eduhive-stretch-element-inside-column">
                         <div class="blog-three__carousel eduhive-owl__carousel owl-carousel owl-theme" data-owl-options='{
-                                    "items": 1,
-                                    "margin": 30,
-                                    "loop": true,
-                                    "smartSpeed": 700,
-                                    "nav": true,
-                                    "dots": false,
-                                    "navContainer": ".blog-three__custome-navs",
-                                    "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
-                                    "autoplay": true,
-                                    "responsive": {
-                                        "0":{
-                                            "items": 1,
-                                            "margin": 10
-                                        },
-                                        "576":{
-                                            "items": 1.5
-                                        },
-                                        "768":{
-                                            "items": 2.2
-                                        },
-                                        "992":{
-                                            "items": 1.55
-                                        },
-                                        "1200":{
-                                            "items": 2.2
-                                        },
-                                        "1360":{
-                                            "items": 2.25
-                                        },
-                                        "1400":{
-                                            "items": 2.35
-                                        },
-                                        "1536":{
-                                            "items": 2.45
-                                        },
-                                        "1600":{
-                                            "items": 2.6
-                                        },
-                                        "1800":{
-                                            "items": 2.94
-                                        }
-                                    }
-                                }'>
-                            <div class="item">
-                                <div class="blog-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                                    <div class="blog-card__image">
-                                        <img src="assets/images/blog/blog-1-1.jpg"
-                                            alt="Talk About the Three Major Types of Floor Tiles">
-                                        <a href="blog-details-right.html" class="blog-card__image__link"><span
-                                                class="sr-only">Talk About the Three Major Types of Floor Tiles</span>
-                                            <!-- /.sr-only --></a>
-                                        <div class="blog-card__date">
-                                            <span class="blog-card__date__day">29</span>
-                                            <span class="blog-card__date__month">jan</span>
-                                        </div><!-- /.blog-card__date -->
-                                    </div><!-- /.blog-card__image -->
-                                    <div class="blog-card__content">
-                                        <ul class="list-unstyled blog-card__meta">
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="far fa-user"></i>
-                                                    </span>
-                                                    by Admin
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="icon-comments"></i>
-                                                    </span>
-                                                    2 Comments
-                                                </a>
-                                            </li>
-                                        </ul><!-- /.list-unstyled blog-card__meta -->
-                                        <h3 class="blog-card__title"><a href="blog-details-right.html">Talk About the Three
-                                                Major Types of Floor Tiles</a></h3><!-- /.blog-card__title -->
-                                        <a href="blog-details-right.html" class="blog-card__link">
-                                            read More
-                                            <span class="blog-card__link__icon">
-                                                <span class="blog-card__link__icon__inner"><i
-                                                        class="icon-arrow-right"></i></span>
-                                            </span>
-                                        </a><!-- /.blog-card__link -->
-                                    </div><!-- /.blog-card__content -->
-                                </div><!-- /.blog-card -->
-                            </div><!-- /.item -->
-                            <div class="item">
-                                <div class="blog-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='100ms'>
-                                    <div class="blog-card__image">
-                                        <img src="assets/images/blog/blog-1-2.jpg"
-                                            alt="Big Data. Are There Any Leftovers In The Kitchen">
-                                        <a href="blog-details-right.html" class="blog-card__image__link"><span
-                                                class="sr-only">Big Data. Are There Any Leftovers In The Kitchen</span>
-                                            <!-- /.sr-only --></a>
-                                        <div class="blog-card__date">
-                                            <span class="blog-card__date__day">25</span>
-                                            <span class="blog-card__date__month">june</span>
-                                        </div><!-- /.blog-card__date -->
-                                    </div><!-- /.blog-card__image -->
-                                    <div class="blog-card__content">
-                                        <ul class="list-unstyled blog-card__meta">
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="far fa-user"></i>
-                                                    </span>
-                                                    by Admin
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="icon-comments"></i>
-                                                    </span>
-                                                    2 Comments
-                                                </a>
-                                            </li>
-                                        </ul><!-- /.list-unstyled blog-card__meta -->
-                                        <h3 class="blog-card__title"><a href="blog-details-right.html">Big Data. Are There
-                                                Any Leftovers In The Kitchen</a></h3><!-- /.blog-card__title -->
-                                        <a href="blog-details-right.html" class="blog-card__link">
-                                            read More
-                                            <span class="blog-card__link__icon">
-                                                <span class="blog-card__link__icon__inner"><i
-                                                        class="icon-arrow-right"></i></span>
-                                            </span>
-                                        </a><!-- /.blog-card__link -->
-                                    </div><!-- /.blog-card__content -->
-                                </div><!-- /.blog-card -->
-                            </div><!-- /.item -->
-                            <div class="item">
-                                <div class="blog-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='200ms'>
-                                    <div class="blog-card__image">
-                                        <img src="assets/images/blog/blog-1-3.jpg"
-                                            alt="A Simple Lift And Shift Job Going Forward Price">
-                                        <a href="blog-details-right.html" class="blog-card__image__link"><span
-                                                class="sr-only">A Simple Lift And Shift Job Going Forward Price</span>
-                                            <!-- /.sr-only --></a>
-                                        <div class="blog-card__date">
-                                            <span class="blog-card__date__day">20</span>
-                                            <span class="blog-card__date__month">jan</span>
-                                        </div><!-- /.blog-card__date -->
-                                    </div><!-- /.blog-card__image -->
-                                    <div class="blog-card__content">
-                                        <ul class="list-unstyled blog-card__meta">
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="far fa-user"></i>
-                                                    </span>
-                                                    by Admin
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="icon-comments"></i>
-                                                    </span>
-                                                    2 Comments
-                                                </a>
-                                            </li>
-                                        </ul><!-- /.list-unstyled blog-card__meta -->
-                                        <h3 class="blog-card__title"><a href="blog-details-right.html">A Simple Lift And
-                                                Shift Job Going Forward Price</a></h3><!-- /.blog-card__title -->
-                                        <a href="blog-details-right.html" class="blog-card__link">
-                                            read More
-                                            <span class="blog-card__link__icon">
-                                                <span class="blog-card__link__icon__inner"><i
-                                                        class="icon-arrow-right"></i></span>
-                                            </span>
-                                        </a><!-- /.blog-card__link -->
-                                    </div><!-- /.blog-card__content -->
-                                </div><!-- /.blog-card -->
-                            </div><!-- /.item -->
-                            <div class="item">
-                                <div class="blog-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                                    <div class="blog-card__image">
-                                        <img src="assets/images/blog/blog-1-4.jpg"
-                                            alt="My Capacity Is Full We're Building The Plane">
-                                        <a href="blog-details-right.html" class="blog-card__image__link"><span
-                                                class="sr-only">My Capacity Is Full We're Building The Plane</span>
-                                            <!-- /.sr-only --></a>
-                                        <div class="blog-card__date">
-                                            <span class="blog-card__date__day">15</span>
-                                            <span class="blog-card__date__month">jul</span>
-                                        </div><!-- /.blog-card__date -->
-                                    </div><!-- /.blog-card__image -->
-                                    <div class="blog-card__content">
-                                        <ul class="list-unstyled blog-card__meta">
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="far fa-user"></i>
-                                                    </span>
-                                                    by Admin
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="icon-comments"></i>
-                                                    </span>
-                                                    2 Comments
-                                                </a>
-                                            </li>
-                                        </ul><!-- /.list-unstyled blog-card__meta -->
-                                        <h3 class="blog-card__title"><a href="blog-details-right.html">My Capacity Is Full
-                                                We're Building The Plane</a></h3><!-- /.blog-card__title -->
-                                        <a href="blog-details-right.html" class="blog-card__link">
-                                            read More
-                                            <span class="blog-card__link__icon">
-                                                <span class="blog-card__link__icon__inner"><i
-                                                        class="icon-arrow-right"></i></span>
-                                            </span>
-                                        </a><!-- /.blog-card__link -->
-                                    </div><!-- /.blog-card__content -->
-                                </div><!-- /.blog-card -->
-                            </div><!-- /.item -->
-                            <div class="item">
-                                <div class="blog-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='100ms'>
-                                    <div class="blog-card__image">
-                                        <img src="assets/images/blog/blog-1-5.jpg"
-                                            alt="Ny Leftovers In The Kitchen Touch Base">
-                                        <a href="blog-details-right.html" class="blog-card__image__link"><span
-                                                class="sr-only">Ny Leftovers In The Kitchen Touch Base</span>
-                                            <!-- /.sr-only --></a>
-                                        <div class="blog-card__date">
-                                            <span class="blog-card__date__day">5</span>
-                                            <span class="blog-card__date__month">june</span>
-                                        </div><!-- /.blog-card__date -->
-                                    </div><!-- /.blog-card__image -->
-                                    <div class="blog-card__content">
-                                        <ul class="list-unstyled blog-card__meta">
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="far fa-user"></i>
-                                                    </span>
-                                                    by Admin
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="icon-comments"></i>
-                                                    </span>
-                                                    2 Comments
-                                                </a>
-                                            </li>
-                                        </ul><!-- /.list-unstyled blog-card__meta -->
-                                        <h3 class="blog-card__title"><a href="blog-details-right.html">Ny Leftovers In The
-                                                Kitchen Touch Base</a></h3><!-- /.blog-card__title -->
-                                        <a href="blog-details-right.html" class="blog-card__link">
-                                            read More
-                                            <span class="blog-card__link__icon">
-                                                <span class="blog-card__link__icon__inner"><i
-                                                        class="icon-arrow-right"></i></span>
-                                            </span>
-                                        </a><!-- /.blog-card__link -->
-                                    </div><!-- /.blog-card__content -->
-                                </div><!-- /.blog-card -->
-                            </div><!-- /.item -->
-                            <div class="item">
-                                <div class="blog-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='200ms'>
-                                    <div class="blog-card__image">
-                                        <img src="assets/images/blog/blog-1-6.jpg"
-                                            alt="Circle Back, If You Want To Motivate These">
-                                        <a href="blog-details-right.html" class="blog-card__image__link"><span
-                                                class="sr-only">Circle Back, If You Want To Motivate These</span>
-                                            <!-- /.sr-only --></a>
-                                        <div class="blog-card__date">
-                                            <span class="blog-card__date__day">28</span>
-                                            <span class="blog-card__date__month">jul</span>
-                                        </div><!-- /.blog-card__date -->
-                                    </div><!-- /.blog-card__image -->
-                                    <div class="blog-card__content">
-                                        <ul class="list-unstyled blog-card__meta">
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="far fa-user"></i>
-                                                    </span>
-                                                    by Admin
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="icon-comments"></i>
-                                                    </span>
-                                                    2 Comments
-                                                </a>
-                                            </li>
-                                        </ul><!-- /.list-unstyled blog-card__meta -->
-                                        <h3 class="blog-card__title"><a href="blog-details-right.html">Circle Back, If You
-                                                Want To Motivate These</a></h3><!-- /.blog-card__title -->
-                                        <a href="blog-details-right.html" class="blog-card__link">
-                                            read More
-                                            <span class="blog-card__link__icon">
-                                                <span class="blog-card__link__icon__inner"><i
-                                                        class="icon-arrow-right"></i></span>
-                                            </span>
-                                        </a><!-- /.blog-card__link -->
-                                    </div><!-- /.blog-card__content -->
-                                </div><!-- /.blog-card -->
-                            </div><!-- /.item -->
-                            <div class="item">
-                                <div class="blog-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='00ms'>
-                                    <div class="blog-card__image">
-                                        <img src="assets/images/blog/blog-1-7.jpg"
-                                            alt="Nail Jelly To The Hothouse Wall Pixel Pushing">
-                                        <a href="blog-details-right.html" class="blog-card__image__link"><span
-                                                class="sr-only">Nail Jelly To The Hothouse Wall Pixel Pushing</span>
-                                            <!-- /.sr-only --></a>
-                                        <div class="blog-card__date">
-                                            <span class="blog-card__date__day">10</span>
-                                            <span class="blog-card__date__month">june</span>
-                                        </div><!-- /.blog-card__date -->
-                                    </div><!-- /.blog-card__image -->
-                                    <div class="blog-card__content">
-                                        <ul class="list-unstyled blog-card__meta">
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="far fa-user"></i>
-                                                    </span>
-                                                    by Admin
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="icon-comments"></i>
-                                                    </span>
-                                                    2 Comments
-                                                </a>
-                                            </li>
-                                        </ul><!-- /.list-unstyled blog-card__meta -->
-                                        <h3 class="blog-card__title"><a href="blog-details-right.html">Nail Jelly To The
-                                                Hothouse Wall Pixel Pushing</a></h3><!-- /.blog-card__title -->
-                                        <a href="blog-details-right.html" class="blog-card__link">
-                                            read More
-                                            <span class="blog-card__link__icon">
-                                                <span class="blog-card__link__icon__inner"><i
-                                                        class="icon-arrow-right"></i></span>
-                                            </span>
-                                        </a><!-- /.blog-card__link -->
-                                    </div><!-- /.blog-card__content -->
-                                </div><!-- /.blog-card -->
-                            </div><!-- /.item -->
-                            <div class="item">
-                                <div class="blog-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='100ms'>
-                                    <div class="blog-card__image">
-                                        <img src="assets/images/blog/blog-1-8.jpg"
-                                            alt="Copy And Paste From Stack Overflow Can You">
-                                        <a href="blog-details-right.html" class="blog-card__image__link"><span
-                                                class="sr-only">Copy And Paste From Stack Overflow Can You</span>
-                                            <!-- /.sr-only --></a>
-                                        <div class="blog-card__date">
-                                            <span class="blog-card__date__day">2</span>
-                                            <span class="blog-card__date__month">jan</span>
-                                        </div><!-- /.blog-card__date -->
-                                    </div><!-- /.blog-card__image -->
-                                    <div class="blog-card__content">
-                                        <ul class="list-unstyled blog-card__meta">
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="far fa-user"></i>
-                                                    </span>
-                                                    by Admin
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="icon-comments"></i>
-                                                    </span>
-                                                    2 Comments
-                                                </a>
-                                            </li>
-                                        </ul><!-- /.list-unstyled blog-card__meta -->
-                                        <h3 class="blog-card__title"><a href="blog-details-right.html">Copy And Paste From
-                                                Stack Overflow Can You</a></h3><!-- /.blog-card__title -->
-                                        <a href="blog-details-right.html" class="blog-card__link">
-                                            read More
-                                            <span class="blog-card__link__icon">
-                                                <span class="blog-card__link__icon__inner"><i
-                                                        class="icon-arrow-right"></i></span>
-                                            </span>
-                                        </a><!-- /.blog-card__link -->
-                                    </div><!-- /.blog-card__content -->
-                                </div><!-- /.blog-card -->
-                            </div><!-- /.item -->
-                            <div class="item">
-                                <div class="blog-card wow fadeInUp" data-wow-duration='1500ms' data-wow-delay='200ms'>
-                                    <div class="blog-card__image">
-                                        <img src="assets/images/blog/blog-1-9.jpg"
-                                            alt="Catching And Not Too Giant, Yet Drink From The">
-                                        <a href="blog-details-right.html" class="blog-card__image__link"><span
-                                                class="sr-only">Catching And Not Too Giant, Yet Drink From The</span>
-                                            <!-- /.sr-only --></a>
-                                        <div class="blog-card__date">
-                                            <span class="blog-card__date__day">26</span>
-                                            <span class="blog-card__date__month">june</span>
-                                        </div><!-- /.blog-card__date -->
-                                    </div><!-- /.blog-card__image -->
-                                    <div class="blog-card__content">
-                                        <ul class="list-unstyled blog-card__meta">
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="far fa-user"></i>
-                                                    </span>
-                                                    by Admin
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <span class="blog-card__meta__icon">
-                                                        <i class="icon-comments"></i>
-                                                    </span>
-                                                    2 Comments
-                                                </a>
-                                            </li>
-                                        </ul><!-- /.list-unstyled blog-card__meta -->
-                                        <h3 class="blog-card__title"><a href="blog-details-right.html">Catching And Not Too
-                                                Giant, Yet Drink From The</a></h3><!-- /.blog-card__title -->
-                                        <a href="blog-details-right.html" class="blog-card__link">
-                                            read More
-                                            <span class="blog-card__link__icon">
-                                                <span class="blog-card__link__icon__inner"><i
-                                                        class="icon-arrow-right"></i></span>
-                                            </span>
-                                        </a><!-- /.blog-card__link -->
-                                    </div><!-- /.blog-card__content -->
-                                </div><!-- /.blog-card -->
-                            </div><!-- /.item -->
-                        </div><!-- /.blog-three__carousel -->
-                    </div><!-- /.eduhive-stretch-element-inside-column -->
-                </div><!-- /.col-xl-8 col-lg-5 -->
-            </div><!-- /.row gutter-y-50 align-items-center -->
-        </div><!-- /.container -->
-        <img src="assets/images/shapes/blog-shape-3-1.png" alt="shape" class="blog-three__shape-one">
-        <div class="blog-three__shape-two"></div><!-- /.blog-three__shape-two -->
-    </section><!-- /.blog-three section-space -->
+                                                                        "items": 1,
+                                                                        "margin": 30,
+                                                                        "loop": true,
+                                                                        "smartSpeed": 700,
+                                                                        "nav": true,
+                                                                        "dots": false,
+                                                                        "navContainer": ".blog-three__custome-navs",
+                                                                        "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
+                                                                        "autoplay": true,
+                                                                        "responsive": {
+                                                                            "0":{ "items": 1, "margin": 10 },
+                                                                            "576":{ "items": 1.5 },
+                                                                            "768":{ "items": 2.2 },
+                                                                            "992":{ "items": 1.55 },
+                                                                            "1200":{ "items": 2.2 },
+                                                                            "1400":{ "items": 2.35 },
+                                                                            "1600":{ "items": 2.6 },
+                                                                            "1800":{ "items": 2.94 }
+                                                                        }
+                                                                    }'>
+                            @foreach ($posts as $post)
+                                <div class="item">
+                                    <div class="blog-card wow fadeInUp" data-wow-duration="1500ms"
+                                        data-wow-delay="{{ ($loop->index % 3) * 100 }}ms">
+                                        <div class="blog-card__image">
+                                            <img src="{{ asset('assets/images/blog/' . $post['img']) }}"
+                                                alt="{{ $post['title'] }}">
+                                            <a href="{{ url('/blog') }}" class="blog-card__image__link"><span
+                                                    class="sr-only">{{ $post['title'] }}</span></a>
+                                        </div>
+                                        <div class="blog-card__content">
+                                            <ul class="list-unstyled blog-card__meta">
+                                                <li>
+                                                    <a href="{{ url('/blog') }}">
+                                                        <span class="blog-card__meta__icon"><i class="far fa-user"></i></span>
+                                                        by SG Education
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <h3 class="blog-card__title"><a href="{{ url('/blog') }}">{{ $post['title'] }}</a>
+                                            </h3>
+                                            <a href="{{ url('/blog') }}" class="blog-card__link">
+                                                read More
+                                                <span class="blog-card__link__icon"><span
+                                                        class="blog-card__link__icon__inner"><i
+                                                            class="icon-arrow-right"></i></span></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img src="{{ asset('assets/images/shapes/blog-shape-3-1.png') }}" alt="" class="blog-three__shape-one">
+        <div class="blog-three__shape-two"></div>
+    </section>
 
-    <div class="client-carousel @@extraClassName">
-        <div class="container-fluid">
-            <div class="client-carousel__inner">
-                <div class="container">
-                    <div class="client-carousel__content">
-                        <h4 class="client-carousel__title">2K+ brands trust us</h4><!-- /.client-carousel__title -->
-                    </div><!-- /.client-carousel__content -->
-                    <div class="client-carousel__carousel eduhive-owl__carousel owl-theme owl-carousel" data-owl-options='{
-                            "items": 5,
-                            "margin": 65,
-                            "smartSpeed": 700,
-                            "loop":true,
-                            "autoplay": 6000,
-                            "nav":false,
-                            "dots":false,
-                            "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
-                            "responsive":{
-                                "0":{
-                                    "items": 2,
-                                    "margin": 50
-                                },
-                                "500":{
-                                    "items": 3,
-                                    "margin": 60
-                                },
-                                "768":{
-                                    "items": 3,
-                                    "margin": 80
-                                },
-                                "992":{
-                                    "items": 4,
-                                    "margin": 60
-                                },
-                                "1200":{
-                                    "items": 5,
-                                    "margin": 163
-                                }
-                            }
-                            }'>
-                        <div class="client-carousel__item">
-                            <img src="assets/images/brand/brand-1-1.png" alt="eduhive" class="client-carousel__image">
-                            <img src="assets/images/brand/brand-1-1-hover.png" alt="eduhive"
-                                class="client-carousel__hover-image">
-                        </div><!-- /.owl-slide-item-->
-                        <div class="client-carousel__item">
-                            <img src="assets/images/brand/brand-1-2.png" alt="eduhive" class="client-carousel__image">
-                            <img src="assets/images/brand/brand-1-2-hover.png" alt="eduhive"
-                                class="client-carousel__hover-image">
-                        </div><!-- /.owl-slide-item-->
-                        <div class="client-carousel__item">
-                            <img src="assets/images/brand/brand-1-3.png" alt="eduhive" class="client-carousel__image">
-                            <img src="assets/images/brand/brand-1-3-hover.png" alt="eduhive"
-                                class="client-carousel__hover-image">
-                        </div><!-- /.owl-slide-item-->
-                        <div class="client-carousel__item">
-                            <img src="assets/images/brand/brand-1-4.png" alt="eduhive" class="client-carousel__image">
-                            <img src="assets/images/brand/brand-1-4-hover.png" alt="eduhive"
-                                class="client-carousel__hover-image">
-                        </div><!-- /.owl-slide-item-->
-                    </div><!-- /.client-carousel__carousel -->
-                </div><!-- /.container -->
-            </div><!-- /.client-carousel__inner -->
-        </div><!-- /.container-fluid -->
-    </div><!-- /.client-carousel -->
+    {{-- ================= 13. CTA ================= --}}
+    <section class="cta-one">
+        <div class="container">
+            <div class="cta-one__content wow fadeInUp" data-wow-duration="1500ms">
+                <h2 class="cta-one__title">
+                    Ready to Build a Stronger <br />
+                    Academic Future?
+                </h2>
+                <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                    <a href="{{ url('/contact') }}" class="eduhive-btn">
+                        <span>Book Counselling</span>
+                        <span class="eduhive-btn__icon"><span class="eduhive-btn__icon__inner"><i
+                                    class="icon-right-arrow"></i></span></span>
+                    </a>
+                    <a href="{{ $whatsapp }}" class="eduhive-btn eduhive-btn--border" target="_blank" rel="noopener">
+                        <span>WhatsApp Us</span>
+                        <span class="eduhive-btn__icon"><span class="eduhive-btn__icon__inner"><i
+                                    class="fab fa-whatsapp"></i></span></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <img src="{{ asset('assets/images/resources/cta-1-1.png') }}" alt="" class="cta-one__image-one" />
+        <img src="{{ asset('assets/images/resources/cta-1-2.png') }}" alt="" class="cta-one__image-two" />
+        <img src="{{ asset('assets/images/shapes/cta-shape-1-1.png') }}" alt="" class="cta-one__shape-one" />
+        <img src="{{ asset('assets/images/shapes/cta-shape-1-1.png') }}" alt="" class="cta-one__shape-two" />
+        <div class="cta-one__shape-box-one"></div>
+        <div class="cta-one__shape-box-two wow fadeInRight" data-wow-duration="1500ms"></div>
+    </section>
 
+    {{-- ================= 14. ABOUT SG EDUCATION (SEO Summary) ================= --}}
+    <section class="sg-summary-sec">
+        <div class="container">
+            <div class="sg-summary-card wow fadeInUp" data-wow-duration="1500ms">
+
+                {{-- Left Column: Identity & Offerings --}}
+                <div class="sg-summary-left">
+                    <span class="sg-summary-badge">
+                        <i class="icon-graduation" aria-hidden="true"></i> About SG Education
+                    </span>
+
+                    <h2 class="sg-summary-title">Coaching Institute in Kalyan for Grades 8 to 12</h2>
+
+                    <div class="sg-summary-location">
+                        <i class="icon-location" aria-hidden="true"></i>
+                        <span>Khadakpada, Kalyan, Maharashtra</span>
+                    </div>
+
+                    <ul class="sg-chips-wrap">
+                        <li class="sg-chip-item">Maharashtra State Board</li>
+                        <li class="sg-chip-item">JEE Foundation</li>
+                        <li class="sg-chip-item">NEET Foundation</li>
+                        <li class="sg-chip-item">JEE Main &amp; Advanced</li>
+                        <li class="sg-chip-item">NEET</li>
+                        <li class="sg-chip-item">MHT-CET</li>
+                    </ul>
+                </div>
+
+                {{-- Right Column: Narrative & Key Feature Pillars --}}
+                <div class="sg-summary-right">
+                    <p class="sg-summary-desc">
+                        SG Education is a premier coaching institute in Kalyan offering targeted academic programs
+                        for Grades 8 to 12 (Maharashtra State Board), JEE, NEET, and MHT-CET. Built on a foundation of
+                        concept-first teaching and individual performance tracking, we empower students to achieve
+                        consistent academic excellence.
+                    </p>
+
+                    <ul class="sg-feature-grid">
+                        <li class="sg-feature-card">
+                            <i class="icon-multiple-users" aria-hidden="true"></i>
+                            <span>Focused Batches</span>
+                        </li>
+                        <li class="sg-feature-card">
+                            <i class="icon-open-book" aria-hidden="true"></i>
+                            <span>Concept Teaching</span>
+                        </li>
+                        <li class="sg-feature-card">
+                            <i class="icon-files" aria-hidden="true"></i>
+                            <span>Regular Tests</span>
+                        </li>
+                        <li class="sg-feature-card">
+                            <i class="icon-ranking" aria-hidden="true"></i>
+                            <span>Performance Analysis</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
 @endsection

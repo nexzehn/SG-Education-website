@@ -16,6 +16,9 @@
     <li class="sg-nav__item {{ request()->is('about') ? 'current' : '' }}">
         <a href="{{ url('/about') }}" class="sg-nav__link">About Us</a>
     </li>
+    <li class="sg-nav__item {{ request()->is('our-methodology') ? 'current' : '' }}">
+        <a href="{{ url('/our-methodology') }}" class="sg-nav__link">Our Methodology</a>
+    </li>
 
     {{-- class "dropdown" is required by eduhive.js for the mobile accordion --}}
     <li class="sg-nav__item dropdown {{ request()->is('courses*') ? 'current' : '' }}">
