@@ -23,7 +23,7 @@
     {{-- class "dropdown" is required by eduhive.js for the mobile accordion --}}
     <li class="sg-nav__item dropdown {{ request()->is('courses*') ? 'current' : '' }}">
         <a href="{{ url('/courses') }}" class="sg-nav__link" aria-haspopup="true">
-            Programs
+            Courses
             <svg class="sg-nav__caret" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2.5"
                  stroke-linecap="round" stroke-linejoin="round">

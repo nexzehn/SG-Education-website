@@ -37,15 +37,14 @@ DEMO markers (replace before go-live):
 @section('styles')
     <style>
         /* =====================================================================
-                                               Home page — custom blocks, same style language as About page.
-                                               All colours from Eduhive CSS variables. Per-card accent via --c / --c-rgb.
-                                               ===================================================================== */
+                                   Home page — custom blocks, same style language as About page.
+                                   All colours from Eduhive CSS variables. Per-card accent via --c / --c-rgb.
+                                   ===================================================================== */
 
-        /* ---------- 2. Why SG — refined horizontal strip ---------- */
         /* ============================================================
-                       2. Why SG — Premium Balanced Cards
-                       Palette: Navy (#334154) + Orange (#F48134)
-                       ============================================================ */
+                                   2. Why SG — Premium Balanced Cards
+                                   Palette: Navy (#334154) + Orange (#F48134)
+                                   ============================================================ */
 
         .sg-why-wrap {
             display: flex;
@@ -67,17 +66,14 @@ DEMO markers (replace before go-live):
             z-index: 1;
             cursor: default;
             transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-            /* Ultra-smooth Apple-like ease */
         }
 
-        /* Hover State - Card Lifts & Shadows Deepen */
         .sg-why-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 20px 40px rgba(var(--eduhive-base-rgb), 0.1);
             border-color: rgba(var(--eduhive-primary-rgb), 0.3);
         }
 
-        /* Background Watermark Number for Depth */
         .sg-why-card__watermark {
             position: absolute;
             top: -15px;
@@ -96,7 +92,6 @@ DEMO markers (replace before go-live):
             transform: scale(1.05) translate(-10px, 10px);
         }
 
-        /* Animated Orange Bottom Line */
         .sg-why-card__line {
             position: absolute;
             bottom: 0;
@@ -111,7 +106,6 @@ DEMO markers (replace before go-live):
             width: 100%;
         }
 
-        /* Icon Box - "Liquid Fill" Animation */
         .sg-why-card__icon {
             position: relative;
             width: 65px;
@@ -133,7 +127,6 @@ DEMO markers (replace before go-live):
             transition: color 0.4s ease;
         }
 
-        /* The fill that grows from the bottom */
         .sg-why-card__icon::before {
             content: '';
             position: absolute;
@@ -169,7 +162,6 @@ DEMO markers (replace before go-live):
             }
         }
 
-        /* Typography */
         .sg-why-card h4 {
             font-size: 22px;
             font-weight: 700;
@@ -190,11 +182,9 @@ DEMO markers (replace before go-live):
             color: var(--eduhive-primary);
         }
 
-        /* Responsive Grid Adjustments */
         @media (max-width: 1199px) {
             .sg-why-card {
                 flex: 0 0 calc(50% - 15px);
-                /* 2 columns on tablet */
             }
         }
 
@@ -205,74 +195,12 @@ DEMO markers (replace before go-live):
 
             .sg-why-card {
                 flex: 0 0 100%;
-                /* 1 column on mobile */
                 padding: 30px 25px;
             }
 
             .sg-why-card__watermark {
                 font-size: 100px;
             }
-        }
-
-        /* ---------- 5. Parents Q&A cards ---------- */
-        .sg-qa {
-            position: relative;
-            height: 100%;
-            padding: 28px 26px 26px;
-            border-radius: 20px;
-            background: var(--eduhive-white);
-            border: 1px solid var(--eduhive-border-color);
-            transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
-        }
-
-        .sg-qa:hover {
-            transform: translateY(-6px);
-            border-color: rgba(var(--c-rgb), .5);
-            box-shadow: 0 18px 45px rgba(var(--c-rgb), .16);
-        }
-
-        .sg-qa__icon {
-            width: 54px;
-            height: 54px;
-            border-radius: 14px;
-            margin-bottom: 18px;
-            display: grid;
-            place-items: center;
-            font-size: 24px;
-            color: var(--c);
-            background: rgba(var(--c-rgb), .12);
-            transition: background .35s ease, color .35s ease;
-        }
-
-        .sg-qa:hover .sg-qa__icon {
-            background: var(--c);
-            color: #fff;
-        }
-
-        .sg-qa__q {
-            margin: 0 0 14px;
-            font-size: 18px;
-            line-height: 1.35;
-            color: var(--eduhive-black);
-        }
-
-        .sg-qa__a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 0;
-            padding: 10px 14px;
-            border-radius: 10px;
-            background: rgba(var(--c-rgb), .08);
-            color: var(--eduhive-black);
-            font-size: 15px;
-            font-weight: 600;
-        }
-
-        .sg-qa__a i {
-            color: var(--c);
-            font-size: 14px;
-            flex-shrink: 0;
         }
 
         /* ---------- 6. Class 11 bullets (same as About AIR list) ---------- */
@@ -496,168 +424,9 @@ DEMO markers (replace before go-live):
             }
         }
 
-        /* ---------- 11b. FAQ left card ---------- */
-        .sg-location {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-            margin: 26px 0 28px;
-            padding: 22px;
-            border-radius: 16px;
-            background: var(--eduhive-white);
-            border: 1px solid var(--eduhive-border-color);
-            box-shadow: 0 10px 30px rgba(var(--eduhive-black-rgb), .05);
-        }
-
-        .sg-location__icon {
-            flex-shrink: 0;
-            width: 50px;
-            height: 50px;
-            border-radius: 14px;
-            display: grid;
-            place-items: center;
-            font-size: 22px;
-            color: #fff;
-            background: var(--eduhive-primary);
-        }
-
-        .sg-location__title {
-            margin: 0 0 4px;
-            font-size: 18px;
-            color: var(--eduhive-black);
-        }
-
-        .sg-location__text {
-            margin: 0;
-            font-size: 15px;
-        }
-
-        /* ---------- 14. About SG strip ---------- */
-        .sg-summary {
-            padding: 90px 0;
-        }
-
-        .sg-summary__card {
-            position: relative;
-            overflow: hidden;
-            display: grid;
-            grid-template-columns: 1fr 1.6fr;
-            gap: 40px;
-            align-items: center;
-            padding: 50px;
-            border-radius: 24px;
-            background: var(--eduhive-white);
-            border: 1px solid var(--eduhive-border-color);
-            box-shadow: 0 20px 50px rgba(var(--eduhive-black-rgb), .06);
-        }
-
-        .sg-summary__card::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 6px;
-            height: 100%;
-            background: linear-gradient(var(--eduhive-primary), var(--eduhive-base));
-        }
-
-        .sg-summary__tag {
-            display: inline-block;
-            margin-bottom: 10px;
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            color: var(--eduhive-primary);
-        }
-
-        .sg-summary__title {
-            margin: 0 0 18px;
-            font-size: clamp(26px, 2.6vw, 34px);
-            line-height: 1.2;
-            color: var(--eduhive-black);
-        }
-
-        .sg-summary__place {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 0 0 22px;
-            font-weight: 600;
-            color: var(--eduhive-black);
-        }
-
-        .sg-summary__place i {
-            color: var(--eduhive-primary);
-        }
-
-        .sg-summary__text {
-            margin: 0 0 22px;
-            line-height: 1.8;
-        }
-
-        .sg-summary__stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .sg-summary__stats li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 14px;
-            border-radius: 12px;
-            background: var(--eduhive-white3);
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--eduhive-black);
-        }
-
-        .sg-summary__stats i {
-            color: var(--eduhive-primary);
-        }
-
-        @media (max-width: 991px) {
-            .sg-summary__card {
-                grid-template-columns: 1fr;
-                padding: 34px 26px 30px 32px;
-                gap: 26px;
-            }
-        }
-
-        @media (max-width: 420px) {
-            .sg-summary__stats {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-
-            .sg-why__card,
-            .sg-why__icon,
-            .sg-qa,
-            .sg-qa__icon,
-            .sg-focus li,
-            .sg-path__dot {
-                transition: none;
-            }
-
-            .sg-why__card:hover,
-            .sg-qa:hover,
-            .sg-focus li:hover,
-            .sg-path__item:hover .sg-path__dot {
-                transform: none;
-            }
-        }
-
         /* ============================================================
-           5. Parents Q&A Cards — Premium Horizontal Tiles
-           Concept: Wide, elegant, SaaS-style layout (no empty space)
-           ============================================================ */
+                                   5. Parents Q&A Cards — Premium Horizontal Tiles
+                                   ============================================================ */
 
         .sg-qa-tile {
             display: flex;
@@ -672,14 +441,12 @@ DEMO markers (replace before go-live):
             height: 100%;
         }
 
-        /* Hover: Card Lifts and Glows */
         .sg-qa-tile:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(var(--eduhive-base-rgb), 0.08);
             border-color: rgba(var(--eduhive-primary-rgb), 0.3);
         }
 
-        /* The Icon Box on the Left */
         .sg-qa-tile__icon {
             flex-shrink: 0;
             width: 65px;
@@ -694,7 +461,6 @@ DEMO markers (replace before go-live):
             transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
-        /* Hover: Icon Pops and turns Orange */
         .sg-qa-tile:hover .sg-qa-tile__icon {
             background: var(--eduhive-primary);
             color: #ffffff;
@@ -703,7 +469,6 @@ DEMO markers (replace before go-live):
             box-shadow: 0 10px 20px rgba(var(--eduhive-primary-rgb), 0.25);
         }
 
-        /* Right Side Content */
         .sg-qa-tile__content {
             flex-grow: 1;
         }
@@ -722,7 +487,6 @@ DEMO markers (replace before go-live):
             color: var(--eduhive-primary);
         }
 
-        /* The "Answer" Badge (Looks verified and premium) */
         .sg-qa-tile__a {
             display: inline-flex;
             align-items: center;
@@ -730,7 +494,6 @@ DEMO markers (replace before go-live):
             padding: 10px 16px;
             background: rgba(var(--eduhive-base-rgb), 0.03);
             border-left: 3px solid var(--eduhive-primary);
-            /* Bold accent line */
             border-radius: 0 8px 8px 0;
             font-size: 15px;
             font-weight: 600;
@@ -744,7 +507,6 @@ DEMO markers (replace before go-live):
             transition: transform 0.4s ease;
         }
 
-        /* Hover: The badge fills with soft orange, text turns dark Navy */
         .sg-qa-tile:hover .sg-qa-tile__a {
             background: linear-gradient(90deg, rgba(var(--eduhive-primary-rgb), 0.1) 0%, rgba(255, 255, 255, 0) 100%);
             color: var(--eduhive-base);
@@ -754,7 +516,6 @@ DEMO markers (replace before go-live):
             transform: scale(1.2);
         }
 
-        /* Mobile Adjustments */
         @media (max-width: 575px) {
             .sg-qa-tile {
                 flex-direction: column;
@@ -770,12 +531,12 @@ DEMO markers (replace before go-live):
         }
 
         /* ============================================================
-       14. About SG Education Summary — Executive Snapshot Card
-       Palette: Navy (#334154) + Orange (#F48134)
-       ============================================================ */
+                                   14. About SG Education Summary — Executive Snapshot Card
+                                   ============================================================ */
 
         .sg-summary-sec {
-            padding: 80px 0 100px;
+            padding: 70px 0 40px;
+            border-top: 1px solid rgba(var(--eduhive-base-rgb), .07);
         }
 
         .sg-summary-card {
@@ -793,7 +554,6 @@ DEMO markers (replace before go-live):
             z-index: 1;
         }
 
-        /* Ambient glow accent in top-right corner */
         .sg-summary-card::before {
             content: '';
             position: absolute;
@@ -806,7 +566,6 @@ DEMO markers (replace before go-live):
             z-index: -1;
         }
 
-        /* Left Accent Border Bar */
         .sg-summary-card::after {
             content: '';
             position: absolute;
@@ -817,7 +576,6 @@ DEMO markers (replace before go-live):
             background: linear-gradient(180deg, var(--eduhive-primary) 0%, var(--eduhive-base) 100%);
         }
 
-        /* Header Elements */
         .sg-summary-badge {
             display: inline-flex;
             align-items: center;
@@ -842,7 +600,6 @@ DEMO markers (replace before go-live):
             margin: 0 0 16px;
         }
 
-        /* Location Badge with Live Pulse Dot */
         .sg-summary-location {
             display: inline-flex;
             align-items: center;
@@ -862,31 +619,6 @@ DEMO markers (replace before go-live):
             font-size: 16px;
         }
 
-        .sg-pulse-dot {
-            width: 8px;
-            height: 8px;
-            background: #10b981;
-            /* Live green status indicator */
-            border-radius: 50%;
-            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
-            animation: pulseGlow 2s infinite;
-        }
-
-        @keyframes pulseGlow {
-            0% {
-                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
-            }
-
-            70% {
-                box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
-            }
-        }
-
-        /* Program Chips (Modern Pill Tags) */
         .sg-chips-wrap {
             display: flex;
             flex-wrap: wrap;
@@ -914,7 +646,6 @@ DEMO markers (replace before go-live):
             transform: translateY(-2px);
         }
 
-        /* Right Side - Description Text */
         .sg-summary-desc {
             font-size: 16px;
             line-height: 1.7;
@@ -922,7 +653,6 @@ DEMO markers (replace before go-live):
             margin: 0 0 28px;
         }
 
-        /* Key Features Grid (2x2 Micro Cards) */
         .sg-feature-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -975,7 +705,6 @@ DEMO markers (replace before go-live):
             color: #ffffff;
         }
 
-        /* Responsive Breakdown */
         @media (max-width: 991px) {
             .sg-summary-card {
                 grid-template-columns: 1fr;
@@ -989,282 +718,484 @@ DEMO markers (replace before go-live):
                 grid-template-columns: 1fr;
             }
         }
+
         /* ============================================================
-   11b. FAQ — Premium Support Hub + Accordion
-   Palette: Navy (#334154) + Orange (#F48134)
-   ============================================================ */
+                                   11b. FAQ — Premium Support Hub + Accordion
+                                   ============================================================ */
 
-/* Left panel support card */
-.sg-faq-support {
-    margin-top: 28px;
-    padding: 28px 26px;
-    border-radius: 20px;
-    background: linear-gradient(160deg, #2b3846 0%, var(--eduhive-base) 100%);
-    color: #fff;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 18px 40px rgba(var(--eduhive-base-rgb), 0.22);
-}
+        .sg-faq-support {
+            margin-top: 28px;
+            padding: 28px 26px;
+            border-radius: 20px;
+            background: linear-gradient(160deg, #2b3846 0%, var(--eduhive-base) 100%);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 18px 40px rgba(var(--eduhive-base-rgb), 0.22);
+        }
 
-.sg-faq-support::before {
-    content: "";
-    position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 160px;
-    height: 160px;
-    background-image: radial-gradient(circle, rgba(255,255,255,.12) 1.5px, transparent 1.5px);
-    background-size: 14px 14px;
-    opacity: .5;
-    pointer-events: none;
-}
+        .sg-faq-support::before {
+            content: "";
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 160px;
+            height: 160px;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, .12) 1.5px, transparent 1.5px);
+            background-size: 14px 14px;
+            opacity: .5;
+            pointer-events: none;
+        }
 
-.sg-faq-support::after {
-    content: "";
-    position: absolute;
-    bottom: -50px;
-    left: -30px;
-    width: 180px;
-    height: 180px;
-    background: radial-gradient(circle, rgba(var(--eduhive-primary-rgb), .35) 0%, transparent 70%);
-    pointer-events: none;
-}
+        .sg-faq-support::after {
+            content: "";
+            position: absolute;
+            bottom: -50px;
+            left: -30px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(var(--eduhive-primary-rgb), .35) 0%, transparent 70%);
+            pointer-events: none;
+        }
 
-.sg-faq-support__label {
-    position: relative;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 14px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,.65);
-}
+        .sg-faq-support__label {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .65);
+        }
 
-.sg-faq-support__label i {
-    color: var(--eduhive-primary);
-}
+        .sg-faq-support__label i {
+            color: var(--eduhive-primary);
+        }
 
-.sg-faq-support__title {
-    position: relative;
-    z-index: 1;
-    margin: 0 0 6px;
-    font-size: 20px;
-    font-weight: 800;
-    color: #fff;
-    letter-spacing: -.01em;
-}
+        .sg-faq-support__title {
+            position: relative;
+            z-index: 1;
+            margin: 0 0 6px;
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -.01em;
+        }
 
-.sg-faq-support__text {
-    position: relative;
-    z-index: 1;
-    margin: 0 0 22px;
-    font-size: 14px;
-    color: rgba(255,255,255,.72);
-}
+        .sg-faq-support__text {
+            position: relative;
+            z-index: 1;
+            margin: 0 0 22px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, .72);
+        }
 
-.sg-faq-support__meta {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 22px;
-}
+        .sg-faq-support__meta {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 22px;
+        }
 
-.sg-faq-support__chip {
-    padding: 6px 12px;
-    border-radius: 50px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #fff;
-    background: rgba(255,255,255,.1);
-    border: 1px solid rgba(255,255,255,.12);
-}
+        .sg-faq-support__chip {
+            padding: 6px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .12);
+        }
 
-/* WhatsApp button inside dark card */
-.sg-faq-wa {
-    position: relative;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 20px;
-    border-radius: 14px;
-    background: #25D366;
-    color: #fff !important;
-    font-size: 15px;
-    font-weight: 700;
-    text-decoration: none !important;
-    box-shadow: 0 10px 24px rgba(37, 211, 102, .28);
-    transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease;
-}
+        .sg-faq-wa {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 20px;
+            border-radius: 14px;
+            background: #25D366;
+            color: #fff !important;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none !important;
+            box-shadow: 0 10px 24px rgba(37, 211, 102, .28);
+            transition: transform .35s cubic-bezier(.22, 1, .36, 1), box-shadow .35s ease;
+        }
 
-.sg-faq-wa:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 16px 30px rgba(37, 211, 102, .4);
-    color: #fff !important;
-}
+        .sg-faq-wa:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 30px rgba(37, 211, 102, .4);
+            color: #fff !important;
+        }
 
-.sg-faq-wa i {
-    font-size: 18px;
-}
+        .sg-faq-wa i {
+            font-size: 18px;
+        }
 
-/* ---------- Accordion cards ---------- */
-.sg-faq-list {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
+        .sg-faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
 
-.sg-faq-item {
-    background: #fff;
-    border: 1px solid rgba(var(--eduhive-base-rgb), .08);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 6px 18px rgba(var(--eduhive-base-rgb), .03);
-    transition: border-color .35s ease, box-shadow .4s cubic-bezier(.22,1,.36,1), transform .4s cubic-bezier(.22,1,.36,1);
-}
+        .sg-faq-item {
+            background: #fff;
+            border: 1px solid rgba(var(--eduhive-base-rgb), .08);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(var(--eduhive-base-rgb), .03);
+            transition: border-color .35s ease, box-shadow .4s cubic-bezier(.22, 1, .36, 1), transform .4s cubic-bezier(.22, 1, .36, 1);
+        }
 
-.sg-faq-item:hover {
-    border-color: rgba(var(--eduhive-primary-rgb), .28);
-    box-shadow: 0 14px 32px rgba(var(--eduhive-base-rgb), .07);
-}
+        .sg-faq-item:hover {
+            border-color: rgba(var(--eduhive-primary-rgb), .28);
+            box-shadow: 0 14px 32px rgba(var(--eduhive-base-rgb), .07);
+        }
 
-.sg-faq-item.is-open {
-    border-color: rgba(var(--eduhive-primary-rgb), .35);
-    box-shadow: 0 16px 36px rgba(var(--eduhive-base-rgb), .08);
-    transform: translateY(-2px);
-}
+        .sg-faq-item.is-open {
+            border-color: rgba(var(--eduhive-primary-rgb), .35);
+            box-shadow: 0 16px 36px rgba(var(--eduhive-base-rgb), .08);
+            transform: translateY(-2px);
+        }
 
-.sg-faq-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 22px 24px;
-    background: transparent;
-    border: 0;
-    text-align: left;
-    cursor: pointer;
-}
+        .sg-faq-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 22px 24px;
+            background: transparent;
+            border: 0;
+            text-align: left;
+            cursor: pointer;
+        }
 
-.sg-faq-num {
-    flex-shrink: 0;
-    width: 38px;
-    height: 38px;
-    border-radius: 12px;
-    display: grid;
-    place-items: center;
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--eduhive-base);
-    background: rgba(var(--eduhive-base-rgb), .05);
-    transition: background .35s ease, color .35s ease, transform .4s cubic-bezier(.34,1.4,.64,1);
-}
+        .sg-faq-num {
+            flex-shrink: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--eduhive-base);
+            background: rgba(var(--eduhive-base-rgb), .05);
+            transition: background .35s ease, color .35s ease, transform .4s cubic-bezier(.34, 1.4, .64, 1);
+        }
 
-.sg-faq-item:hover .sg-faq-num,
-.sg-faq-item.is-open .sg-faq-num {
-    background: var(--eduhive-primary);
-    color: #fff;
-    transform: scale(1.06);
-}
+        .sg-faq-item:hover .sg-faq-num,
+        .sg-faq-item.is-open .sg-faq-num {
+            background: var(--eduhive-primary);
+            color: #fff;
+            transform: scale(1.06);
+        }
 
-.sg-faq-q {
-    flex: 1;
-    margin: 0;
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 1.4;
-    color: var(--eduhive-base);
-    letter-spacing: -.01em;
-}
+        .sg-faq-q {
+            flex: 1;
+            margin: 0;
+            font-size: 17px;
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--eduhive-base);
+            letter-spacing: -.01em;
+        }
 
-.sg-faq-toggle {
-    flex-shrink: 0;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 1px solid rgba(var(--eduhive-base-rgb), .12);
-    display: grid;
-    place-items: center;
-    color: rgba(var(--eduhive-base-rgb), .45);
-    font-size: 14px;
-    transition: all .4s cubic-bezier(.22,1,.36,1);
-}
+        .sg-faq-toggle {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid rgba(var(--eduhive-base-rgb), .12);
+            display: grid;
+            place-items: center;
+            color: rgba(var(--eduhive-base-rgb), .45);
+            font-size: 14px;
+            transition: all .4s cubic-bezier(.22, 1, .36, 1);
+        }
 
-.sg-faq-item:hover .sg-faq-toggle {
-    border-color: rgba(var(--eduhive-primary-rgb), .35);
-    color: var(--eduhive-primary);
-}
+        .sg-faq-item:hover .sg-faq-toggle {
+            border-color: rgba(var(--eduhive-primary-rgb), .35);
+            color: var(--eduhive-primary);
+        }
 
-.sg-faq-item.is-open .sg-faq-toggle {
-    background: var(--eduhive-base);
-    border-color: var(--eduhive-base);
-    color: #fff;
-    transform: rotate(45deg); /* plus becomes close */
-}
+        .sg-faq-item.is-open .sg-faq-toggle {
+            background: var(--eduhive-base);
+            border-color: var(--eduhive-base);
+            color: #fff;
+            transform: rotate(45deg);
+        }
 
-.sg-faq-panel {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows .45s cubic-bezier(.22,1,.36,1);
-}
+        .sg-faq-panel {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows .45s cubic-bezier(.22, 1, .36, 1);
+        }
 
-.sg-faq-item.is-open .sg-faq-panel {
-    grid-template-rows: 1fr;
-}
+        .sg-faq-item.is-open .sg-faq-panel {
+            grid-template-rows: 1fr;
+        }
 
-.sg-faq-panel__inner {
-    overflow: hidden;
-}
+        .sg-faq-panel__inner {
+            overflow: hidden;
+        }
 
-.sg-faq-a {
-    margin: 0;
-    padding: 0 24px 22px 78px; /* aligns under question text */
-    font-size: 15px;
-    line-height: 1.7;
-    color: rgba(var(--eduhive-base-rgb), .72);
-    border-top: 0;
-}
+        .sg-faq-a {
+            margin: 0;
+            padding: 0 24px 22px 78px;
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(var(--eduhive-base-rgb), .72);
+            border-top: 0;
+        }
 
-.sg-faq-a::before {
-    content: "";
-    display: block;
-    height: 1px;
-    background: rgba(var(--eduhive-base-rgb), .08);
-    margin: 0 0 16px -54px; /* pulls divider left under number */
-}
+        .sg-faq-a::before {
+            content: "";
+            display: block;
+            height: 1px;
+            background: rgba(var(--eduhive-base-rgb), .08);
+            margin: 0 0 16px -54px;
+        }
 
-/* Intro text polish */
-.sg-faq-intro {
-    margin: 0 0 8px;
-    font-size: 16px;
-    line-height: 1.7;
-    color: rgba(var(--eduhive-base-rgb), .72);
-}
+        .sg-faq-intro {
+            margin: 0 0 8px;
+            font-size: 16px;
+            line-height: 1.7;
+            color: rgba(var(--eduhive-base-rgb), .72);
+        }
 
-@media (max-width: 991px) {
-    .sg-faq-a {
-        padding-left: 24px;
-    }
-    .sg-faq-a::before {
-        margin-left: 0;
-    }
-}
+        @media (max-width: 991px) {
+            .sg-faq-a {
+                padding-left: 24px;
+            }
 
-@media (prefers-reduced-motion: reduce) {
-    .sg-faq-item,
-    .sg-faq-num,
-    .sg-faq-toggle,
-    .sg-faq-panel,
-    .sg-faq-wa {
-        transition: none;
-    }
-}
+            .sg-faq-a::before {
+                margin-left: 0;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .sg-why-card,
+            .sg-why-card__icon,
+            .sg-why-card__line,
+            .sg-why-card__watermark,
+            .sg-qa-tile,
+            .sg-qa-tile__icon,
+            .sg-focus li,
+            .sg-path__dot,
+            .sg-chip-item,
+            .sg-feature-card,
+            .sg-faq-item,
+            .sg-faq-num,
+            .sg-faq-toggle,
+            .sg-faq-panel,
+            .sg-faq-wa {
+                transition: none;
+            }
+
+            .sg-why-card:hover,
+            .sg-qa-tile:hover,
+            .sg-focus li:hover,
+            .sg-path__item:hover .sg-path__dot {
+                transform: none;
+            }
+        }
+
+        /* ---------- 14. CTA — dark card (same as About page) ---------- */
+        .sg-cta {
+            padding: 40px 0 110px;
+        }
+
+        .sg-cta__card {
+            margin-bottom: 60px;
+            margin-top: 60px;
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 40px;
+            align-items: center;
+            padding: 60px 55px;
+            border-radius: 26px;
+            background: linear-gradient(150deg, #2b3846 0%, var(--eduhive-base) 100%);
+            box-shadow: 0 25px 60px rgba(var(--eduhive-base-rgb), .25);
+        }
+
+        .sg-cta__card::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 260px;
+            height: 260px;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, .1) 1.5px, transparent 1.5px);
+            background-size: 16px 16px;
+            opacity: .5;
+            pointer-events: none;
+        }
+
+        .sg-cta__card::after {
+            content: "";
+            position: absolute;
+            bottom: -90px;
+            left: -60px;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(var(--eduhive-primary-rgb), .3) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .sg-cta__content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .sg-cta__tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 7px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: #fff;
+            background: rgba(var(--eduhive-primary-rgb), .18);
+            border: 1px solid rgba(var(--eduhive-primary-rgb), .35);
+        }
+
+        .sg-cta__tag i {
+            color: var(--eduhive-primary);
+            font-size: 14px;
+        }
+
+        .sg-cta__title {
+            margin: 0 0 14px;
+            font-size: clamp(28px, 3vw, 40px);
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -.015em;
+            color: #fff;
+        }
+
+        .sg-cta__text {
+            margin: 0;
+            max-width: 480px;
+            font-size: 16px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, .72);
+        }
+
+        .sg-cta__actions {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            justify-self: end;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .sg-cta__btn {
+            --btn-ease: cubic-bezier(.22, 1, .36, 1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 16px 20px 16px 24px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none !important;
+            transition: transform .4s var(--btn-ease), box-shadow .4s var(--btn-ease),
+                background .35s ease, border-color .35s ease;
+        }
+
+        .sg-cta__btn-icon {
+            flex-shrink: 0;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 13px;
+            transition: transform .4s var(--btn-ease), background .35s ease;
+        }
+
+        .sg-cta__btn--primary {
+            background: var(--eduhive-primary);
+            color: #fff !important;
+            box-shadow: 0 12px 28px rgba(var(--eduhive-primary-rgb), .35);
+        }
+
+        .sg-cta__btn--primary .sg-cta__btn-icon {
+            background: rgba(255, 255, 255, .18);
+            color: #fff;
+        }
+
+        .sg-cta__btn--primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 38px rgba(var(--eduhive-primary-rgb), .45);
+        }
+
+        .sg-cta__btn--primary:hover .sg-cta__btn-icon {
+            transform: translateX(4px);
+            background: rgba(255, 255, 255, .28);
+        }
+
+        .sg-cta__btn--wa {
+            background: rgba(37, 211, 102, .12);
+            border: 1px solid rgba(37, 211, 102, .35);
+            color: #fff !important;
+        }
+
+        .sg-cta__btn--wa .sg-cta__btn-icon {
+            background: #25D366;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .sg-cta__btn--wa:hover {
+            transform: translateY(-3px);
+            background: rgba(37, 211, 102, .2);
+            border-color: rgba(37, 211, 102, .6);
+        }
+
+        .sg-cta__btn--wa:hover .sg-cta__btn-icon {
+            transform: translateX(4px);
+        }
+
+        @media (max-width: 991px) {
+            .sg-cta__card {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 44px 34px;
+            }
+
+            .sg-cta__actions {
+                justify-self: start;
+                max-width: 420px;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .sg-cta__card {
+                padding: 36px 24px;
+                border-radius: 20px;
+            }
+        }
     </style>
 @endsection
 
@@ -1279,17 +1210,17 @@ DEMO markers (replace before go-live):
     <section class="main-slider-one" id="home">
         <div class="main-slider-one__carousel eduhive-owl__carousel eduhive-owl__carousel--basic-nav owl-carousel owl-theme"
             data-owl-options='{
-                                                            "items": 1,
-                                                            "margin": 0,
-                                                            "animateIn": "fadeIn",
-                                                            "animateOut": "fadeOut",
-                                                            "loop": true,
-                                                            "smartSpeed": 1000,
-                                                            "nav": false,
-                                                            "dots": false,
-                                                            "autoplay": true,
-                                                            "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"]
-                                                        }'>
+                                                                                        "items": 1,
+                                                                                        "margin": 0,
+                                                                                        "animateIn": "fadeIn",
+                                                                                        "animateOut": "fadeOut",
+                                                                                        "loop": true,
+                                                                                        "smartSpeed": 1000,
+                                                                                        "nav": false,
+                                                                                        "dots": false,
+                                                                                        "autoplay": true,
+                                                                                        "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"]
+                                                                                    }'>
 
             @php
                 $slides = [
@@ -1333,7 +1264,7 @@ DEMO markers (replace before go-live):
                                         </a>
                                         <a href="{{ url('/courses') }}"
                                             class="main-slider-one__btn-2 eduhive-btn eduhive-btn--border">
-                                            <span>Explore Programs</span>
+                                            <span>Explore Courses</span>
                                             <span class="eduhive-btn__icon"><span class="eduhive-btn__icon__inner"><i
                                                         class="icon-right-arrow"></i></span></span>
                                         </a>
@@ -1515,10 +1446,10 @@ DEMO markers (replace before go-live):
     {{-- ================= 4. EVERY ACADEMIC STAGE ================= --}}
     @php
         $stages = [
-            ['filter' => 'school', 'cat' => 'School', 'grades' => 'Grade 9 | 10', 'title' => 'School Programs (State Board)', 'text' => 'Build strong fundamentals and prepare with confidence.', 'info' => 'Grade 9 & 10', 'url' => '/courses/boards', 'img' => 'course-1-1.jpg', 'btn' => 'Explore School Programs'],
+            ['filter' => 'school', 'cat' => 'School', 'grades' => 'Grade 9 | 10', 'title' => 'School Courses (State Board)', 'text' => 'Build strong fundamentals and prepare with confidence.', 'info' => 'Grade 9 & 10', 'url' => '/courses/boards', 'img' => 'course-1-1.jpg', 'btn' => 'Explore School Courses'],
             ['filter' => 'foundation', 'cat' => 'Foundation', 'grades' => 'Grade 8 – 10', 'title' => 'JEE Foundation | NEET Foundation', 'text' => 'Start early. Build strong.', 'info' => 'Early preparation', 'url' => '/courses/foundation', 'img' => 'course-1-2.jpg', 'btn' => 'Explore Foundation'],
-            ['filter' => 'competitive', 'cat' => 'Competitive', 'grades' => 'Class 11 & 12', 'title' => 'JEE Main & Advanced | NEET | MHT-CET', 'text' => 'Concepts. Problem Solving. Testing. Strategy.', 'info' => 'Entrance exams', 'url' => '/courses', 'img' => 'course-1-3.jpg', 'btn' => 'Explore Competitive Programs'],
-            ['filter' => 'science', 'cat' => '11th–12th', 'grades' => 'Science', 'title' => 'PCMB | JEE | NEET | MHT-CET', 'text' => 'Build the foundation for the next level.', 'info' => 'Physics, Chemistry, Maths, Biology', 'url' => '/courses', 'img' => 'course-1-4.jpg', 'btn' => 'Explore Science Programs'],
+            ['filter' => 'competitive', 'cat' => 'Competitive', 'grades' => 'Class 11 & 12', 'title' => 'JEE Main & Advanced | NEET | MHT-CET', 'text' => 'Concepts. Problem Solving. Testing. Strategy.', 'info' => 'Entrance exams', 'url' => '/courses', 'img' => 'course-1-3.jpg', 'btn' => 'Explore Competitive Courses'],
+            ['filter' => 'science', 'cat' => '11th–12th', 'grades' => 'Science', 'title' => 'PCMB | JEE | NEET | MHT-CET', 'text' => 'Build the foundation for the next level.', 'info' => 'Physics, Chemistry, Maths, Biology', 'url' => '/courses', 'img' => 'course-1-4.jpg', 'btn' => 'Explore Science Courses'],
         ];
     @endphp
     <section class="courses-two section-space" id="courses">
@@ -1526,13 +1457,13 @@ DEMO markers (replace before go-live):
         </div>
         <div class="container">
             <div class="sec-title sec-title--center wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                <h6 class="sec-title__tagline">our programs</h6>
+                <h6 class="sec-title__tagline">our Courses</h6>
                 <h3 class="sec-title__title"><span>One Place.</span> <span class="sec-title__title__shape">Every</span>
                     <span>Academic</span> <span class="sec-title__title__text">Stage.</span>
                 </h3>
             </div>
             <ul class="list-unstyled courses-two__filter-list owl-filter-bar wow fadeInUp" data-wow-duration="1500ms">
-                <li class="item active" data-owl-filter="*">All programs</li>
+                <li class="item active" data-owl-filter="*">All Courses</li>
                 <li class="item" data-owl-filter=".school">school</li>
                 <li class="item" data-owl-filter=".foundation">foundation</li>
                 <li class="item" data-owl-filter=".competitive">competitive</li>
@@ -1542,35 +1473,35 @@ DEMO markers (replace before go-live):
         <div class="courses-two__container container">
             <div class="courses-two__carousel eduhive-owl__carousel--progress eduhive-owl__carousel--filter-with-counter eduhive-owl__carousel--basic-nav owl-carousel owl-theme"
                 data-owl-filters-div=".courses-two__filter-list" data-progress-options='{
-                                                                "size": "1px",
-                                                                "margin": "0 auto",
-                                                                "foregroundColor": "var(--eduhive-border-color)",
-                                                                "color": "var(--eduhive-base)",
-                                                                "borderRadius": 0,
-                                                                "transitionInterval": 1,
-                                                                "progressBarClassName": "courses-two__carousel__progress-bar",
-                                                                "scrollerClassName": "courses-two__carousel__scroller"
-                                                            }' data-owl-options='{
-                                                                "items": 1,
-                                                                "margin": 10,
-                                                                "loop": false,
-                                                                "smartSpeed": 700,
-                                                                "nav": true,
-                                                                "dots": false,
-                                                                "navContainer": ".courses-two__custome-navs",
-                                                                "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
-                                                                "autoplay": true,
-                                                                "responsive": {
-                                                                    "0":    { "items": 1, "margin": 10 },
-                                                                    "576":  { "items": 1, "margin": 30, "stagePadding": 100 },
-                                                                    "768":  { "items": 1, "margin": 30, "stagePadding": 200 },
-                                                                    "992":  { "items": 2, "margin": 30, "stagePadding": 120 },
-                                                                    "1200": { "items": 2, "margin": 30, "stagePadding": 270 },
-                                                                    "1400": { "items": 3, "margin": 30, "stagePadding": 120 },
-                                                                    "1600": { "items": 3, "margin": 30, "stagePadding": 210 },
-                                                                    "1800": { "items": 3, "margin": 30, "stagePadding": 375 }
-                                                                }
-                                                            }'>
+                                                                                            "size": "1px",
+                                                                                            "margin": "0 auto",
+                                                                                            "foregroundColor": "var(--eduhive-border-color)",
+                                                                                            "color": "var(--eduhive-base)",
+                                                                                            "borderRadius": 0,
+                                                                                            "transitionInterval": 1,
+                                                                                            "progressBarClassName": "courses-two__carousel__progress-bar",
+                                                                                            "scrollerClassName": "courses-two__carousel__scroller"
+                                                                                        }' data-owl-options='{
+                                                                                            "items": 1,
+                                                                                            "margin": 10,
+                                                                                            "loop": false,
+                                                                                            "smartSpeed": 700,
+                                                                                            "nav": true,
+                                                                                            "dots": false,
+                                                                                            "navContainer": ".courses-two__custome-navs",
+                                                                                            "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
+                                                                                            "autoplay": true,
+                                                                                            "responsive": {
+                                                                                                "0":    { "items": 1, "margin": 10 },
+                                                                                                "576":  { "items": 1, "margin": 30, "stagePadding": 100 },
+                                                                                                "768":  { "items": 1, "margin": 30, "stagePadding": 200 },
+                                                                                                "992":  { "items": 2, "margin": 30, "stagePadding": 120 },
+                                                                                                "1200": { "items": 2, "margin": 30, "stagePadding": 270 },
+                                                                                                "1400": { "items": 3, "margin": 30, "stagePadding": 120 },
+                                                                                                "1600": { "items": 3, "margin": 30, "stagePadding": 210 },
+                                                                                                "1800": { "items": 3, "margin": 30, "stagePadding": 375 }
+                                                                                            }
+                                                                                        }'>
                 @foreach ($stages as $s)
                     <div class="item {{ $s['filter'] }}">
                         <div class="course-card wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
@@ -1750,7 +1681,7 @@ DEMO markers (replace before go-live):
                         </ul>
 
                         <ul class="sg-chips wow fadeInUp" data-wow-duration="1500ms">
-                            <li class="sg-chips__label">Programs:</li>
+                            <li class="sg-chips__label">Courses:</li>
                             <li>PCMB</li>
                             <li>JEE</li>
                             <li>NEET</li>
@@ -1801,25 +1732,25 @@ DEMO markers (replace before go-live):
                     <div class="eduhive-stretch-element-inside-column">
                         <div class="testimonials-one__carousel eduhive-owl__carousel eduhive-owl__carousel--with-shadow owl-theme owl-carousel"
                             data-owl-options='{
-                                                                            "items": 1,
-                                                                            "margin": 30,
-                                                                            "smartSpeed": 700,
-                                                                            "loop": true,
-                                                                            "autoplay": 600,
-                                                                            "nav": true,
-                                                                            "navContainer": ".testimonials-one__custome-navs",
-                                                                            "dots": false,
-                                                                            "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
-                                                                            "responsive":{
-                                                                                "0":{ "items": 1, "margin": 10 },
-                                                                                "576":{ "items": 1.5 },
-                                                                                "768":{ "items": 1.8 },
-                                                                                "992":{ "items": 2.6 },
-                                                                                "1200":{ "items": 2.3 },
-                                                                                "1536":{ "items": 2.5 },
-                                                                                "1800":{ "items": 2.94 }
-                                                                            }
-                                                                        }'>
+                                                                                                        "items": 1,
+                                                                                                        "margin": 30,
+                                                                                                        "smartSpeed": 700,
+                                                                                                        "loop": true,
+                                                                                                        "autoplay": 600,
+                                                                                                        "nav": true,
+                                                                                                        "navContainer": ".testimonials-one__custome-navs",
+                                                                                                        "dots": false,
+                                                                                                        "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
+                                                                                                        "responsive":{
+                                                                                                            "0":{ "items": 1, "margin": 10 },
+                                                                                                            "576":{ "items": 1.5 },
+                                                                                                            "768":{ "items": 1.8 },
+                                                                                                            "992":{ "items": 2.6 },
+                                                                                                            "1200":{ "items": 2.3 },
+                                                                                                            "1536":{ "items": 2.5 },
+                                                                                                            "1800":{ "items": 2.94 }
+                                                                                                        }
+                                                                                                    }'>
                             @foreach ($testimonials as $t)
                                 <div class="item wow fadeInUp" data-wow-duration="1500ms"
                                     data-wow-delay="{{ $loop->index * 100 }}ms">
@@ -1977,78 +1908,78 @@ DEMO markers (replace before go-live):
     </section>
 
     {{-- ================= 11b. FAQ ================= --}}
-@php
-    $faqs = [
-        ['q' => 'Which classes does SG Education offer?', 'a' => 'Grades 8–10, Foundation, 11th–12th Science, JEE, NEET and MHT-CET programs.'],
-        ['q' => 'Where is SG Education located?', 'a' => 'SG Education is located at Khadakpada, Kalyan, offering School, Foundation and Competitive programs.'],
-        ['q' => 'How can I choose the right program?', 'a' => 'Book an academic counselling session and discuss your child\'s class, board, academic level and future goals with our team.'],
-        ['q' => 'How are students tested and tracked?', 'a' => 'Through chapter tests, unit tests, cumulative tests and mock tests, followed by analysis of why marks were lost and a plan to improve.'],
-    ];
-@endphp
-<section class="faq-one section-space" id="faq">
-    <div class="container">
-        <div class="row gutter-y-50 align-items-start">
+    @php
+        $faqs = [
+            ['q' => 'Which classes does SG Education offer?', 'a' => 'Grades 8–10, Foundation, 11th–12th Science, JEE, NEET and MHT-CET Courses.'],
+            ['q' => 'Where is SG Education located?', 'a' => 'SG Education is located at Khadakpada, Kalyan, offering School, Foundation and Competitive Courses.'],
+            ['q' => 'How can I choose the right program?', 'a' => 'Book an academic counselling session and discuss your child\'s class, board, academic level and future goals with our team.'],
+            ['q' => 'How are students tested and tracked?', 'a' => 'Through chapter tests, unit tests, cumulative tests and mock tests, followed by analysis of why marks were lost and a plan to improve.'],
+        ];
+    @endphp
+    <section class="faq-one section-space" id="faq">
+        <div class="container">
+            <div class="row gutter-y-50 align-items-start">
 
-            {{-- LEFT: Title + Support Hub --}}
-            <div class="col-lg-5">
-                <div class="sec-title wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
-                    <h6 class="sec-title__tagline">faq’s</h6>
-                    <h3 class="sec-title__title">Frequently
-                        <span class="sec-title__title__text">Asked</span>
-                        <span class="sec-title__title__shape">Questions</span>
-                    </h3>
-                </div>
-
-                <p class="sg-faq-intro wow fadeInUp" data-wow-duration="1500ms">
-                    Quick answers for parents and students. Still unsure?
-                    Talk to our team and we’ll help you pick the right program.
-                </p>
-
-                <div class="sg-faq-support wow fadeInUp" data-wow-duration="1500ms">
-                    <div class="sg-faq-support__label">
-                        <i class="icon-location" aria-hidden="true"></i> Visit / Contact
-                    </div>
-                    <h4 class="sg-faq-support__title">SG Education, Khadakpada</h4>
-                    <p class="sg-faq-support__text">Kalyan, Maharashtra</p>
-
-                    <div class="sg-faq-support__meta">
-                        <span class="sg-faq-support__chip">School</span>
-                        <span class="sg-faq-support__chip">Foundation</span>
-                        <span class="sg-faq-support__chip">Competitive</span>
+                {{-- LEFT: Title + Support Hub --}}
+                <div class="col-lg-5">
+                    <div class="sec-title wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="00ms">
+                        <h6 class="sec-title__tagline">faq’s</h6>
+                        <h3 class="sec-title__title">Frequently
+                            <span class="sec-title__title__text">Asked</span>
+                            <span class="sec-title__title__shape">Questions</span>
+                        </h3>
                     </div>
 
-                    <a href="{{ $whatsapp }}" class="sg-faq-wa" target="_blank" rel="noopener">
-                        <i class="fab fa-whatsapp" aria-hidden="true"></i>
-                        <span>Ask Us on WhatsApp</span>
-                    </a>
-                </div>
-            </div>
+                    <p class="sg-faq-intro wow fadeInUp" data-wow-duration="1500ms">
+                        Quick answers for parents and students. Still unsure?
+                        Talk to our team and we’ll help you pick the right program.
+                    </p>
 
-            {{-- RIGHT: Custom Accordion --}}
-            <div class="col-lg-7">
-                <div class="sg-faq-list wow fadeInUp" data-wow-duration="1500ms">
-                    @foreach ($faqs as $f)
-                        <div class="sg-faq-item {{ $loop->first ? 'is-open' : '' }}">
-                            <button type="button" class="sg-faq-btn" aria-expanded="{{ $loop->first ? 'true' : 'false' }}">
-                                <span class="sg-faq-num">0{{ $loop->iteration }}</span>
-                                <h4 class="sg-faq-q">{{ $f['q'] }}</h4>
-                                <span class="sg-faq-toggle" aria-hidden="true">
-                                    <i class="fas fa-plus"></i>
-                                </span>
-                            </button>
-                            <div class="sg-faq-panel">
-                                <div class="sg-faq-panel__inner">
-                                    <p class="sg-faq-a">{{ $f['a'] }}</p>
+                    <div class="sg-faq-support wow fadeInUp" data-wow-duration="1500ms">
+                        <div class="sg-faq-support__label">
+                            <i class="icon-location" aria-hidden="true"></i> Visit / Contact
+                        </div>
+                        <h4 class="sg-faq-support__title">SG Education, Khadakpada</h4>
+                        <p class="sg-faq-support__text">Kalyan, Maharashtra</p>
+
+                        <div class="sg-faq-support__meta">
+                            <span class="sg-faq-support__chip">School</span>
+                            <span class="sg-faq-support__chip">Foundation</span>
+                            <span class="sg-faq-support__chip">Competitive</span>
+                        </div>
+
+                        <a href="{{ $whatsapp }}" class="sg-faq-wa" target="_blank" rel="noopener">
+                            <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                            <span>Ask Us on WhatsApp</span>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- RIGHT: Custom Accordion --}}
+                <div class="col-lg-7">
+                    <div class="sg-faq-list wow fadeInUp" data-wow-duration="1500ms">
+                        @foreach ($faqs as $f)
+                            <div class="sg-faq-item {{ $loop->first ? 'is-open' : '' }}">
+                                <button type="button" class="sg-faq-btn" aria-expanded="{{ $loop->first ? 'true' : 'false' }}">
+                                    <span class="sg-faq-num">0{{ $loop->iteration }}</span>
+                                    <h4 class="sg-faq-q">{{ $f['q'] }}</h4>
+                                    <span class="sg-faq-toggle" aria-hidden="true">
+                                        <i class="fas fa-plus"></i>
+                                    </span>
+                                </button>
+                                <div class="sg-faq-panel">
+                                    <div class="sg-faq-panel__inner">
+                                        <p class="sg-faq-a">{{ $f['a'] }}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
-            </div>
 
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
 
     {{-- ================= 12. BLOG / KNOWLEDGE HUB ================= --}}
@@ -2086,26 +2017,26 @@ DEMO markers (replace before go-live):
                 <div class="col-xl-8 col-lg-7">
                     <div class="eduhive-stretch-element-inside-column">
                         <div class="blog-three__carousel eduhive-owl__carousel owl-carousel owl-theme" data-owl-options='{
-                                                                        "items": 1,
-                                                                        "margin": 30,
-                                                                        "loop": true,
-                                                                        "smartSpeed": 700,
-                                                                        "nav": true,
-                                                                        "dots": false,
-                                                                        "navContainer": ".blog-three__custome-navs",
-                                                                        "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
-                                                                        "autoplay": true,
-                                                                        "responsive": {
-                                                                            "0":{ "items": 1, "margin": 10 },
-                                                                            "576":{ "items": 1.5 },
-                                                                            "768":{ "items": 2.2 },
-                                                                            "992":{ "items": 1.55 },
-                                                                            "1200":{ "items": 2.2 },
-                                                                            "1400":{ "items": 2.35 },
-                                                                            "1600":{ "items": 2.6 },
-                                                                            "1800":{ "items": 2.94 }
-                                                                        }
-                                                                    }'>
+                                                                                                    "items": 1,
+                                                                                                    "margin": 30,
+                                                                                                    "loop": true,
+                                                                                                    "smartSpeed": 700,
+                                                                                                    "nav": true,
+                                                                                                    "dots": false,
+                                                                                                    "navContainer": ".blog-three__custome-navs",
+                                                                                                    "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
+                                                                                                    "autoplay": true,
+                                                                                                    "responsive": {
+                                                                                                        "0":{ "items": 1, "margin": 10 },
+                                                                                                        "576":{ "items": 1.5 },
+                                                                                                        "768":{ "items": 2.2 },
+                                                                                                        "992":{ "items": 1.55 },
+                                                                                                        "1200":{ "items": 2.2 },
+                                                                                                        "1400":{ "items": 2.35 },
+                                                                                                        "1600":{ "items": 2.6 },
+                                                                                                        "1800":{ "items": 2.94 }
+                                                                                                    }
+                                                                                                }'>
                             @foreach ($posts as $post)
                                 <div class="item">
                                     <div class="blog-card wow fadeInUp" data-wow-duration="1500ms"
@@ -2146,43 +2077,13 @@ DEMO markers (replace before go-live):
         <div class="blog-three__shape-two"></div>
     </section>
 
-    {{-- ================= 13. CTA ================= --}}
-    <section class="cta-one">
-        <div class="container">
-            <div class="cta-one__content wow fadeInUp" data-wow-duration="1500ms">
-                <h2 class="cta-one__title">
-                    Ready to Build a Stronger <br />
-                    Academic Future?
-                </h2>
-                <div style="display: flex; flex-wrap: wrap; gap: 15px;">
-                    <a href="{{ url('/contact') }}" class="eduhive-btn">
-                        <span>Book Counselling</span>
-                        <span class="eduhive-btn__icon"><span class="eduhive-btn__icon__inner"><i
-                                    class="icon-right-arrow"></i></span></span>
-                    </a>
-                    <a href="{{ $whatsapp }}" class="eduhive-btn eduhive-btn--border" target="_blank" rel="noopener">
-                        <span>WhatsApp Us</span>
-                        <span class="eduhive-btn__icon"><span class="eduhive-btn__icon__inner"><i
-                                    class="fab fa-whatsapp"></i></span></span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <img src="{{ asset('assets/images/resources/cta-1-1.png') }}" alt="" class="cta-one__image-one" />
-        <img src="{{ asset('assets/images/resources/cta-1-2.png') }}" alt="" class="cta-one__image-two" />
-        <img src="{{ asset('assets/images/shapes/cta-shape-1-1.png') }}" alt="" class="cta-one__shape-one" />
-        <img src="{{ asset('assets/images/shapes/cta-shape-1-1.png') }}" alt="" class="cta-one__shape-two" />
-        <div class="cta-one__shape-box-one"></div>
-        <div class="cta-one__shape-box-two wow fadeInRight" data-wow-duration="1500ms"></div>
-    </section>
-
-    {{-- ================= 14. ABOUT SG EDUCATION (SEO Summary) ================= --}}
+    {{-- ================= 13. ABOUT SG EDUCATION (SEO Summary) ================= --}}
     <section class="sg-summary-sec">
         <div class="container">
-            <div class="sg-summary-card wow fadeInUp" data-wow-duration="1500ms">
+            <div class="row gutter-y-40 align-items-center">
 
                 {{-- Left Column: Identity & Offerings --}}
-                <div class="sg-summary-left">
+                <div class="col-lg-6 wow fadeInUp" data-wow-duration="1500ms">
                     <span class="sg-summary-badge">
                         <i class="icon-graduation" aria-hidden="true"></i> About SG Education
                     </span>
@@ -2205,9 +2106,9 @@ DEMO markers (replace before go-live):
                 </div>
 
                 {{-- Right Column: Narrative & Key Feature Pillars --}}
-                <div class="sg-summary-right">
+                <div class="col-lg-6 wow fadeInUp" data-wow-duration="1500ms" data-wow-delay="100ms">
                     <p class="sg-summary-desc">
-                        SG Education is a premier coaching institute in Kalyan offering targeted academic programs
+                        SG Education is a premier coaching institute in Kalyan offering targeted academic Courses
                         for Grades 8 to 12 (Maharashtra State Board), JEE, NEET, and MHT-CET. Built on a foundation of
                         concept-first teaching and individual performance tracking, we empower students to achieve
                         consistent academic excellence.
@@ -2231,6 +2132,35 @@ DEMO markers (replace before go-live):
                             <span>Performance Analysis</span>
                         </li>
                     </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    {{-- ================= 14. CTA ================= --}}
+    <section class="sg-cta-repo">
+        <div class="container">
+            <div class="sg-cta__card wow fadeInUp" data-wow-duration="1500ms">
+
+                <div class="sg-cta__content">
+                    <span class="sg-cta__tag">
+                        <i class="icon-graduation" aria-hidden="true"></i> Admissions Open
+                    </span>
+                    <h2 class="sg-cta__title">Ready to Build a Stronger<br>Academic Future?</h2>
+                    <p class="sg-cta__text">Book a free academic counselling session or message us on WhatsApp. We'll help
+                        you pick the right program for your child.</p>
+                </div>
+
+                <div class="sg-cta__actions">
+                    <a href="{{ url('/contact') }}" class="sg-cta__btn sg-cta__btn--primary">
+                        <span>Book Counselling</span>
+                        <span class="sg-cta__btn-icon"><i class="icon-right-arrow" aria-hidden="true"></i></span>
+                    </a>
+                    <a href="{{ $whatsapp }}" class="sg-cta__btn sg-cta__btn--wa" target="_blank" rel="noopener">
+                        <span>WhatsApp Us</span>
+                        <span class="sg-cta__btn-icon"><i class="fab fa-whatsapp" aria-hidden="true"></i></span>
+                    </a>
                 </div>
 
             </div>
