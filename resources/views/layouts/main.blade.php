@@ -1,17 +1,22 @@
 {{--
 ============================================================================
   SG Educare — Master Layout  (Eduhive template → Laravel Blade)
-  Place at: resources/views/layouts/app.blade.php
+  Place at: resources/views/layouts/main.blade.php   (pages use @extends('layouts.main'))
 
   Partials:
     @include('layouts.header')  → resources/views/layouts/header.blade.php
     @include('layouts.footer')  → resources/views/layouts/footer.blade.php
 
   Per-page usage:
-    @extends('layouts.app')
+    @extends('layouts.main')
     @section('title', 'JEE Coaching in Kalyan | SG Educare')
     @section('meta') ...custom og/description... @endsection   (optional)
     @section('content') ...page... @endsection
+
+  Preloader:
+    - Branded (logo + progress line + tagline), shown on the FIRST page of a visit only.
+    - Hides on window load, minimum 500 ms (no flash), maximum 3 s (slow images never block).
+    - Disabled for no-JS visitors; static for "reduce motion" users.
 
   TODO before go-live:
     - Replace logo-dark.png / logo-light.png / favicons / og-image.jpg with SG Educare assets
@@ -26,6 +31,155 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    {{-- ===== Preloader bootstrap: runs before anything paints ===== --}}
+    <script>
+        (function () {
+            var d = document.documentElement;
+            window.__sgStart = Date.now();
+            var seen = false;
+            try { seen = sessionStorage.getItem('sg-visited') === '1'; } catch (e) { }
+            d.classList.add(seen ? 'sg-no-preload' : 'sg-loading');
+        })();
+    </script>
+
+    {{-- ===== Preloader critical CSS (inline so it shows instantly) ===== --}}
+    <style>
+        .sg-preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(circle at 50% 42%, rgba(244, 129, 52, .07) 0%, transparent 42%),
+                #ffffff;
+            transition: opacity .55s ease, visibility .55s ease;
+        }
+
+        .sg-preloader::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(51, 65, 84, .08) 1px, transparent 1px);
+            background-size: 22px 22px;
+            -webkit-mask-image: radial-gradient(circle at 50% 45%, #000 0%, transparent 60%);
+            mask-image: radial-gradient(circle at 50% 45%, #000 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .sg-preloader__inner {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 22px;
+            padding: 24px;
+            animation: sgPreIn .7s cubic-bezier(.22, 1, .36, 1) both;
+            transition: transform .55s cubic-bezier(.22, 1, .36, 1), opacity .4s ease;
+        }
+
+        .sg-preloader__logo {
+            display: block;
+            width: 190px;
+            max-width: 60vw;
+            height: auto;
+        }
+
+        .sg-preloader__wordmark {
+            display: none;
+            margin: 0;
+            font: 800 30px/1 'Plus Jakarta Sans', system-ui, sans-serif;
+            letter-spacing: -.02em;
+            color: #334154;
+        }
+
+        .sg-preloader__wordmark span {
+            color: #F48134;
+        }
+
+        .sg-preloader__bar {
+            position: relative;
+            width: 190px;
+            max-width: 60vw;
+            height: 3px;
+            border-radius: 3px;
+            overflow: hidden;
+            background: rgba(51, 65, 84, .1);
+        }
+
+        .sg-preloader__bar span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 38%;
+            height: 100%;
+            border-radius: 3px;
+            background: #F48134;
+            animation: sgPreBar 1.15s cubic-bezier(.65, 0, .35, 1) infinite;
+        }
+
+        .sg-preloader__tag {
+            margin: 0;
+            font: 600 13px/1.4 'Plus Jakarta Sans', system-ui, sans-serif;
+            letter-spacing: .02em;
+            color: rgba(51, 65, 84, .7);
+            text-align: center;
+        }
+
+        /* Exit: content lifts slightly, panel fades */
+        .sg-preloader.is-done {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .sg-preloader.is-done .sg-preloader__inner {
+            transform: translateY(-14px) scale(.98);
+            opacity: 0;
+        }
+
+        /* Lock scroll only while visible */
+        html.sg-loading,
+        html.sg-loading body {
+            overflow: hidden;
+        }
+
+        /* Repeat pages in the same visit: no preloader */
+        html.sg-no-preload .sg-preloader {
+            display: none;
+        }
+
+        @keyframes sgPreIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        @keyframes sgPreBar {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(265%); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .sg-preloader,
+            .sg-preloader__inner {
+                animation: none;
+                transition: opacity .2s ease, visibility .2s ease;
+            }
+
+            .sg-preloader__bar span {
+                width: 100%;
+                animation: none;
+            }
+
+            .sg-preloader.is-done .sg-preloader__inner {
+                transform: none;
+            }
+        }
+    </style>
+    <noscript>
+        <style>.sg-preloader { display: none !important; } html.sg-loading, html.sg-loading body { overflow: auto !important; }</style>
+    </noscript>
+    <link rel="preload" as="image" href="{{ asset('assets/images/logo-dark.png') }}">
 
     <!-- ===== Global meta (always present) ===== -->
     <meta name="author" content="SG Educare" />
@@ -87,14 +241,54 @@
 
 <body class="custom-cursor">
 
+    {{-- ===== Branded preloader (replaces template .preloader) ===== --}}
+    <div class="sg-preloader" id="sg-preloader" role="status" aria-live="polite" aria-label="Loading SG Educare">
+        <div class="sg-preloader__inner">
+            <img class="sg-preloader__logo" src="{{ asset('assets/images/logo-dark.png') }}" width="190" alt=""
+                onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+            <p class="sg-preloader__wordmark" aria-hidden="true">SG <span>Educare</span></p>
+            <div class="sg-preloader__bar" aria-hidden="true"><span></span></div>
+            <p class="sg-preloader__tag">Building Concepts. Creating Achievers.</p>
+        </div>
+    </div>
+    <script>
+        (function () {
+            var el = document.getElementById('sg-preloader');
+            var root = document.documentElement;
+            if (!el) return;
+
+            // Repeat page in this visit → already hidden by CSS; just clean up.
+            if (root.classList.contains('sg-no-preload')) { el.remove(); return; }
+
+            var MIN = 500;   // never flash for less than this
+            var MAX = 3000;  // never block longer than this, even if images are slow
+            var done = false;
+
+            function hide() {
+                if (done) return;
+                done = true;
+                var wait = Math.max(0, MIN - (Date.now() - (window.__sgStart || Date.now())));
+                setTimeout(function () {
+                    el.classList.add('is-done');
+                    root.classList.remove('sg-loading');
+                    try { sessionStorage.setItem('sg-visited', '1'); } catch (e) { }
+                    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 650);
+                }, wait);
+            }
+
+            if (document.readyState === 'complete') hide();
+            else window.addEventListener('load', hide);
+            setTimeout(hide, MAX);
+
+            // Back/forward cache: never show a stale preloader
+            window.addEventListener('pageshow', function (e) {
+                if (e.persisted) { root.classList.remove('sg-loading'); if (el.parentNode) el.parentNode.removeChild(el); }
+            });
+        })();
+    </script>
+
     <div class="custom-cursor__cursor"></div>
     <div class="custom-cursor__cursor-two"></div>
-
-    <!-- Preloader -->
-    <div class="preloader">
-        <div class="preloader__image" style="background-image: url({{ asset('assets/images/loader.png') }});"></div>
-    </div>
-    <!-- /.preloader -->
 
     <div class="page-wrapper">
 
