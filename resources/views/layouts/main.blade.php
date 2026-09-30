@@ -20,7 +20,7 @@
 
   TODO before go-live:
     - Replace logo-dark.png / logo-light.png / favicons / og-image.jpg with SG Educare assets
-    - Fill real secondary phone + verify primary (+91 77159 16926) in Schema
+    - Phones / WhatsApp now come from config/sg.php (signboard: 85919 32112, 85919 42112)
     - Add real social profile URLs (sameAs) + campus street addresses/pincodes
     - Point newsletter form (footer) + /search to real routes
 ============================================================================
@@ -210,7 +210,7 @@
     <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/favicons/apple-touch-icon.png') }}" />
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/favicons/favicon-32x32.png') }}" />
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicons/favicon-16x16.png') }}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicons/favicon-32x32.png') }}" />
     <link rel="manifest" href="{{ asset('assets/images/favicons/site.webmanifest') }}" />
 
     <!-- Fonts -->
@@ -235,6 +235,9 @@
 
     <!-- Template styles -->
     <link rel="stylesheet" href="{{ asset('assets/css/eduhive.css') }}" />
+
+    <!-- SG shared components (bullets, cards, accordions, CTA) — ?v= busts cache on every change -->
+    <link rel="stylesheet" href="{{ asset('assets/css/sg-custom.css') }}?v={{ @filemtime(public_path('assets/css/sg-custom.css')) }}" />
 
     @yield('styles')
 </head>
@@ -321,14 +324,15 @@
                 </li>
                 <li>
                     <span class="mobile-nav__contact__icon"><i class="fa fa-phone-alt"></i></span>
-                    <a href="tel:+917715916926">+91 77159 16926</a>
+                    @php $sgPhone = config('sg.phones.0', '8591932112'); @endphp
+                    <a href="tel:+91{{ $sgPhone }}">+91 {{ substr($sgPhone, 0, 5) }} {{ substr($sgPhone, 5) }}</a>
                 </li>
             </ul>
             <div class="mobile-nav__social social-links-two">
                 <a href="#"><span class="social-links-two__icon"><i class="fab fa-facebook-f" aria-hidden="true"></i></span><span class="sr-only">Facebook</span></a>
                 <a href="#"><span class="social-links-two__icon"><i class="fab fa-instagram" aria-hidden="true"></i></span><span class="sr-only">Instagram</span></a>
                 <a href="#"><span class="social-links-two__icon"><i class="fab fa-youtube" aria-hidden="true"></i></span><span class="sr-only">YouTube</span></a>
-                <a href="#"><span class="social-links-two__icon"><i class="fab fa-whatsapp" aria-hidden="true"></i></span><span class="sr-only">WhatsApp</span></a>
+                <a href="https://wa.me/91{{ config('sg.whatsapp', '8591932112') }}" target="_blank" rel="noopener"><span class="social-links-two__icon"><i class="fab fa-whatsapp" aria-hidden="true"></i></span><span class="sr-only">WhatsApp</span></a>
             </div>
         </div>
     </div><!-- /.mobile-nav__wrapper -->
@@ -378,6 +382,9 @@
     <!-- Template js -->
     <script src="{{ asset('assets/js/eduhive.js') }}"></script>
 
+    <!-- SG shared behaviour (accordion, count-up) -->
+    <!-- <script src="{{ asset('assets/js/sg-custom.js') }}?v={{ @filemtime(public_path('assets/js/sg-custom.js')) }}"></script> -->
+
     @yield('scripts')
 
     {{-- ===== EducationalOrganization + multi-campus schema (local SEO / rich results) ===== --}}
@@ -393,7 +400,7 @@
         "areaServed": ["Kalyan", "Dombivli", "Ulhasnagar", "Ambernath", "Badlapur", "Bhiwandi", "Thane"],
         "contactPoint": [{
             "@type": "ContactPoint",
-            "telephone": "+91-77159-16926",
+            "telephone": "+91-{{ config('sg.phones.0', '8591932112') }}",
             "contactType": "admissions",
             "email": "info@sgeducare.in",
             "areaServed": "IN",

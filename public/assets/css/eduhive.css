@@ -8322,13 +8322,13 @@ li:hover .contact-page__info__icon__inner {
   border: 1px solid RGBA(var(--eduhive-secondary-rgb, 57, 212, 214), 0.35);
 }
 .about-one__video {
+display:none;
   padding: 13px;
   position: absolute;
   top: 63px;
   right: -125px;
   background-color: var(--eduhive-white, #FFFFFF);
   border-radius: 100px;
-  display: flex;
   align-items: center;
   gap: 20px;
   z-index: 2;

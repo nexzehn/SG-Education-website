@@ -2,13 +2,13 @@
 
 /*
 |--------------------------------------------------------------------------
-| SG Educare — Programs data (content from COURSES.docx)
+| SG Education — Programs data (content from COURSES.docx)
 |--------------------------------------------------------------------------
 | Key = URL slug  →  /courses/{slug}
 | Edit ke baad:  php artisan config:clear
 |
-| ⚠️  DEMO markers: fees / duration / batches / video docx me nahi the —
-|     go-live se pehle real values daalo ya null karo (null = "Ask us").
+| null = page shows "Ask us" (fees / duration / batches) or hides it (video).
+| Fill real values only when the client confirms them.
 |
 | Program keys:
 |   highlights   → Course Highlights chips
@@ -18,32 +18,35 @@
 |   testing      → ['schedule' => [['1st Saturday','Physics'],...], 'along' => '...']
 |   objective    → closing callout line
 |   quote        → ['text' => ..., 'by' => ...]  (Mission IIT only)
+|   image        → program photo (public/…); missing file → default photo
+|   form_course  → course pre-selected on the contact form (ContactController::COURSES key)
 */
 
-$demoVideo = 'https://www.youtube.com/watch?v=h9MbznbxlLc'; // DEMO
-
+// From the website content: small batches, testing + analysis, mentorship, parent communication
 $common = [
-    'Small, capped batches so every student gets attention',
-    'Weekly, monthly and quarterly tests on the exam pattern',
-    'Dedicated doubt-solving sessions outside lecture hours',
-    'Parent-teacher meets and progress updates on WhatsApp',
+    'Small batches with focused attention for every student',
+    'Regular tests followed by performance analysis',
+    'Doubt-solving support and faculty mentorship',
+    'Regular communication with parents on progress',
 ];
 
 return [
 
     /* ================= 01 — 9TH & 10TH STATE BOARD ================= */
     'boards' => [
+        'image'       => 'assets/images/sg/classroom-junior.webp',
+        'form_course' => '9th-10th',
         'name'     => '9th & 10th State Board',
         'short'    => 'Boards 9–10',
         'tagline'  => 'Build Strong Foundations. Finish Strong.',
         'for'      => 'Class 9 & 10',
         'exam'     => 'Maharashtra State Board',
         'subjects' => ['Mathematics', 'Science'],
-        'duration' => '1 Year (per class)',            // DEMO
-        'batches'  => 'Mon–Sat, 4:00 PM – 6:00 PM',    // DEMO
+        'duration' => '1 Year (per class)',            // confirm
+        'batches'  => null,                           // confirm timings with client
         'fees'     => null,                            // "Ask us"
-        'mode'     => 'Classroom, Kalyan',
-        'video'    => $demoVideo,                      // DEMO
+        'mode'     => 'Classroom, Khadakpada, Kalyan',
+        'video'    => null,                           // add SG's own YouTube link
         'overview' => [
             'Board-focused coaching for Class 9 and 10 State Board students, built around concept-first teaching, complete syllabus planning and regular assessment.',
             'Students build strong fundamentals in Class 9 and carry them into a structured, board-oriented Class 10 preparation.',
@@ -70,23 +73,25 @@ return [
         'faqs' => [
             ['q' => 'Does the program follow the school syllabus?', 'a' => 'Yes. Teaching follows the Maharashtra State Board syllabus, so school performance and board preparation move together.'],
         ],
-        'meta_title' => 'Class 9 & 10 State Board Coaching in Kalyan | SG Educare',
-        'meta_desc'  => 'State Board coaching in Kalyan for Class 9 & 10. Concept-first teaching, board-pattern tests, writing practice and parent updates at SG Educare.',
+        'meta_title' => 'Class 9 & 10 State Board Coaching in Kalyan | SG Education',
+        'meta_desc'  => 'State Board coaching in Kalyan for Class 9 & 10. Concept-first teaching, board-pattern tests, writing practice and parent updates at SG Education.',
     ],
 
     /* ================= 02 — 11TH & 12TH SCIENCE ================= */
     'science' => [
+        'image'       => 'assets/images/sg/classroom-senior.webp',
+        'form_course' => '11th-12th-science',
         'name'     => '11th & 12th Science',
         'short'    => '11th–12th Science',
         'tagline'  => 'Build the Foundation for Your Future.',
         'for'      => 'Class 11 & 12',
         'exam'     => 'HSC Board + JEE / NEET / MHT-CET readiness',
         'subjects' => ['Physics', 'Chemistry', 'Mathematics', 'Biology'],
-        'duration' => '2 Years (Class 11 + 12)',       // DEMO
-        'batches'  => 'Mon–Sat, 4:00 PM – 7:00 PM',    // DEMO
+        'duration' => '2 Years (Class 11 + 12)',       // confirm
+        'batches'  => null,                           // confirm timings with client
         'fees'     => null,
-        'mode'     => 'Classroom, Kalyan',
-        'video'    => $demoVideo,                      // DEMO
+        'mode'     => 'Classroom, Khadakpada, Kalyan',
+        'video'    => null,                           // add SG's own YouTube link
         'overview' => [
             'A complete academic program for Class 11 and 12 Science that combines board preparation with competitive-exam readiness.',
             'Students choose their pathway — PCM, PCB or PCMB — and follow a structured plan across both years.',
@@ -113,23 +118,25 @@ return [
         'faqs' => [
             ['q' => 'Can I take PCMB and decide my direction later?', 'a' => 'Yes. PCMB keeps both engineering and medical pathways open. Our counsellors help students choose at the right time.'],
         ],
-        'meta_title' => '11th & 12th Science Classes in Kalyan | PCM, PCB, PCMB | SG Educare',
-        'meta_desc'  => 'Class 11 & 12 Science coaching in Kalyan with PCM, PCB and PCMB pathways. Board + JEE / NEET / MHT-CET readiness at SG Educare.',
+        'meta_title' => '11th & 12th Science Classes in Kalyan | PCM, PCB, PCMB | SG Education',
+        'meta_desc'  => 'Class 11 & 12 Science coaching in Kalyan with PCM, PCB and PCMB pathways. Board + JEE / NEET / MHT-CET readiness at SG Education.',
     ],
 
     /* ================= 03 — SG MISSION IIT 2029 (JEE) ================= */
     'jee' => [
+        'image'       => 'assets/images/sg/fp-student-thinking.webp',
+        'form_course' => 'jee',
         'name'     => 'SG Mission IIT 2029 — JEE Main & Advanced',
         'short'    => 'Mission IIT',
         'tagline'  => 'The Dream: AIR 1 From Kalyan.',
         'for'      => 'Class 11 & 12',
         'exam'     => 'JEE Main, JEE Advanced',
         'subjects' => ['Physics', 'Chemistry', 'Mathematics'],
-        'duration' => '2 Years (Class 11 + 12)',       // DEMO
-        'batches'  => 'Mon–Sat, 4:00 PM – 7:00 PM',    // DEMO
+        'duration' => '2 Years (Class 11 + 12)',       // confirm
+        'batches'  => null,                           // confirm timings with client
         'fees'     => null,
-        'mode'     => 'Classroom, Kalyan',
-        'video'    => $demoVideo,                      // DEMO
+        'mode'     => 'Classroom, Khadakpada, Kalyan',
+        'video'    => null,                           // add SG's own YouTube link
         'quote'    => [
             'text' => 'I have a dream of producing AIR 1 from Kalyan.',
             'by'   => 'Latesh Ghavat, Founder, SG Education',
@@ -172,23 +179,25 @@ return [
         'faqs' => [
             ['q' => 'Does the program also cover the board syllabus?', 'a' => 'Yes. Teaching follows the Class 11 and 12 syllabus, so board preparation happens alongside JEE preparation.'],
         ],
-        'meta_title' => 'JEE Coaching in Kalyan | SG Mission IIT 2029 | Main + Advanced | SG Educare',
-        'meta_desc'  => 'Two-year JEE Main & Advanced program in Kalyan. Conceptual depth, DPPs, PYQs, mock tests and detailed performance analysis at SG Educare.',
+        'meta_title' => 'JEE Coaching in Kalyan | SG Mission IIT 2029 | Main + Advanced | SG Education',
+        'meta_desc'  => 'Two-year JEE Main & Advanced program in Kalyan. Conceptual depth, DPPs, PYQs, mock tests and detailed performance analysis at SG Education.',
     ],
 
     /* ================= 04 — SG MISSION NEET 2029 ================= */
     'neet' => [
+        'image'       => 'assets/images/sg/fp-science-lab.webp',
+        'form_course' => 'neet',
         'name'     => 'SG Mission NEET 2029 — NEET-UG',
         'short'    => 'Mission NEET',
         'tagline'  => 'Build Knowledge. Build Accuracy. Build Consistency.',
         'for'      => 'Class 11 & 12',
         'exam'     => 'NEET-UG',
         'subjects' => ['Physics', 'Chemistry', 'Biology'],
-        'duration' => '2 Years (Class 11 + 12)',       // DEMO
-        'batches'  => 'Mon–Sat, 4:00 PM – 7:00 PM',    // DEMO
+        'duration' => '2 Years (Class 11 + 12)',       // confirm
+        'batches'  => null,                           // confirm timings with client
         'fees'     => null,
-        'mode'     => 'Classroom, Kalyan',
-        'video'    => $demoVideo,                      // DEMO
+        'mode'     => 'Classroom, Khadakpada, Kalyan',
+        'video'    => null,                           // add SG's own YouTube link
         'overview' => [
             'A structured NEET-UG program built on NCERT-focused preparation, extensive MCQ practice and regular full-length mocks.',
             'Every test is followed by error analysis, accuracy and time-management training, so preparation keeps improving.',
@@ -224,23 +233,25 @@ return [
         'faqs' => [
             ['q' => 'Is the teaching NCERT-based?', 'a' => 'Yes. NCERT is the base, with additional practice material for NEET-level questions.'],
         ],
-        'meta_title' => 'NEET Coaching in Kalyan | SG Mission NEET 2029 | SG Educare',
-        'meta_desc'  => 'NEET-UG program in Kalyan with NCERT-focused teaching, MCQ practice, full-length mocks and error analysis at SG Educare.',
+        'meta_title' => 'NEET Coaching in Kalyan | SG Mission NEET 2029 | SG Education',
+        'meta_desc'  => 'NEET-UG program in Kalyan with NCERT-focused teaching, MCQ practice, full-length mocks and error analysis at SG Education.',
     ],
 
     /* ================= 05 — MHT-CET ================= */
     'mht-cet' => [
+        'image'       => 'assets/images/sg/fp-exam-hall.webp',
+        'form_course' => 'mht-cet',
         'name'     => 'MHT-CET (Engineering & Pharmacy)',
         'short'    => 'MHT-CET',
         'tagline'  => 'Concepts Matter. Speed Matters Too.',
         'for'      => 'Class 11 & 12',
         'exam'     => 'MHT-CET (PCM / PCB)',
         'subjects' => ['Physics', 'Chemistry', 'Mathematics', 'Biology'],
-        'duration' => '1 Year (Class 12)',             // DEMO
-        'batches'  => 'Mon–Sat, 5:00 PM – 7:30 PM',    // DEMO
+        'duration' => null,                           // confirm with client
+        'batches'  => null,                           // confirm timings with client
         'fees'     => null,
-        'mode'     => 'Classroom, Kalyan',
-        'video'    => $demoVideo,                      // DEMO
+        'mode'     => 'Classroom, Khadakpada, Kalyan',
+        'video'    => null,                           // add SG's own YouTube link
         'overview' => [
             'MHT-CET rewards accuracy at speed on the Maharashtra syllabus. Our program combines concept-focused teaching with timed practice and CET-pattern testing.',
         ],
@@ -270,23 +281,25 @@ return [
         'faqs' => [
             ['q' => 'Can I prepare for MHT-CET and JEE together?', 'a' => 'Yes, the syllabus overlaps a lot. Talk to us and we will suggest the right combination.'],
         ],
-        'meta_title' => 'MHT-CET Classes in Kalyan | Engineering & Pharmacy | SG Educare',
-        'meta_desc'  => 'MHT-CET coaching in Kalyan for PCM and PCB. Timed practice, CET-pattern tests and performance analysis at SG Educare.',
+        'meta_title' => 'MHT-CET Classes in Kalyan | Engineering & Pharmacy | SG Education',
+        'meta_desc'  => 'MHT-CET coaching in Kalyan for PCM and PCB. Timed practice, CET-pattern tests and performance analysis at SG Education.',
     ],
 
     /* ================= 06 — NDA ================= */
     'nda' => [
+        'image'       => 'assets/images/sg/fp-group-study.webp',
+        'form_course' => 'nda',
         'name'     => 'NDA',
         'short'    => 'NDA',
         'tagline'  => 'Prepare Academically. Think With Discipline.',
         'for'      => 'Class 11, 12 & passed-out',
         'exam'     => 'UPSC NDA & NA',
         'subjects' => ['Mathematics', 'General Ability Test'],
-        'duration' => '1 Year',                        // DEMO
-        'batches'  => 'Mon–Sat, 7:00 AM – 9:00 AM',    // DEMO
+        'duration' => null,                           // confirm with client
+        'batches'  => null,                           // confirm timings with client
         'fees'     => null,
-        'mode'     => 'Classroom, Kalyan',
-        'video'    => $demoVideo,                      // DEMO
+        'mode'     => 'Classroom, Khadakpada, Kalyan',
+        'video'    => null,                           // add SG's own YouTube link
         'overview' => [
             'Written-exam preparation for the UPSC NDA examination across Mathematics and the General Ability Test — English, Science, History, Geography and General Knowledge.',
         ],
@@ -309,23 +322,25 @@ return [
         'faqs' => [
             ['q' => 'Do you prepare students for the SSB interview?', 'a' => 'Ask us. We will share what support is currently available.'],
         ],
-        'meta_title' => 'NDA Coaching in Kalyan | UPSC NDA Written Exam | SG Educare',
-        'meta_desc'  => 'NDA coaching in Kalyan for Mathematics and the General Ability Test. UPSC-pattern timed tests and mocks at SG Educare.',
+        'meta_title' => 'NDA Coaching in Kalyan | UPSC NDA Written Exam | SG Education',
+        'meta_desc'  => 'NDA coaching in Kalyan for Mathematics and the General Ability Test. UPSC-pattern timed tests and mocks at SG Education.',
     ],
 
     /* ================= 07 — FOUNDATION ================= */
     'foundation' => [
+        'image'       => 'assets/images/sg/fp-student-self-study.webp',
+        'form_course' => 'foundation',
         'name'     => 'Foundation',
         'short'    => 'Foundation',
         'tagline'  => 'Start Early. Build Strong.',
         'for'      => 'Class 8 to 10',
         'exam'     => 'School + competitive foundation',
         'subjects' => ['Mathematics', 'Science', 'Mental Ability'],
-        'duration' => '1 Year (per class)',            // DEMO
-        'batches'  => 'Mon, Wed, Fri, 5:00 PM – 7:00 PM', // DEMO
+        'duration' => '1 Year (per class)',            // confirm
+        'batches'  => null,                           // confirm timings with client
         'fees'     => null,
-        'mode'     => 'Classroom, Kalyan',
-        'video'    => $demoVideo,                      // DEMO
+        'mode'     => 'Classroom, Khadakpada, Kalyan',
+        'video'    => null,                           // add SG's own YouTube link
         'overview' => [
             "Foundation isn't about putting younger students under unnecessary competitive-exam pressure.",
             'It is about developing the skills that make advanced learning easier.',
@@ -348,18 +363,19 @@ return [
         'faqs' => [
             ['q' => "Will this affect my child's school studies?", 'a' => 'No. The program follows the school syllabus and goes deeper, so it supports school performance.'],
         ],
-        'meta_title' => 'Foundation Classes in Kalyan | Class 8–10 | SG Educare',
-        'meta_desc'  => 'Foundation coaching for Class 8–10 in Kalyan. Strong Maths, Science and reasoning base for JEE, NEET and Olympiads at SG Educare.',
+        'meta_title' => 'Foundation Classes in Kalyan | Class 8–10 | SG Education',
+        'meta_desc'  => 'Foundation coaching for Class 8–10 in Kalyan. Strong Maths, Science and reasoning base for future JEE and NEET preparation at SG Education.',
     ],
 
     /* ---------- Shared ---------- */
     '_common_features' => $common,
 
+    // Bio uses the founder's own words from the website content (About page)
     '_mentor' => [
-        'name'        => 'Latesh Sir',
-        'designation' => 'Founder & Senior Faculty',   // DEMO
-        'experience'  => '15+ Years',                  // DEMO
-        'bio'         => 'Latesh Sir founded SG Education with one goal: give every student in Kalyan the kind of personal attention that large coaching centres cannot. He teaches, mentors and personally reviews student progress, and keeps parents closely involved at every step of the preparation journey.', // DEMO
-        'image'       => 'assets/images/team/latesh-sir.jpg',
+        'name'        => 'Latesh Ghavat',
+        'designation' => 'Founder, SG Education',
+        'experience'  => null,                          // add real years only if the client confirms
+        'bio'         => 'Latesh Sir started SG Education with a belief that students from Kalyan should not have to lower their ambitions because of where they live. His focus is building the system, guidance and discipline students need to understand, think, solve and keep improving.',
+        'image'       => 'assets/images/sg/founder-latesh-ghavat.webp',
     ],
 ];

@@ -246,6 +246,25 @@ Data: $posts (paginator), $categories, $category (BlogController@index)
             transform: translateX(4px);
         }
 
+        .sg-debug {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 24px;
+            border: 2px dashed #f59e0b;
+            border-radius: 14px;
+            font-family: ui-monospace, Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #7c2d12;
+            background: #fffbeb;
+            overflow-x: auto;
+        }
+
+        .sg-debug ul {
+            margin: 10px 0 0;
+            padding-left: 18px;
+        }
+
         .sg-empty {
             padding: 60px 20px;
             text-align: center;
@@ -539,6 +558,27 @@ Data: $posts (paginator), $categories, $category (BlogController@index)
                         <a href="{{ url('/contact') }}">book a free counselling session</a>.
                     @endif
                 </p>
+
+                {{-- Local debugging only (APP_DEBUG=true): explains why no posts are listed --}}
+                @if (config('app.debug') && !$category)
+                    @php $diag = app(\App\Services\BlogRepository::class)->diagnostics(); @endphp
+                    <div class="sg-debug">
+                        <strong>Blog debug (visible only because APP_DEBUG=true)</strong>
+                        <ul>
+                            @foreach ($diag as $key => $value)
+                                <li><b>{{ str_replace('_', ' ', $key) }}:</b>
+                                    @if (is_array($value))
+                                        {{ $value ? implode(', ', $value) : '— none —' }}
+                                    @elseif (is_bool($value))
+                                        {{ $value ? 'yes' : 'NO' }}
+                                    @else
+                                        {{ $value }}
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             @else
                 <div class="sg-posts">
                     @foreach ($posts as $post)

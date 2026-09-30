@@ -54,6 +54,20 @@ class BlogRepository
         );
     }
 
+    /** Newest published posts (home page "Knowledge Hub" carousel). */
+    public function latest(int $limit = 6): Collection
+    {
+        if ($this->usesDatabase()) {
+            return BlogPost::published()
+                ->select(BlogPost::CARD_COLUMNS)
+                ->latest('published_at')
+                ->take($limit)
+                ->get();
+        }
+
+        return $this->filePosts()->take($limit)->values();
+    }
+
     /** Distinct categories that have at least one published post. */
     public function categories(): Collection
     {
@@ -92,6 +106,41 @@ class BlogRepository
             ->sortBy(fn ($p) => $p['category'] === $post['category'] ? 0 : 1) // stable: keeps newest-first within groups
             ->take($limit)
             ->values();
+    }
+
+    /**
+     * Why posts are (not) showing. Rendered on /blog only when APP_DEBUG=true.
+     */
+    public function diagnostics(): array
+    {
+        $dir = config('blog.content_path', resource_path('content/blog'));
+        $configured = config('blog.posts', []);
+        $htmlFiles = is_dir($dir) ? array_map('basename', glob($dir . '/*.html') ?: []) : [];
+
+        $missing = [];
+        $hidden = [];
+        foreach ($configured as $slug => $p) {
+            if (! in_array("{$slug}.html", $htmlFiles, true)) {
+                $missing[] = "{$slug}.html";
+            }
+            $status = $p['status'] ?? 'published';
+            $date = Carbon::parse($p['published_at'] ?? 'now');
+            if ($status !== 'published' || $date->isFuture()) {
+                $hidden[] = "{$slug} (status: {$status}, date: {$date->toDateTimeString()})";
+            }
+        }
+
+        return [
+            'driver' => config('blog.driver') ?: 'file (not set)',
+            'config_file' => config_path('blog.php'),
+            'posts_in_config' => array_keys($configured),
+            'content_path' => $dir,
+            'content_path_exists' => is_dir($dir),
+            'html_files_found' => $htmlFiles,
+            'missing_html_files' => $missing,
+            'draft_or_scheduled' => $hidden,
+            'now' => now()->toDateTimeString() . ' (' . config('app.timezone') . ')',
+        ];
     }
 
     /*

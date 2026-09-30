@@ -1,13 +1,23 @@
 {{--
 ============================================================================
-resources/views/courses/show.blade.php
-ONE template for every program: /courses/{slug}
-Data = config/programs.php (COURSES.docx structure)
+resources/views/courses/show.blade.php  →  /courses/{slug}
+ONE template for every program. Data = config/programs.php
 Vars from controller: $slug, $program, $image, $features, $mentor, $others
-($curriculum ab use nahi hota — controller me rehne do, harmless)
+
+Shared pieces (public/assets/css/sg-custom.css + sg-custom.js):
+  bullets .sg-focus · process chain partials.sg-chain · callout .sg-callout
+  quote .sg-quote · FAQ partials.sg-accordion · CTA .sg-cta__*
+Program photos: 'image' key in config/programs.php (files in public/assets/images/sg/).
 ============================================================================
 --}}
 @extends('layouts.main')
+
+@php
+    // Program photo comes from config/programs.php 'image' (controller checks the file exists).
+    $fallbackImg = 'assets/images/sg/classroom-senior.webp';
+    $heroImg = $image ?? $fallbackImg;
+    $progImg = fn(array $p) => !empty($p['image']) && file_exists(public_path($p['image'])) ? $p['image'] : $fallbackImg;
+@endphp
 
 @section('title', $program['meta_title'])
 
@@ -16,22 +26,28 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{ $program['meta_title'] }}">
     <meta property="og:description" content="{{ $program['meta_desc'] }}">
-    <meta property="og:image" content="{{ asset($image) }}">
+    <meta property="og:image" content="{{ asset($heroImg) }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:locale" content="en_IN">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ $program['meta_title'] }}">
     <meta name="twitter:description" content="{{ $program['meta_desc'] }}">
-    <meta name="twitter:image" content="{{ asset($image) }}">
+    <meta name="twitter:image" content="{{ asset($heroImg) }}">
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'Course',
+            'name' => $program['name'],
+            'description' => $program['meta_desc'],
+            'url' => url()->current(),
+            'provider' => ['@type' => 'EducationalOrganization', 'name' => 'SG Education', 'sameAs' => url('/')],
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
 @endsection
 
 @section('styles')
     <style>
         /* ---------- Program page blocks (sg- language) ---------- */
-        .sg-prog__section {
-            margin-top: 44px;
-        }
-
         /* ---------- Hero head ---------- */
         .sg-hero {
             margin-bottom: 24px;
@@ -164,38 +180,6 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
             margin-bottom: 0;
         }
 
-        /* Quote (Mission IIT) */
-        .sg-quote {
-            position: relative;
-            margin: 0 0 22px;
-            padding: 20px 24px 20px 60px;
-            background: rgba(var(--eduhive-primary-rgb), .06);
-            border-radius: 14px;
-            border-left: 4px solid var(--eduhive-primary);
-            font-size: 17px;
-            font-weight: 600;
-            font-style: italic;
-            color: var(--eduhive-base);
-        }
-
-        .sg-quote i {
-            position: absolute;
-            left: 20px;
-            top: 20px;
-            font-size: 24px;
-            color: var(--eduhive-primary);
-            font-style: normal;
-        }
-
-        .sg-quote cite {
-            display: block;
-            margin-top: 6px;
-            font-size: 14px;
-            font-style: normal;
-            font-weight: 500;
-            color: rgba(var(--eduhive-base-rgb), .6);
-        }
-
         /* Pathways chips */
         .sg-pathways {
             display: flex;
@@ -219,53 +203,6 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
             color: var(--eduhive-primary);
             background: rgba(var(--eduhive-primary-rgb), .1);
             border: 1px solid rgba(var(--eduhive-primary-rgb), .22);
-        }
-
-        /* Highlights (sg-focus) */
-        .sg-focus {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .sg-focus li {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-height: 52px;
-            padding: 10px 16px;
-            border-radius: 12px;
-            background: var(--eduhive-white);
-            border: 1px solid var(--eduhive-border-color);
-            font-size: 15px;
-            font-weight: 600;
-            line-height: 1.3;
-            color: var(--eduhive-black);
-            transition: border-color .3s ease, transform .3s ease;
-        }
-
-        .sg-focus li:hover {
-            border-color: var(--eduhive-primary);
-            transform: translateX(4px);
-        }
-
-        .sg-focus li:last-child:nth-child(odd) {
-            grid-column: span 2;
-        }
-
-        .sg-focus__icon {
-            flex-shrink: 0;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            font-size: 12px;
-            color: #fff;
-            background: var(--eduhive-primary);
         }
 
         /* Planner — numbered phase rail */
@@ -338,30 +275,6 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
             font-size: 14px;
             line-height: 1.6;
             color: rgba(var(--eduhive-base-rgb), .68);
-        }
-
-        /* Methodology chain + step rows */
-        .sg-capability__chain {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 8px 6px;
-            margin: 0 0 18px;
-        }
-
-        .sg-capability__chain span {
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--eduhive-primary);
-            background: rgba(var(--eduhive-primary-rgb), .1);
-            border: 1px solid rgba(var(--eduhive-primary-rgb), .2);
-        }
-
-        .sg-capability__chain i {
-            font-size: 9px;
-            color: rgba(var(--eduhive-base-rgb), .3);
         }
 
         .sg-method__steps {
@@ -460,63 +373,6 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
             color: rgba(var(--eduhive-base-rgb), .75);
             background: rgba(var(--eduhive-primary-rgb), .06);
             border-left: 3px solid var(--eduhive-primary);
-        }
-
-        /* Objective callout */
-        .sg-callout {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 16px 20px;
-            border-radius: 14px;
-            background: var(--eduhive-base);
-            color: #fff;
-            font-weight: 700;
-        }
-
-        .sg-callout i {
-            flex-shrink: 0;
-            font-size: 22px;
-            color: var(--eduhive-primary);
-        }
-
-        /* FAQs — static open cards, no JS */
-        .sg-qa-static {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .sg-qa-static__item {
-            padding: 20px 22px;
-            background: #fff;
-            border: 1px solid rgba(var(--eduhive-base-rgb), .08);
-            border-radius: 14px;
-        }
-
-        .sg-qa-static__q {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin: 0 0 8px;
-            font-size: 16px;
-            font-weight: 800;
-            color: var(--eduhive-base);
-        }
-
-        .sg-qa-static__q i {
-            flex-shrink: 0;
-            margin-top: 3px;
-            font-size: 14px;
-            color: var(--eduhive-primary);
-        }
-
-        .sg-qa-static__a {
-            margin: 0;
-            padding-left: 24px;
-            font-size: 14px;
-            line-height: 1.7;
-            color: rgba(var(--eduhive-base-rgb), .7);
         }
 
         /* ---------- Sidebar (sg-side) ---------- */
@@ -805,171 +661,6 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
             }
         }
 
-        /* CTA (shared sg-cta) */
-        .sg-cta {
-            padding: 40px 0 110px;
-        }
-
-        .sg-cta__card {
-            position: relative;
-            overflow: hidden;
-            display: grid;
-            grid-template-columns: 1.5fr 1fr;
-            gap: 40px;
-            align-items: center;
-            padding: 60px 55px;
-            border-radius: 26px;
-            background: linear-gradient(150deg, #2b3846 0%, var(--eduhive-base) 100%);
-            box-shadow: 0 25px 60px rgba(var(--eduhive-base-rgb), .25);
-        }
-
-        .sg-cta__card::before {
-            content: "";
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 260px;
-            height: 260px;
-            background-image: radial-gradient(circle, rgba(255, 255, 255, .1) 1.5px, transparent 1.5px);
-            background-size: 16px 16px;
-            opacity: .5;
-            pointer-events: none;
-        }
-
-        .sg-cta__card::after {
-            content: "";
-            position: absolute;
-            bottom: -90px;
-            left: -60px;
-            width: 320px;
-            height: 320px;
-            background: radial-gradient(circle, rgba(var(--eduhive-primary-rgb), .3) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .sg-cta__content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .sg-cta__tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 16px;
-            padding: 7px 16px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            color: #fff;
-            background: rgba(var(--eduhive-primary-rgb), .18);
-            border: 1px solid rgba(var(--eduhive-primary-rgb), .35);
-        }
-
-        .sg-cta__tag i {
-            color: var(--eduhive-primary);
-            font-size: 14px;
-        }
-
-        .sg-cta__title {
-            margin: 0 0 14px;
-            font-size: clamp(28px, 3vw, 40px);
-            font-weight: 800;
-            line-height: 1.2;
-            letter-spacing: -.015em;
-            color: #fff;
-        }
-
-        .sg-cta__text {
-            margin: 0;
-            max-width: 480px;
-            font-size: 16px;
-            line-height: 1.7;
-            color: rgba(255, 255, 255, .72);
-        }
-
-        .sg-cta__actions {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            justify-self: end;
-            width: 100%;
-            max-width: 320px;
-        }
-
-        .sg-cta__btn {
-            --btn-ease: cubic-bezier(.22, 1, .36, 1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 14px;
-            padding: 16px 20px 16px 24px;
-            border-radius: 14px;
-            font-size: 15px;
-            font-weight: 700;
-            text-decoration: none !important;
-            transition: transform .4s var(--btn-ease), box-shadow .4s var(--btn-ease),
-                background .35s ease, border-color .35s ease;
-        }
-
-        .sg-cta__btn-icon {
-            flex-shrink: 0;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            font-size: 13px;
-            transition: transform .4s var(--btn-ease), background .35s ease;
-        }
-
-        .sg-cta__btn--primary {
-            background: var(--eduhive-primary);
-            color: #fff !important;
-            box-shadow: 0 12px 28px rgba(var(--eduhive-primary-rgb), .35);
-        }
-
-        .sg-cta__btn--primary .sg-cta__btn-icon {
-            background: rgba(255, 255, 255, .18);
-            color: #fff;
-        }
-
-        .sg-cta__btn--primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 18px 38px rgba(var(--eduhive-primary-rgb), .45);
-        }
-
-        .sg-cta__btn--primary:hover .sg-cta__btn-icon {
-            transform: translateX(4px);
-            background: rgba(255, 255, 255, .28);
-        }
-
-        .sg-cta__btn--wa {
-            background: rgba(37, 211, 102, .12);
-            border: 1px solid rgba(37, 211, 102, .35);
-            color: #fff !important;
-        }
-
-        .sg-cta__btn--wa .sg-cta__btn-icon {
-            background: #25D366;
-            color: #fff;
-            font-size: 16px;
-        }
-
-        .sg-cta__btn--wa:hover {
-            transform: translateY(-3px);
-            background: rgba(37, 211, 102, .2);
-            border-color: rgba(37, 211, 102, .6);
-        }
-
-        .sg-cta__btn--wa:hover .sg-cta__btn-icon {
-            transform: translateX(4px);
-        }
-
         /* ---------- Mentor (sg-mentor) ---------- */
         .sg-mentor__card {
             position: relative;
@@ -1184,27 +875,9 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .sg-cta__card {
-                grid-template-columns: 1fr;
-                gap: 30px;
-                padding: 44px 34px;
-            }
-
-            .sg-cta__actions {
-                justify-self: start;
-                max-width: 420px;
-            }
         }
 
         @media (max-width: 575px) {
-            .sg-focus {
-                grid-template-columns: 1fr;
-            }
-
-            .sg-focus li:last-child:nth-child(odd) {
-                grid-column: auto;
-            }
-
             .sg-method__step {
                 flex-direction: column;
                 gap: 4px;
@@ -1218,24 +891,16 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
                 grid-template-columns: 1fr;
             }
 
-            .sg-cta__card {
-                padding: 36px 24px;
-                border-radius: 20px;
-            }
         }
 
         @media (prefers-reduced-motion: reduce) {
 
-            .sg-focus li,
             .sg-plan__num,
-            .sg-testing__cell,
-            .sg-cta__btn,
-            .sg-cta__btn-icon {
+            .sg-testing__cell {
                 transition: none !important;
             }
 
-            .sg-focus li:hover,
-            .sg-cta__btn:hover {
+            .sg-plan__item:hover .sg-plan__num {
                 transform: none;
             }
 
@@ -1254,17 +919,39 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
                 animation: none !important;
             }
         }
-    </style>
+    
+        /* Sidebar WhatsApp button on white card */
+        .sg-side .sg-cta__btn--wa {
+            color: #1e9e4f !important;
+            background: rgba(37, 211, 102, .08);
+            border-color: rgba(37, 211, 102, .35);
+        }
+
+        .sg-side .sg-cta__btn--wa:hover {
+            background: rgba(37, 211, 102, .14);
+        }
+
+        .sg-prog__section .sg-chain {
+            margin-bottom: 18px;
+        }
+
+        .sg-prog__section .sg-focus {
+            margin: 0;
+        }
+
+        </style>
 @endsection
 
 @section('content')
 
     @php
         $ask = 'Ask us';
-        $contactUrl = url('/contact') . '?program=' . $slug;
+        // Pre-select the course on the contact form (slug → ContactController::COURSES key)
+        $formCourse = $program['form_course'] ?? $slug;
+        $contactUrl = url('/contact') . '?course=' . $formCourse . '#enquiry';
         $pageUrl = urlencode(url()->current());
-        $shareText = rawurlencode($program['name'] . ' at SG Educare, Kalyan');
-        $whatsapp = 'https://wa.me/917715916926?text=' . rawurlencode('Hi, I want to know more about ' . $program['name'] . ' at SG Educare.');
+        $shareText = rawurlencode($program['name'] . ' at SG Education, Kalyan');
+        $whatsapp = 'https://wa.me/91' . config('sg.whatsapp', '8591932112') . '?text=' . rawurlencode('Hi, I want to know more about ' . $program['name'] . ' at SG Education.');
     @endphp
 
     {{-- ================= PAGE HEADER ================= --}}
@@ -1272,8 +959,8 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
         <div class="container">
             <div class="page-header__content">
                 <ul class="eduhive-breadcrumb list-unstyled">
-                    <li><span class="eduhive-breadcrumb__icon"><i class="icon-home"></i></span>
-                        href="{{ url('/') }}">Home</a></li>
+                    <li><span class="eduhive-breadcrumb__icon"><i class="icon-home"></i></span><a
+                            href="{{ url('/') }}">Home</a></li>
                     <li><a href="{{ url('/courses') }}">Courses</a></li>
                     <li><span>{{ $program['short'] }}</span></li>
                 </ul>
@@ -1310,13 +997,13 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
 
                         {{-- HERO IMAGE --}}
                         <div class="sg-hero__media wow fadeInUp" data-wow-duration="1200ms">
-                            <img src="{{ asset($image) }}" alt="{{ $program['name'] }} coaching at SG Educare">
+                            <img src="{{ asset($heroImg) }}" alt="{{ $program['name'] }} coaching at SG Education, Kalyan"
+                                width="1600" height="800">
                             <span class="sg-hero__category">{{ $program['short'] }}</span>
                             @if (!empty($program['video']))
                                 <a href="{{ $program['video'] }}" class="course-details__video-btn video-btn video-popup"
                                     aria-label="Play video">
-                                    <i class="icon-play"></i>
-                                    <span></span><span></span><span></span><span></span>
+                                    <i class="icon-play"></i><span></span><span></span><span></span><span></span>
                                 </a>
                             @endif
                         </div>
@@ -1332,7 +1019,7 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
                                 <blockquote class="sg-quote">
                                     <i class="icon-quote" aria-hidden="true"></i>
                                     "{{ $program['quote']['text'] }}"
-                                    — {{ $program['quote']['by'] }}
+                                    <cite>— {{ $program['quote']['by'] }}</cite>
                                 </blockquote>
                             @endif
 
@@ -1370,7 +1057,7 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
                         {{-- COURSE PLANNER --}}
                         <div class="sg-prog__section wow fadeInUp" data-wow-duration="1200ms">
                             <div class="sg-prog__head">
-                                <span class="sg-prog__head-icon"><i class="icon-clipboard" aria-hidden="true"></i></span>
+                                <span class="sg-prog__head-icon"><i class="fas fa-clipboard-list" aria-hidden="true"></i></span>
                                 <h3 class="sg-prog__h">Course planner</h3>
                             </div>
                             <div class="sg-plan">
@@ -1390,17 +1077,11 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
                         {{-- TEACHING METHODOLOGY --}}
                         <div class="sg-prog__section wow fadeInUp" data-wow-duration="1200ms">
                             <div class="sg-prog__head">
-                                <span class="sg-prog__head-icon"><i class="icon-teacher" aria-hidden="true"></i></span>
+                                <span class="sg-prog__head-icon"><i class="fas fa-chalkboard-teacher" aria-hidden="true"></i></span>
                                 <h3 class="sg-prog__h">Teaching methodology</h3>
                             </div>
 
-                            <div class="sg-capability__chain"
-                                aria-label="{{ implode(', ', $program['methodology']['flow']) }}">
-                                @foreach ($program['methodology']['flow'] as $chip)
-                                    <span>{{ $chip }}</span>
-                                    @if (!$loop->last)<i class="fas fa-chevron-right" aria-hidden="true"></i>@endif
-                                @endforeach
-                            </div>
+                            @include('partials.sg-chain', ['steps' => $program['methodology']['flow'], 'endIcon' => null])
 
                             @if (!empty($program['methodology']['steps']))
                                 <div class="sg-method__steps">
@@ -1427,7 +1108,7 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
                         @if (!empty($program['testing']))
                             <div class="sg-prog__section wow fadeInUp" data-wow-duration="1200ms">
                                 <div class="sg-prog__head">
-                                    <span class="sg-prog__head-icon"><i class="icon-exam" aria-hidden="true"></i></span>
+                                    <span class="sg-prog__head-icon"><i class="icon-files" aria-hidden="true"></i></span>
                                     <h3 class="sg-prog__h">Testing system</h3>
                                 </div>
                                 <div class="sg-testing__grid">
@@ -1439,40 +1120,28 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
                                         </div>
                                     @endforeach
                                 </div>
-                                <p class="sg-testing__along"><strong>Along with:</strong>
-                                    {{ $program['testing']['along'] }}
-                                </p>
+                                <p class="sg-testing__along"><strong>Along with:</strong> {{ $program['testing']['along'] }}</p>
                             </div>
                         @endif
 
                         {{-- OBJECTIVE --}}
                         @if (!empty($program['objective']))
                             <div class="sg-prog__section wow fadeInUp" data-wow-duration="1200ms">
-                                <div class="sg-callout">
+                                <p class="sg-callout">
                                     <i class="icon-ranking" aria-hidden="true"></i>
                                     {{ $program['objective'] }}
-                                </div>
+                                </p>
                             </div>
                         @endif
 
-                        {{-- FAQS (static, no JS) --}}
+                        {{-- FAQS (shared accordion, same as Home / About) --}}
                         @if (!empty($program['faqs']))
-                            <div class="sg-prog__section wow fadeInUp" data-wow-duration="1200ms">
+                            <div class="sg-prog__section">
                                 <div class="sg-prog__head">
                                     <span class="sg-prog__head-icon"><i class="fas fa-question" aria-hidden="true"></i></span>
-                                    <h3 class="sg-prog__h">Frequently asked</h3>
+                                    <h3 class="sg-prog__h">Frequently asked questions</h3>
                                 </div>
-                                <div class="sg-qa-static">
-                                    @foreach ($program['faqs'] as $faq)
-                                        <div class="sg-qa-static__item">
-                                            <h4 class="sg-qa-static__q">
-                                                <i class="fas fa-question-circle" aria-hidden="true"></i>
-                                                {{ $faq['q'] }}
-                                            </h4>
-                                            <p class="sg-qa-static__a">{{ $faq['a'] }}</p>
-                                        </div>
-                                    @endforeach
-                                </div>
+                                @include('partials.sg-accordion', ['items' => $program['faqs']])
                             </div>
                         @endif
                     </div>
@@ -1488,17 +1157,17 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
                                 <span class="sg-side__pill">{{ $program['short'] }}</span>
                             </div>
 
+                            @php
+                                $rows = [
+                                    ['icon-graduation', 'Classes', $program['for']],
+                                    ['icon-ranking', 'Exam', $program['exam']],
+                                    ['icon-clock', 'Duration', $program['duration'] ?? $ask],
+                                    ['icon-multiple-users', 'Batches', $program['batches'] ?? $ask],
+                                    ['icon-open-book', 'Subjects', implode(', ', $program['subjects'])],
+                                    ['fas fa-school', 'Mode', $program['mode'] ?? 'Classroom, Khadakpada, Kalyan'],
+                                ];
+                            @endphp
                             <ul class="sg-side__list">
-                                @php
-                                    $rows = [
-                                        ['icon-graduation', 'Classes', $program['for']],
-                                        ['icon-ranking', 'Exam', $program['exam']],
-                                        ['icon-clock-1', 'Duration', $program['duration'] ?? $ask],
-                                        ['icon-multiple-users', 'Batches', $program['batches'] ?? $ask],
-                                        ['icon-open-book', 'Subjects', implode(', ', $program['subjects'])],
-                                        ['icon-globe', 'Mode', $program['mode'] ?? $ask],
-                                    ];
-                                @endphp
                                 @foreach ($rows as [$icon, $label, $value])
                                     <li class="sg-side__row">
                                         <span class="sg-side__row-icon"><i class="{{ $icon }}" aria-hidden="true"></i></span>
@@ -1519,26 +1188,26 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
                             <div class="sg-side__actions">
                                 <a href="{{ $contactUrl }}" class="sg-cta__btn sg-cta__btn--primary">
                                     <span>Book Free Counselling</span>
-                                    <span class="sg-cta__btn-icon"><i class="icon-right-arrow"
-                                            aria-hidden="true"></i></span>
+                                    <span class="sg-cta__btn-icon"><i class="icon-right-arrow" aria-hidden="true"></i></span>
                                 </a>
-                                <a href="{{ $whatsapp }}" class="sg-cta__btn sg-cta__btn--wa sg-cta__btn--wa-dark"
-                                    target="_blank" rel="noopener">
+                                <a href="{{ $whatsapp }}" class="sg-cta__btn sg-cta__btn--wa" target="_blank" rel="noopener">
                                     <span>Enquire on WhatsApp</span>
                                     <span class="sg-cta__btn-icon"><i class="fab fa-whatsapp" aria-hidden="true"></i></span>
                                 </a>
-                                <p class="sg-side__assure"><i class="icon-check-2" aria-hidden="true"></i> Free session
-                                    · No obligation</p>
+                                <p class="sg-side__assure"><i class="icon-check-2" aria-hidden="true"></i> Free session,
+                                    no obligation</p>
                             </div>
 
-                            <div class="sg-side__includes">
-                                <h4 class="sg-side__includes-title">Every SG program includes</h4>
-                                <ul class="sg-side__includes-list">
-                                    @foreach ($features as $feature)
-                                        <li><i class="icon-check-2" aria-hidden="true"></i>{{ $feature }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                            @if (!empty($features))
+                                <div class="sg-side__includes">
+                                    <h4 class="sg-side__includes-title">Every SG program includes</h4>
+                                    <ul class="sg-side__includes-list">
+                                        @foreach ($features as $feature)
+                                            <li><i class="icon-check-2" aria-hidden="true"></i>{{ $feature }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
 
                             <div class="sg-side__share">
                                 <span class="sg-side__share-label">Share:</span>
@@ -1568,16 +1237,20 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
 
     {{-- ================= MENTOR ================= --}}
     @if (!empty($mentor['bio']))
-        @php $hasMentorImg = !empty($mentor['image']) && file_exists(public_path($mentor['image'])); @endphp
-        <section class="sg-mentor section-space2" style="padding-top: 0px !important;">
+        @php
+            $mentorImg = !empty($mentor['image']) && file_exists(public_path($mentor['image']))
+                ? $mentor['image']
+                : (file_exists(public_path('assets/images/sg/founder-latesh-ghavat.webp')) ? 'assets/images/sg/founder-latesh-ghavat.webp' : null);
+        @endphp
+        <section class="sg-mentor section-space2" style="padding-top: 0 !important;">
             <div class="container">
-                <div class="sg-mentor__card {{ $hasMentorImg ? '' : 'sg-mentor__card--no-img' }} wow fadeInUp"
+                <div class="sg-mentor__card {{ $mentorImg ? '' : 'sg-mentor__card--no-img' }} wow fadeInUp"
                     data-wow-duration="1500ms">
 
-                    @if ($hasMentorImg)
+                    @if ($mentorImg)
                         <div class="sg-mentor__media">
                             <div class="sg-mentor__img">
-                                <img src="{{ asset($mentor['image']) }}" alt="{{ $mentor['name'] }}">
+                                <img src="{{ asset($mentorImg) }}" alt="{{ $mentor['name'] }}" loading="lazy">
                             </div>
                             @if (!empty($mentor['experience']))
                                 <div class="sg-mentor__badge">
@@ -1596,7 +1269,7 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
                         @endif
                         <p class="sg-mentor__bio">{{ $mentor['bio'] }}</p>
 
-                        @if (!$hasMentorImg && !empty($mentor['experience']))
+                        @if (!$mentorImg && !empty($mentor['experience']))
                             <p class="sg-mentor__exp"><strong>Experience:</strong> {{ $mentor['experience'] }}</p>
                         @endif
 
@@ -1613,7 +1286,7 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
 
     {{-- ================= OTHER PROGRAMS ================= --}}
     @if (!empty($others))
-        <section class="courses-four section-space2">
+        <section class="courses-four section-space2" style="padding-top: 0 !important;">
             <div class="container">
                 <div class="courses-four__top">
                     <div class="row gutter-y-50 align-items-center">
@@ -1632,33 +1305,17 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
                 </div>
 
                 <div class="courses-four__carousel eduhive-owl__carousel eduhive-owl__carousel--with-shadow eduhive-owl__carousel--basic-nav owl-carousel owl-theme"
-                    data-owl-options='{
-                                                                    "items": 1,
-                                                                    "margin": 10,
-                                                                    "loop": true,
-                                                                    "smartSpeed": 700,
-                                                                    "nav": false,
-                                                                    "dots": false,
-                                                                    "navContainer": ".courses-four__custome-navs",
-                                                                    "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"],
-                                                                    "autoplay": true,
-                                                                    "responsive": {
-                                                                        "0":   { "items": 1, "nav": true, "margin": 10 },
-                                                                        "768": { "items": 2, "margin": 30 },
-                                                                        "992": { "items": 3, "margin": 30 }
-                                                                    }
-                                                                }'>
+                    data-owl-options='{"items": 1, "margin": 10, "loop": true, "smartSpeed": 700, "nav": false, "dots": false, "navContainer": ".courses-four__custome-navs", "navText": ["<span class=\"icon-arrow-left\"></span>","<span class=\"icon-arrow-right\"></span>"], "autoplay": true, "responsive": {"0": {"items": 1, "nav": true, "margin": 10}, "768": {"items": 2, "margin": 30}, "992": {"items": 3, "margin": 30}}}'>
                     @foreach ($others as $oSlug => $o)
                         @php
                             $oUrl = url('/courses/' . $oSlug);
-                            $oImg = 'assets/images/programs/' . $oSlug . '.jpg';
-                            $oImg = file_exists(public_path($oImg)) ? $oImg : 'assets/images/courses/course-1-' . (($loop->index % 9) + 1) . '.jpg';
+                            $oImg = $progImg($o);
                         @endphp
                         <div class="item">
                             <div class="course-card wow fadeInUp" data-wow-duration="1500ms"
                                 data-wow-delay="{{ ($loop->index % 3) * 100 }}ms">
                                 <div class="course-card__image">
-                                    <img src="{{ asset($oImg) }}" alt="{{ $o['name'] }}">
+                                    <img src="{{ asset($oImg) }}" alt="{{ $o['name'] }} at SG Education" loading="lazy">
                                 </div>
                                 <div class="course-card__content">
                                     <div class="course-card__content__top">
@@ -1686,14 +1343,13 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
                                                 {{ $o['for'] }}
                                             </div>
                                         </div>
-                                        <h3 class="course-card__title course-card__title--hover">
-                                            href="{{ $oUrl }}">{{ $o['name'] }}</a></h3>
+                                        <h3 class="course-card__title course-card__title--hover"><a
+                                                href="{{ $oUrl }}">{{ $o['name'] }}</a></h3>
                                         <p class="course-card__text">{{ $o['tagline'] }}</p>
                                         <a href="{{ $oUrl }}" class="course-card__btn eduhive-btn eduhive-btn--border">
                                             <span>view program</span>
-                                            <span class="eduhive-btn__icon">
-                                                <span class="eduhive-btn__icon__inner"><i class="icon-right-arrow"></i></span>
-                                            </span>
+                                            <span class="eduhive-btn__icon"><span class="eduhive-btn__icon__inner"><i
+                                                        class="icon-right-arrow"></i></span></span>
                                         </a>
                                     </div>
                                 </div>
@@ -1705,8 +1361,8 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
         </section>
     @endif
 
-    {{-- ================= CTA ================= --}}
-    <section class="sg-cta-repo" style="margin-bottom: 60px;">
+    {{-- ================= CTA (styles: sg-custom.css §19) ================= --}}
+    <section class="sg-cta-repo">
         <div class="container">
             <div class="sg-cta__card wow fadeInUp" data-wow-duration="1500ms">
                 <div class="sg-cta__content">
@@ -1729,21 +1385,4 @@ Vars from controller: $slug, $program, $image, $features, $mentor, $others
         </div>
     </section>
 
-@endsection
-
-@section('scripts')
-    <script type="application/ld+json">
-                            {!! json_encode([
-        '@context' => 'https://schema.org',
-        '@type' => 'Course',
-        'name' => $program['name'],
-        'description' => $program['meta_desc'],
-        'url' => url()->current(),
-        'provider' => [
-            '@type' => 'EducationalOrganization',
-            'name' => 'SG Educare',
-            'sameAs' => url('/'),
-        ],
-    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
-                        </script>
 @endsection

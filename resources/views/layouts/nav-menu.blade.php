@@ -38,16 +38,16 @@
             <li><a href="{{ url('/courses/boards') }}"     class="sg-dropdown__link">Boards 8–10 (SSC / CBSE / ICSE)</a></li>
             <li><a href="{{ url('/courses/nda') }}"        class="sg-dropdown__link">NDA</a></li>
             <li class="sg-dropdown__divider" role="separator"></li>
-            <li><a href="{{ url('/courses') }}"            class="sg-dropdown__link"><strong>All Programs →</strong></a></li>
+            <li><a href="{{ url('/courses') }}"            class="sg-dropdown__link"><strong>All Courses →</strong></a></li>
         </ul>
     </li>
 
     <li class="sg-nav__item {{ request()->is('results') ? 'current' : '' }}">
         <a href="{{ url('/results') }}" class="sg-nav__link">Results</a>
     </li>
-    <li class="sg-nav__item {{ request()->is('resources') ? 'current' : '' }}">
+    <!-- <li class="sg-nav__item {{ request()->is('resources') ? 'current' : '' }}">
         <a href="{{ url('/resources') }}" class="sg-nav__link">Resources</a>
-    </li>
+    </li> -->
     <li class="sg-nav__item {{ request()->is('blog*') ? 'current' : '' }}">
         <a href="{{ url('/blog') }}" class="sg-nav__link">Blog</a>
     </li>
